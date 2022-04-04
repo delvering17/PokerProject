@@ -67,7 +67,8 @@ class LogIn_in implements Inter_button_login {
 				id_login + "';") ;
 		
 		if (new GongbackCon().con(id_login) || new GongbackCon().con(pw_login) ) {
-			System.out.println("빈칸을 채워주세요");
+			new noticeWindow("빈 칸을 채워주세요", "오류", JOptionPane.ERROR_MESSAGE);
+			
 		} else {
 			if (res) {
 				
@@ -77,12 +78,12 @@ class LogIn_in implements Inter_button_login {
 					// 성공 시 대기실 화면 전환
 					System.out.println("로그인 성공");
 				} else {
-					System.out.println("로그인 실패");
+					new noticeWindow("로그인 실패", "오류", JOptionPane.ERROR_MESSAGE);
 				}
 				
 				
 			} else {
-				System.out.println("정보가 맞지 않습니다");
+				new noticeWindow("정보가 맞지 않습니다", "오류", JOptionPane.ERROR_MESSAGE);
 			}
 
 		
@@ -192,17 +193,20 @@ class SignInComplete_in implements Inter_button_login {
 		}
 		
 		if (resA || resB) {
-			System.out.println("빈칸을 채워주세요");
+			new noticeWindow("빈 칸을 채워주세요", "오류", JOptionPane.ERROR_MESSAGE);
 		
 		} else if (resGongback) {
-			System.out.println(Gong +"의 공백을 제외하고 입력해주세요.");
+			new noticeWindow(Gong +"의 공백을 제외하고 입력해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
 			
 		} else if (!password.equals(passwordCon)) {
-			System.out.println("비밀번호와 확인이 일치하지 않습니다.");
+		
+			new noticeWindow("비밀번호와 확인이 일치하지 않습니다.", "오류", JOptionPane.ERROR_MESSAGE);
 		} else if (login_frame.signin_panel.doubleCheck_id) {
-			System.out.println("아이디 중복 체크를 해주세요");
+	
+			new noticeWindow("아이디 중복 체크를 해주세요", "오류", JOptionPane.ERROR_MESSAGE);
 		} else if (login_frame.signin_panel.doublecCheck_nickname) {
-			System.out.println("닉네임 중복 체크를 해주세요");
+		
+			new noticeWindow("닉네임 중복 체크를 해주세요", "오류", JOptionPane.ERROR_MESSAGE);
 		} else {
 			System.out.println("회원가입완료");
 			complete();
@@ -266,17 +270,18 @@ class SignIn_ID_DoubleCheck implements Inter_button_login {
 		String str = login_frame.signin_panel.signInfo.get(0).getText().trim() ;
 		
 		if (new GongbackCon().con(str)) {
-			System.out.println("아이디를 입력해주세요");
+			
+			new noticeWindow("아이디를 입력해주세요", "오류", JOptionPane.ERROR_MESSAGE);
 		} else {
 			boolean res = true;
 			res = new SignDB().DBmemCheck("id = '"+
 			str + "';");
 			
 			if (res) {
-				System.out.println("중복된 아이디");
 				
+				new noticeWindow("중복된 아이디", "오류", JOptionPane.ERROR_MESSAGE);
 			} else {
-				System.out.println("아이디 사용가능");
+				new noticeWindow("아이디 사용 가능", "사용가능", JOptionPane.INFORMATION_MESSAGE);
 				login_frame.signin_panel.doubleCheck_id = false;
 			}
 		}
@@ -292,18 +297,19 @@ class SignIn_Nickname_DoubleCheck implements Inter_button_login {
 		String str = login_frame.signin_panel.signInfo.get(3).getText().trim();
 		
 		if (new GongbackCon().con(str)) {
-			System.out.println("닉네임을 입력해주세요");
 			
+			new noticeWindow("닉네임을 입력해주세요", "오류", JOptionPane.ERROR_MESSAGE);
 		} else {
 			boolean res = true;
 			res = new SignDB().DBproCheck("nickname = '"+
 			str + "';");
 			
 			if (res) {
-				System.out.println("중복된 닉네임");
+
+				new noticeWindow("중복된 닉네임", "오류", JOptionPane.ERROR_MESSAGE);
 				
 			} else {
-				System.out.println("닉네임 사용가능");
+				new noticeWindow("닉네임 사용 가능", "사용 가능", JOptionPane.INFORMATION_MESSAGE);
 				login_frame.signin_panel.doublecCheck_nickname = false;
 			}
 		
@@ -328,7 +334,8 @@ class FindID_button implements Inter_button_login {
 				name_find + "';") ;
 		
 		if (new GongbackCon().con(name_find) || new GongbackCon().con(email_find) ) {
-			System.out.println("빈칸을 채워주세요");
+		
+			new noticeWindow("빈칸을 채워주세요", "사용가능", JOptionPane.ERROR_MESSAGE);
 		} else {
 			if (res) {
 				
@@ -341,12 +348,14 @@ class FindID_button implements Inter_button_login {
 					, "아이디 찾기 성공" , JOptionPane.INFORMATION_MESSAGE);
 					
 				} else {
-					System.out.println("해당되는 정보가 없습니다");
+				
+					new noticeWindow("해당되는 정보가 없습니다", "사용가능", JOptionPane.ERROR_MESSAGE);
 				}
 				
 				
 			} else {
-				System.out.println("해당되는 정보가 없습니다");
+				
+				new noticeWindow("해당되는 정보가 없습니다", "사용가능", JOptionPane.ERROR_MESSAGE);
 			}
 
 		
@@ -371,7 +380,8 @@ class FindPW_button implements Inter_button_login {
 				idpw_find + "';") ;
 		
 		if (new GongbackCon().con(idpw_find) ) {
-			System.out.println("빈칸을 채워주세요");
+			
+			new noticeWindow("빈칸을 채워주세요", "사용가능", JOptionPane.ERROR_MESSAGE);
 		} else {
 			if (res) {
 				String aa = "";
@@ -386,15 +396,16 @@ class FindPW_button implements Inter_button_login {
 							idpw_find + "';") +" 입니다" 
 							, "아이디 찾기 성공" , JOptionPane.INFORMATION_MESSAGE);
 				} else {
-					System.out.println("답이 맞지 않습니다");
-
+				
+					new noticeWindow("답이 맞지 않습니다", "사용가능", JOptionPane.ERROR_MESSAGE);
 		
 
 				}
 
 		
 			} else {
-				System.out.println("정보가 맞지 않습니다");
+			
+				new noticeWindow("정보가 맞지 않습니다", "사용가능", JOptionPane.ERROR_MESSAGE);
 			}
 		
 		}
@@ -432,6 +443,7 @@ class GongbackCon {
 		}
 		
 		return res; 
+		
 	}
 }
 
@@ -469,10 +481,37 @@ class KorEng {
 			result += res;
 			
 		}
-		
+	
 		return result;
 		
 	}
 }
+
+class noticeWindow {
+	
+	public noticeWindow(String message, String title, int informationMessage) {
+		JOptionPane.showMessageDialog(null, message, title, informationMessage);
+	}
+	/*
+	 - ERROR_MESSAGE
+     - INFORMATION_MESSAGE
+     - QUESTION_MESAGE
+     - WARNING_MESSAGE
+     - PLAIN_MESSAGE 
+	 */
+}
+
+class emailcon {
+	
+	public emailcon() {
+		
+		
+		
+	}
+	
+}
+
+
+
 
 
