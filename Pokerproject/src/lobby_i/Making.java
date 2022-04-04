@@ -20,11 +20,12 @@ import javax.swing.JToggleButton;
 
 import lobby_p.Lobby;
 import lobby_p.LobbyMain;
+import login_p.Login_frame;
 
 public class Making implements RoomAction {
 
 	@Override
-	public void room(HashMap<InetAddress, Object> roomChk,LobbyMain mainJf) {
+	public void room(HashMap<InetAddress, Object> roomChk,Login_frame mainJf) {
 		
 		String[] beting = {"1만","2만","5만","10만","100만"};
 		JFrame jf = new JFrame();

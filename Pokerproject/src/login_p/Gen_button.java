@@ -3,6 +3,9 @@ package login_p;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,7 +17,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import DB_p.ProfileDAO;
+import DB_p.ProfileDTO;
 import DB_p.SignDB;
+import lobby_p.Lobby;
 
 
 
@@ -64,8 +70,7 @@ class LogIn_in implements Inter_button_login {
 		
 		boolean res = false ;
 		boolean respw = false;
-		res = new SignDB().DBmemCheck("id = '"+
-				id_login + "';") ;
+		res = new SignDB().DBmemCheck("id = '"+id_login + "';") ;
 		
 		if (new GongbackCon().con(id_login) || new GongbackCon().con(pw_login) ) {
 			new noticeWindow("빈 칸을 채워주세요", "오류", JOptionPane.ERROR_MESSAGE);
@@ -78,6 +83,20 @@ class LogIn_in implements Inter_button_login {
 				if (respw) {
 					// 성공 시 대기실 화면 전환
 					System.out.println("로그인 성공");
+					//// 갓찬욱 개잘생김
+					
+					int memberNum = new SignDB().num_get("id = '"+id_login + "';");
+					
+					
+					ProfileDTO datathis = new SignDB().num_profileRead(" profilenum = " +memberNum+ ";");
+					try {
+						Socket client = new Socket("192.168.20.39", 8888);
+						login_frame.remove(login_frame.login_panel);
+						login_frame.add(new Lobby(client,login_frame,datathis)) ;
+						login_frame.repaint();
+					}catch (IOException e) {
+						e.printStackTrace();
+					}
 				} else {
 					new noticeWindow("로그인 실패", "오류", JOptionPane.ERROR_MESSAGE);
 				}

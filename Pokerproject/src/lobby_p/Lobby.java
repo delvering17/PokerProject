@@ -29,8 +29,10 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneLayout;
 import javax.swing.border.LineBorder;
 
+import DB_p.ProfileDTO;
 import lobby_i.RoomAction;
 import lobby_i.UserData;
+import login_p.Login_frame;
 
 public class Lobby extends JPanel {
 	JTextField jtf;
@@ -40,18 +42,18 @@ public class Lobby extends JPanel {
 	Lobby sss;
 	ObjectOutputStream oos;
 	ObjectInputStream ois;
-	UserData data;
+	ProfileDTO data;
 	//들어올 유져 객체
-	ArrayList<Object> userList = new ArrayList<Object>();
-	LobbyMain mainJf;
+//	ArrayList<Object> userList = new ArrayList<Object>();
+	Login_frame mainJf;
 	
 	//방 체크할 리스트
 	HashMap<InetAddress, Object> roomChk;
 	ArrayList<RoomBtn> btnlist = new ArrayList<RoomBtn>();
-	public Lobby(Socket client,LobbyMain mainJf) {
+	public Lobby(Socket client,Login_frame mainJf,ProfileDTO datathis) {
 		
 		this.mainJf = mainJf;
-		sss= this;
+		data = datathis;
 		try {
 			System.out.println(client);
 			oos = new ObjectOutputStream(client.getOutputStream());
@@ -59,7 +61,7 @@ public class Lobby extends JPanel {
 		}catch (Exception e2) {
 			e2.printStackTrace();
 		}
-		
+		System.out.println(data.nickname);
 		setBounds(0, 0, 1200, 800);
 		setBackground(Color.black);
 		setLayout(null);
@@ -120,9 +122,9 @@ public class Lobby extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				
 				try {
-					System.out.println(this);
-					UserData test = new UserData("zzz","전현우","1000000000",jtf.getText());
-					oos.writeObject(test);
+					System.out.println(data.nickname);
+					data.msg = jtf.getText();
+					oos.writeObject(data);
 					jtf.setText("");
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -180,12 +182,15 @@ public class Lobby extends JPanel {
 
 	class Receiver extends Thread {
 		@Override
+		
 		public void run() {
+			ProfileDTO data = null;
 			try {
 				while(ois!=null) {
-					data=(UserData)ois.readObject();
-					jta.append(data.name + data.msg+"\n");
-					System.out.println(data.name +" : "+ data.msg);
+					data=(ProfileDTO)ois.readObject();
+					System.out.println(data.nickname);
+					jta.append(data.nickname + data.msg+"\n");
+					System.out.println(data.nickname +" : "+ data.msg);
 				}
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block

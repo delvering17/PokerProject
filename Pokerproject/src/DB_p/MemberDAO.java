@@ -19,8 +19,8 @@ public class MemberDAO {
 	
 	public MemberDAO() {
 		
-		String url = "jdbc:mariadb://localhost:3306/poker_db";
-		String username = "pokerserver";
+		String url = "jdbc:mariadb://192.168.20.28:3306/poker_db";
+		String username = "pokertest";
 		String password = "cksdnr12";
 		
 		try {
@@ -75,7 +75,7 @@ public class MemberDAO {
 	
 	public MemberDTO memberReadDetail(int num) {
 		MemberDTO res = null;
-		sql = "select * from member where membernum = "+ num;
+		sql = "select * from member where  = "+ num;
 		
 		ResultSet rs;
 		

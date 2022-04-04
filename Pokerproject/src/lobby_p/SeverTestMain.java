@@ -7,11 +7,13 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 
+import DB_p.ProfileDAO;
+import DB_p.ProfileDTO;
 import lobby_i.UserData;
 class MulServer {
 	ObjectInputStream dis;
 	ObjectOutputStream dos;
-	UserData data;
+	ProfileDTO data;
 	HashMap<String, ObjectOutputStream> userList = new HashMap<String, ObjectOutputStream>();
 	public MulServer(Socket client) {
 		new Reciver(client).start();
@@ -29,9 +31,9 @@ class MulServer {
 		public void run() {
 			try {
 				while(dis!=null) {
-					data = (UserData)dis.readObject();
-					System.out.println(data.name + data.msg);
-					userList.put(data.name, dos);
+					data = (ProfileDTO)dis.readObject();
+					System.out.println(data.nickname +" : "+ data.msg);
+					userList.put(data.nickname, dos);
 					dos.writeObject(data);
 				}
 			}catch (Exception e) {
@@ -44,7 +46,6 @@ class MulServer {
 public class SeverTestMain {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 //		System.out.println("나서버");
 //		ServerSocket socket =null;
 //		try {
@@ -77,7 +78,6 @@ public class SeverTestMain {
 //				e.printStackTrace();
 //			}
 //		}
-		
 		try {
 			System.out.println("나 서버");
 			ServerSocket server = new ServerSocket(8888);
