@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -196,13 +197,16 @@ class SignInComplete_in implements Inter_button_login {
 			new noticeWindow("빈 칸을 채워주세요", "오류", JOptionPane.ERROR_MESSAGE);
 		
 		} else if (resGongback) {
-			new noticeWindow(Gong +"의 공백을 제외하고 입력해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
 			
+			new noticeWindow(Gong +"의 공백을 제외하고 입력해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
+		}  else if (new CharLimit().email(email)) {
+			
+			new noticeWindow("이메일 형식에 맞지 않습니다.", "오류", JOptionPane.ERROR_MESSAGE);
 		} else if (!password.equals(passwordCon)) {
 		
 			new noticeWindow("비밀번호와 확인이 일치하지 않습니다.", "오류", JOptionPane.ERROR_MESSAGE);
 		} else if (login_frame.signin_panel.doubleCheck_id) {
-	
+			
 			new noticeWindow("아이디 중복 체크를 해주세요", "오류", JOptionPane.ERROR_MESSAGE);
 		} else if (login_frame.signin_panel.doublecCheck_nickname) {
 		
@@ -272,6 +276,9 @@ class SignIn_ID_DoubleCheck implements Inter_button_login {
 		if (new GongbackCon().con(str)) {
 			
 			new noticeWindow("아이디를 입력해주세요", "오류", JOptionPane.ERROR_MESSAGE);
+		} else if (new CharLimit().id(str)) {	
+			
+			new noticeWindow("아이디는 영문과 숫자만으로 된 5~12자리여야 합니다.", "오류", JOptionPane.ERROR_MESSAGE);
 		} else {
 			boolean res = true;
 			res = new SignDB().DBmemCheck("id = '"+
@@ -285,6 +292,7 @@ class SignIn_ID_DoubleCheck implements Inter_button_login {
 				login_frame.signin_panel.doubleCheck_id = false;
 			}
 		}
+		
 		
 		
 	}
@@ -510,6 +518,43 @@ class emailcon {
 	}
 	
 }
+
+class CharLimit {
+
+	public CharLimit() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public boolean id(String id) { // id 5~12 영어로 시
+		boolean res = true;
+		
+		
+		String id_regex = "^[a-zA-Z]{1}[a-zA-Z0-9_]{4,11}$";
+		
+		if (Pattern.matches(id_regex, id)) {
+			res = false;
+		}
+		
+		return res;
+			
+	}
+	
+	public boolean email(String email) {
+		boolean res = true;
+		
+		String email_regex = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
+		
+		if (Pattern.matches(email_regex, email)) {
+			res = false;
+		}
+		
+		return res;
+		
+	}
+	
+}
+
+
 
 
 
