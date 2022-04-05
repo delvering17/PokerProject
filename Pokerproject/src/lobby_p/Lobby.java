@@ -134,9 +134,9 @@ public class Lobby extends JPanel {
 			}
 		});
 		
-		Component userList = new Component(820,10 , 350, 500);
+		Component userList = new Component(820,520 , 350, 230);
 		add(userList);
-		Component profile = new Component(820,520 , 350, 230);
+		Component profile = new Component(820,10 , 350, 500);
 		add(profile);
 		
 		Receiver ch = new Receiver();
