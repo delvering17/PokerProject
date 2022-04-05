@@ -4,20 +4,23 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
-import lobby_p.Lobby;
+import DB_p.ProfileDTO;
 import game_p.Game_panel;
+import lobby_p.Lobby;
 
 public class Login_frame extends JFrame {
 	Login_panel login_panel;
 	Signin_panel signin_panel;
 	FindIDPW_panel findIDPW_panel;
 	public Lobby lobby_panel;
-	
+	ProfileDTO userDTO;
 	public ArrayList <Game_panel> game_panelarr= new ArrayList <Game_panel>();
 	
 	
 	Login_frame login_frame;
+	
 	public Login_frame() {
+		
 		login_frame=this;
 		RepaintT test = new RepaintT();
 		test.start();

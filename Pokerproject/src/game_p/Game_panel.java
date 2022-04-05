@@ -40,6 +40,9 @@ public class Game_panel extends JPanel implements ActionListener {
 	
 	JTextField chf;
 	JTextArea cht;
+	
+	ArrayList<Ingame_userProfile_panel> userprofile = new ArrayList<Ingame_userProfile_panel>();
+	
 	public Game_panel(Login_frame login_frame) {
 		
 		setBounds(0, 0, 1200, 800);
@@ -71,13 +74,13 @@ public class Game_panel extends JPanel implements ActionListener {
 		});
 		// Player user(user 카드)
 		p1 = new JPanel();
-		p1.setBounds(270, 520, 290, 220);
+		p1.setBounds(420, 520, 290, 200);
 		p1.setBackground(new Color(41,67,58));
 		add(p1);
 		
 		// player2(p2 카드)
 		JPanel p2 = new JPanel();
-		p2.setBounds(120, 280, 290, 200);
+		p2.setBounds(200, 50, 290, 200);
 		p2.setBackground(new Color(41,67,58));
 		add(p2);
 		
@@ -85,7 +88,7 @@ public class Game_panel extends JPanel implements ActionListener {
 		
 		// player3(p3 카드)
 		JPanel p3 = new JPanel();
-		p3.setBounds(120,50,290,200);
+		p3.setBounds(200,280,290,200);
 		p3.setBackground(new Color(41,67,58));
 		add(p3);
 		
@@ -138,6 +141,10 @@ public class Game_panel extends JPanel implements ActionListener {
 		p5.setBounds(710, 280, 290, 200);
 		p5.setBackground(new Color(41,67,58));
 		add(p5);
+		
+		// test user profile
+		
+
 		
 		// betting
 		JPanel betting = new JPanel();
@@ -253,6 +260,7 @@ class Help_pg extends JFrame{
 	JLabel p;
 
 	public Help_pg() {
+		
 		setBounds(1000,300,660,660);
 		setTitle("사용 설명");
 		
