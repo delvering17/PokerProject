@@ -1,6 +1,10 @@
 package DB_p;
 
-public class ProfileDTO {
+import java.io.Serializable;
+
+public class ProfileDTO implements Serializable{
+	
+	private static final long serialVersionUID = 1231245L;
 	
 	public int profilenum;
 	public String nickname;

@@ -122,14 +122,15 @@ public class Lobby extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				
 				try {
-					System.out.println(data.nickname);
 					data.msg = jtf.getText();
 					oos.writeObject(data);
-					jtf.setText("");
+					oos.flush();
+					oos.reset();
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				} 
-				
+
+				jtf.setText("");
 			}
 		});
 		
@@ -184,12 +185,12 @@ public class Lobby extends JPanel {
 		@Override
 		
 		public void run() {
-			ProfileDTO data = null;
+//			ProfileDTO data = null;
 			try {
 				while(ois!=null) {
-					data=(ProfileDTO)ois.readObject();
+					ProfileDTO data=(ProfileDTO)ois.readObject();
 					System.out.println(data.nickname);
-					jta.append(data.nickname + data.msg+"\n");
+					jta.append(data.nickname + " : "+ data.msg+"\n");
 					System.out.println(data.nickname +" : "+ data.msg);
 				}
 			} catch (ClassNotFoundException e) {

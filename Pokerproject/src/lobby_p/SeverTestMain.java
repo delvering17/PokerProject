@@ -13,13 +13,14 @@ import lobby_i.UserData;
 class MulServer {
 	ObjectInputStream dis;
 	ObjectOutputStream dos;
-	ProfileDTO data;
-	HashMap<String, ObjectOutputStream> userList = new HashMap<String, ObjectOutputStream>();
+	String name;
+	HashMap<String, ObjectOutputStream> userList;
 	public MulServer(Socket client) {
 		new Reciver(client).start();
 	}
 	class Reciver extends Thread {
 		public Reciver(Socket client) {
+			userList = new HashMap<String, ObjectOutputStream>();
 			try {
 				dos = new ObjectOutputStream(client.getOutputStream());
 				dis = new ObjectInputStream(client.getInputStream());
@@ -29,14 +30,31 @@ class MulServer {
 		}
 		@Override
 		public void run() {
-			try {
+			
 				while(dis!=null) {
-					data = (ProfileDTO)dis.readObject();
-					System.out.println(data.nickname +" : "+ data.msg);
+					try {
+					ProfileDTO data = (ProfileDTO)dis.readObject();
+					name = data.nickname;
 					userList.put(data.nickname, dos);
-					dos.writeObject(data);
+					System.out.println(data.nickname +" : "+ data.msg);
+					sendToAll(data);
+					}catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}finally {
+						userList.remove(name);
+					}
 				}
-			}catch (Exception e) {
+			
+		}
+	}
+	void sendToAll(ProfileDTO data) {
+		for (ObjectOutputStream dd : userList.values()) {
+			try {
+				dd.writeObject(data);
+				dd.flush();
+				dd.reset();
+			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -46,38 +64,7 @@ class MulServer {
 public class SeverTestMain {
 
 	public static void main(String[] args) {
-//		System.out.println("나서버");
-//		ServerSocket socket =null;
-//		try {
-//			socket = new ServerSocket(8888);
-//			while(true) {
-//				
-//				Socket client = socket.accept();
-//
-//				ObjectInputStream ois = new ObjectInputStream(client.getInputStream());
-//				ObjectOutputStream oos = new ObjectOutputStream(client.getOutputStream());
-//				
-//				UserData data =  (UserData)ois.readObject();
-//				System.out.println(data.msg);
-//				oos.writeObject(data);
-//				
-//				oos.close();
-//				ois.close();
-//				
-//				
-//				
-//			}
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}finally {
-//			try {
-////				socket.close();
-//			} catch (Exception e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
+
 		try {
 			System.out.println("나 서버");
 			ServerSocket server = new ServerSocket(8888);
