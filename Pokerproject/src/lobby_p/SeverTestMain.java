@@ -14,6 +14,7 @@ import lobby_i.UserData;
 class MulServer {
 
 	HashMap<String, ObjectOutputStream> userList;
+	
 	public MulServer() {
 		try {
 			System.out.println("나 서버");
@@ -28,6 +29,7 @@ class MulServer {
 			e.printStackTrace();
 		}
 	}
+	
 	class Reciver extends Thread {
 		ObjectInputStream ois;
 		ObjectOutputStream oos;
@@ -63,9 +65,11 @@ class MulServer {
 	void sendToAll(ProfileDTO data) {
 		for (ObjectOutputStream dd : userList.values()) {
 			try {
+				
 				dd.writeObject(data);
 				dd.flush();
 				dd.reset();
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

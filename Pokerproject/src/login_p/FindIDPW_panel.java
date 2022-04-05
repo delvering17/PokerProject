@@ -1,5 +1,8 @@
 package login_p;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import javax.swing.JPanel;
 
 public class FindIDPW_panel extends JPanel{
@@ -10,12 +13,16 @@ public class FindIDPW_panel extends JPanel{
 
 	Gen_textfiled idpw_find ;
 
-
+	ObjectOutputStream oos;
+	ObjectInputStream ois;
 	
-	public FindIDPW_panel(Login_frame login_frame) {
+	public FindIDPW_panel(Login_frame login_frame,ObjectOutputStream oos,
+	ObjectInputStream ois) {
 		
 		setBounds(0,0,1200,800);
 		setLayout(null);
+		this.oos = oos;
+		this.ois = ois;
 		// 아이디 찾기
 		add(new Gen_label("아이디 찾기",520,100,80,40));
 	
@@ -27,7 +34,7 @@ public class FindIDPW_panel extends JPanel{
  		email_find = new Gen_textfiled(login_frame,"아이디","Login_textfiled_id",500,200, 200,50);
  		
  		// 확인 버튼
- 		add(new Gen_button_login(login_frame,"아이디 찾기","FindID_button",500,250, 100,50));
+ 		add(new Gen_button_login(login_frame,"아이디 찾기","FindID_button",500,250, 100,50,oos,ois));
  		
  		
 		// 비밀번호 찾기
@@ -37,11 +44,11 @@ public class FindIDPW_panel extends JPanel{
 		idpw_find = new Gen_textfiled(login_frame,"아이디","Login_textfiled_id",500,450, 200,50);
  		// 창 나옴 ,  질문에 답 , 맞으면 다시 창열어서  알려줌 비번
 		// 확인 버튼
-		add(new Gen_button_login(login_frame,"비밀번호 찾기","FindPW_button",500,500, 100,50));
+		add(new Gen_button_login(login_frame,"비밀번호 찾기","FindPW_button",500,500, 100,50,oos,ois));
 		
 		
 		// 나가기
-		add(new Gen_button_login(login_frame,"나가기","FindCancel_in",500,600, 100,50));
+		add(new Gen_button_login(login_frame,"나가기","FindCancel_in",500,600, 100,50,oos,ois));
 
 
 		

@@ -16,7 +16,8 @@ public class ProfileDTO implements Serializable{
 	public int win;
 	public int lose;
 	public long money;
-	
+	public int witch;
+	public int roomNum = -1;
 	public ProfileDTO(int profilenum, String nickname, String gender, String introduce, int totalGame, int win,
 			int lose, long money) {
 		super();
@@ -40,6 +41,14 @@ public class ProfileDTO implements Serializable{
 
 	public void setProfilenum(int profilenum) {
 		this.profilenum = profilenum;
+	}
+	
+	public int getWitch() {
+		return witch;
+	}
+
+	public void setWitch(int witch) {
+		this.witch = witch;
 	}
 
 	public String getNickname() {

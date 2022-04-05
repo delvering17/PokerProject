@@ -235,7 +235,7 @@ public class Game_panel extends JPanel implements ActionListener {
 				cht.append(tt+"\n");
 				chf.selectAll();
 				cht.setCaretPosition(cht.getDocument().getLength());
-				// settext (" ");
+				chf.setText("");
 			}
 		});
   

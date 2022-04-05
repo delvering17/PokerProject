@@ -49,14 +49,14 @@ public class Lobby extends JPanel {
 	//방 체크할 리스트
 	HashMap<InetAddress, Object> roomChk;
 	ArrayList<RoomBtn> btnlist = new ArrayList<RoomBtn>();
-	public Lobby(Socket client,Login_frame mainJf,ProfileDTO datathis) {
+	public Lobby(Socket client,Login_frame mainJf,ProfileDTO datathis,ObjectOutputStream oos,ObjectInputStream ois) {
 		
 		this.mainJf = mainJf;
 		data = datathis;
 		try {
 			System.out.println(client);
-			oos = new ObjectOutputStream(client.getOutputStream());
-			ois = new ObjectInputStream(client.getInputStream());
+			this.oos = oos;
+			this.ois = ois;
 		}catch (Exception e2) {
 			e2.printStackTrace();
 		}

@@ -27,8 +27,8 @@ public class Enter implements RoomAction{
 		login_frame.remove(login_frame.lobby_panel);
 		Game_panel game_panel = new Game_panel(login_frame);
 		login_frame.add(game_panel);
-		login_frame.repaint();
 		login_frame.game_panelarr.add(game_panel);
+		login_frame.repaint();
 	}
 
 }

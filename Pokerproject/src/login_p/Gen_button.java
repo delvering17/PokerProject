@@ -4,6 +4,8 @@ package login_p;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.text.ParseException;
@@ -28,8 +30,14 @@ import lobby_p.Lobby;
 class Gen_button_login extends JButton implements ActionListener {
 	Login_frame login_frame;
 	String function;
-	public Gen_button_login(Login_frame login_frame,String name, String function, int dis_x, int dis_y, int size_x, int size_y) {
+	ObjectOutputStream oos;
+	ObjectInputStream ois;
+	public Gen_button_login(Login_frame login_frame,String name, 
+			String function, int dis_x, int dis_y, int size_x, int size_y,
+			ObjectOutputStream oos,ObjectInputStream ois) {
 		super(name);
+		this.oos=oos;
+		this.ois=ois;
 		this.login_frame = login_frame;
 		setBounds(dis_x, dis_y, size_x, size_y);
 		this.function = function;
@@ -42,7 +50,7 @@ class Gen_button_login extends JButton implements ActionListener {
 		
 		try {
 			Inter_button_login inter_button_login = (Inter_button_login)Class.forName("login_p."+function).newInstance();
-			inter_button_login.go(login_frame);
+			inter_button_login.go(login_frame,oos,ois);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -56,15 +64,16 @@ class Gen_button_login extends JButton implements ActionListener {
 
 interface Inter_button_login {
 	
-	public void go(Login_frame login_frame);
+	public void go(Login_frame login_frame,ObjectOutputStream oos,ObjectInputStream ois);
 }
 
 class LogIn_in implements Inter_button_login {
-
+	ObjectOutputStream oos;
+	ObjectInputStream ois;
 	@Override
-	public void go(Login_frame login_frame) {
-		
-		
+	public void go(Login_frame login_frame,ObjectOutputStream oos,ObjectInputStream ois) {
+		this.oos = oos;
+		this.ois = ois;
 		String id_login = login_frame.login_panel.id_login.getText().trim() ;
 		String pw_login = new KorEng().con(login_frame.login_panel.pw_login.getText().trim() );
 		
@@ -92,7 +101,8 @@ class LogIn_in implements Inter_button_login {
 					try {
 						Socket client = new Socket("192.168.20.39", 8888);
 						login_frame.remove(login_frame.login_panel);
-						Lobby lobby_panel = new Lobby(client,login_frame,datathis);
+						datathis.roomNum = 0;
+						Lobby lobby_panel = new Lobby(client,login_frame,datathis,oos,ois);
 						login_frame.add(lobby_panel) ;
 						login_frame.userDTO = datathis;
 						login_frame.lobby_panel = lobby_panel;
@@ -119,8 +129,8 @@ class LogIn_in implements Inter_button_login {
 class SignIn_in implements Inter_button_login {
 	Signin_panel signin_panel;
 	@Override
-	public void go(Login_frame login_frame) {
-		signin_panel = new Signin_panel(login_frame);
+	public void go(Login_frame login_frame,ObjectOutputStream oos,ObjectInputStream ois) {
+		signin_panel = new Signin_panel(login_frame,oos,ois);
 		login_frame.add(signin_panel);
 		login_frame.signin_panel = this.signin_panel;
 		login_frame.remove(login_frame.login_panel);
@@ -134,9 +144,9 @@ class SignIn_in implements Inter_button_login {
 class FindInfo_in implements Inter_button_login {
 	FindIDPW_panel findIDPW_panel;
 	@Override
-	public void go(Login_frame login_frame) {
+	public void go(Login_frame login_frame,ObjectOutputStream oos,ObjectInputStream ois) {
 		
-		findIDPW_panel = new FindIDPW_panel(login_frame);
+		findIDPW_panel = new FindIDPW_panel(login_frame,oos,ois);
 		login_frame.add(findIDPW_panel);
 		login_frame.findIDPW_panel = this.findIDPW_panel;
 		login_frame.remove(login_frame.login_panel);
@@ -168,11 +178,14 @@ class SignInComplete_in implements Inter_button_login {
 	int win;
 	int lose;
 	int money;
-	
+	ObjectOutputStream oos;
+	ObjectInputStream ois;
 	ArrayList<Gen_textfiled> signInfo ;
 	ArrayList<Textfiled_password> pwInfo ;
 	@Override
-	public void go(Login_frame login_frame)  {
+	public void go(Login_frame login_frame,ObjectOutputStream oos,ObjectInputStream ois)  {
+		this.oos = oos;
+		this.ois = ois;
 		this.login_frame = login_frame;
 		this.signInfo = login_frame.signin_panel.signInfo;
 		this.pwInfo = login_frame.signin_panel.pwInfo;
@@ -241,7 +254,7 @@ class SignInComplete_in implements Inter_button_login {
 	}
 	
 	public void complete() {
-		login_panel = new Login_panel(login_frame);
+		login_panel = new Login_panel(login_frame,oos,ois);
 		login_frame.add(login_panel);
 		login_frame.login_panel = this.login_panel;
 		login_frame.remove(login_frame.signin_panel);
@@ -258,9 +271,9 @@ class SignInComplete_in implements Inter_button_login {
 class SignInCancel_in implements Inter_button_login {
 	Login_panel login_panel;
 	@Override
-	public void go(Login_frame login_frame) {
+	public void go(Login_frame login_frame,ObjectOutputStream oos,ObjectInputStream ois) {
 		
-		login_panel = new Login_panel(login_frame);
+		login_panel = new Login_panel(login_frame,oos,ois);
 		login_frame.add(login_panel);
 		login_frame.login_panel = this.login_panel;
 		login_frame.remove(login_frame.signin_panel);
@@ -273,9 +286,9 @@ class SignInCancel_in implements Inter_button_login {
 class FindCancel_in implements Inter_button_login {
 	Login_panel login_panel;
 	@Override
-	public void go(Login_frame login_frame) {
+	public void go(Login_frame login_frame,ObjectOutputStream oos,ObjectInputStream ois) {
 		
-		login_panel = new Login_panel(login_frame);
+		login_panel = new Login_panel(login_frame,oos,ois);
 		login_frame.add(login_panel);
 		login_frame.login_panel = this.login_panel;
 		login_frame.remove(login_frame.findIDPW_panel);
@@ -291,7 +304,7 @@ class FindCancel_in implements Inter_button_login {
 class SignIn_ID_DoubleCheck implements Inter_button_login {
 	Login_panel login_panel;
 	@Override
-	public void go(Login_frame login_frame) {
+	public void go(Login_frame login_frame,ObjectOutputStream oos,ObjectInputStream ois) {
 
 		String str = login_frame.signin_panel.signInfo.get(0).getText().trim() ;
 		
@@ -323,7 +336,7 @@ class SignIn_ID_DoubleCheck implements Inter_button_login {
 class SignIn_Nickname_DoubleCheck implements Inter_button_login {
 	Login_panel login_panel;
 	@Override
-	public void go(Login_frame login_frame) {
+	public void go(Login_frame login_frame,ObjectOutputStream oos,ObjectInputStream ois) {
 		String str = login_frame.signin_panel.signInfo.get(3).getText().trim();
 		
 		if (new GongbackCon().con(str)) {
@@ -352,7 +365,7 @@ class SignIn_Nickname_DoubleCheck implements Inter_button_login {
 class FindID_button implements Inter_button_login {
 
 	@Override
-	public void go(Login_frame login_frame) {
+	public void go(Login_frame login_frame,ObjectOutputStream oos,ObjectInputStream ois) {
 		
 		
 		String name_find = login_frame.findIDPW_panel.name_find.getText().trim() ;
@@ -398,7 +411,7 @@ class FindID_button implements Inter_button_login {
 class FindPW_button implements Inter_button_login {
 
 	@Override
-	public void go(Login_frame login_frame) {
+	public void go(Login_frame login_frame,ObjectOutputStream oos,ObjectInputStream ois) {
 		
 		
 		String idpw_find = login_frame.findIDPW_panel.idpw_find.getText().trim() ;
