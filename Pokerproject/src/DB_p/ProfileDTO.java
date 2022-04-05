@@ -1,15 +1,21 @@
 package DB_p;
 
-public class ProfileDTO {
+import java.io.Serializable;
+
+public class ProfileDTO implements Serializable{
 	
-	int profilenum;
-	String nickname;
-	String gender;
-	String introduce;
-	int totalGame;
-	int win;
-	int lose;
-	long money;
+	private static final long serialVersionUID = 1231245L;
+	
+	public int profilenum;
+	public String nickname;
+	public String gender;
+	public String introduce;
+	////갓 찬욱
+	public String msg;
+	public int totalGame;
+	public int win;
+	public int lose;
+	public long money;
 	
 	public ProfileDTO(int profilenum, String nickname, String gender, String introduce, int totalGame, int win,
 			int lose, long money) {

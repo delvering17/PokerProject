@@ -77,4 +77,17 @@ public class SignDB {
 		return new MemberDAO().memberReadCheck(id).password ;
 		
 	}
+	
+	public int num_get(String id) {
+		
+		int a = new MemberDAO().memberReadCheck(id).membernum;
+		return a;
+		
+	}
+	
+	public ProfileDTO num_profileRead(String id) {
+
+		return new ProfileDAO().profileReadCheck(id);
+		
+	}
 }

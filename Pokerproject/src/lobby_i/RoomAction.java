@@ -8,8 +8,9 @@ import javax.swing.JButton;
 
 import lobby_p.Lobby;
 import lobby_p.LobbyMain;
+import login_p.Login_frame;
 
 
 public interface RoomAction {
-	void room(HashMap<InetAddress, Object> roomChk,LobbyMain mainJf);
+	void room(HashMap<InetAddress, Object> roomChk,Login_frame mainJf);
 }

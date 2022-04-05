@@ -29,38 +29,43 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneLayout;
 import javax.swing.border.LineBorder;
 
+import DB_p.ProfileDTO;
 import lobby_i.RoomAction;
 import lobby_i.UserData;
+import login_p.Login_frame;
 
 public class Lobby extends JPanel {
 	JTextField jtf;
 	JTextArea jta;
-	Socket socket;
 	String addr;
-	ObjectInputStream ois;
+	Socket client;
+	Lobby sss;
 	ObjectOutputStream oos;
+	ObjectInputStream ois;
+	ProfileDTO data;
 	//들어올 유져 객체
-	ArrayList<Object> userList = new ArrayList<Object>();
-	LobbyMain mainJf;
+//	ArrayList<Object> userList = new ArrayList<Object>();
+	Login_frame mainJf;
+	
 	//방 체크할 리스트
 	HashMap<InetAddress, Object> roomChk;
 	ArrayList<RoomBtn> btnlist = new ArrayList<RoomBtn>();
-	public Lobby(LobbyMain mainJf) {
+	public Lobby(Socket client,Login_frame mainJf,ProfileDTO datathis) {
+		
 		this.mainJf = mainJf;
+		data = datathis;
 		try {
-			socket = new Socket(addr,8888);
-			ois = new ObjectInputStream(socket.getInputStream());
-			oos = new ObjectOutputStream(socket.getOutputStream());
+			System.out.println(client);
+			oos = new ObjectOutputStream(client.getOutputStream());
+			ois = new ObjectInputStream(client.getInputStream());
 		}catch (Exception e2) {
-			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-		
+		System.out.println(data.nickname);
 		setBounds(0, 0, 1200, 800);
 		setBackground(Color.black);
 		setLayout(null);
-		Receiver ch = new Receiver();
-		ch.start();
+		
 		Component roomAdd = new Component(10, 10, 800, 100);
 		add(roomAdd);
 		
@@ -76,6 +81,7 @@ public class Lobby extends JPanel {
 		JPanel roomPanel = new JPanel();//스크롤팬에 붙일 패널 생성
 		roomPanel.setBorder(new LineBorder(Color.white,10));
 		roomPanel.setLayout(new GridLayout(3,3,10,10));
+		
 		for (int i = 0; i < 9; i++) {
 			JLabel jl= new JLabel();
 			jl.setBorder(new LineBorder(Color.black,2));
@@ -84,14 +90,13 @@ public class Lobby extends JPanel {
 			RoomBtn rBtn = new RoomBtn("만들기","Making","231.0.0."+(i+1),90,110,80,40);
 			try {
 				InetAddress ad = InetAddress.getByName(rBtn.addr);
-//				roomChk.put(ad, null);
 			} catch (UnknownHostException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			jl.add(rBtn);
 			roomPanel.add(jl);
 		}
+		
 		Dimension size = new Dimension();
 		size.setSize(780, 800);
 		roomPanel.setPreferredSize(size);
@@ -110,23 +115,22 @@ public class Lobby extends JPanel {
 		chatting.add(jtf,"Center");
 		chatting.add(js,"South");
 		
+		
 		jtf.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				
 				try {
-					
-					UserData user = new UserData("zzz","전현우","1000000000");
-					user.msg = jtf.getText();
-					
-					oos.writeObject(user);
-					jtf.setText("");
+					data.msg = jtf.getText();
+					oos.writeObject(data);
+					oos.flush();
+					oos.reset();
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				} 
-				
+
+				jtf.setText("");
 			}
 		});
 		
@@ -134,6 +138,9 @@ public class Lobby extends JPanel {
 		add(userList);
 		Component profile = new Component(820,520 , 350, 230);
 		add(profile);
+		
+		Receiver ch = new Receiver();
+		ch.start();
 	}
 	
 	class RoomBtn extends JButton implements ActionListener{
@@ -175,24 +182,23 @@ public class Lobby extends JPanel {
 	
 
 	class Receiver extends Thread {
-		MulticastSocket socket = null;
-		
 		@Override
+		
 		public void run() {
-			
+//			ProfileDTO data = null;
 			try {
-
 				while(ois!=null) {
-					
-					
-					jta.append(":\n");
-					jta.setCaretPosition(jta.getDocument().getLength());
+					ProfileDTO data=(ProfileDTO)ois.readObject();
+					System.out.println(data.nickname);
+					jta.append(data.nickname + " : "+ data.msg+"\n");
+					System.out.println(data.nickname +" : "+ data.msg);
 				}
-			} catch (Exception e) {
+			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}finally {
-				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}
