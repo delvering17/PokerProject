@@ -5,25 +5,38 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Collections;
 import java.util.HashMap;
 
 import DB_p.ProfileDAO;
 import DB_p.ProfileDTO;
 import lobby_i.UserData;
 class MulServer {
-	ObjectInputStream dis;
-	ObjectOutputStream dos;
-	String name;
+
 	HashMap<String, ObjectOutputStream> userList;
-	public MulServer(Socket client) {
-		new Reciver(client).start();
+	public MulServer() {
+		try {
+			System.out.println("나 서버");
+			userList = new HashMap<String, ObjectOutputStream>();
+			Collections.synchronizedMap(userList);
+			ServerSocket server = new ServerSocket(8888);
+			while(true) {
+				Socket client = server.accept();
+				new Reciver(client).start();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	class Reciver extends Thread {
+		ObjectInputStream ois;
+		ObjectOutputStream oos;
+		String name;
 		public Reciver(Socket client) {
-			userList = new HashMap<String, ObjectOutputStream>();
 			try {
-				dos = new ObjectOutputStream(client.getOutputStream());
-				dis = new ObjectInputStream(client.getInputStream());
+				oos = new ObjectOutputStream(client.getOutputStream());
+				ois = new ObjectInputStream(client.getInputStream());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -31,20 +44,20 @@ class MulServer {
 		@Override
 		public void run() {
 			
-				while(dis!=null) {
-					try {
-					ProfileDTO data = (ProfileDTO)dis.readObject();
+			try {
+				while(ois!=null) {
+					ProfileDTO data = (ProfileDTO)ois.readObject();
 					name = data.nickname;
-					userList.put(data.nickname, dos);
+					userList.put(data.nickname, oos);
 					System.out.println(data.nickname +" : "+ data.msg);
 					sendToAll(data);
-					}catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}finally {
-						userList.remove(name);
-					}
 				}
+			}catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				userList.remove(name);
+			}
 			
 		}
 	}
@@ -64,18 +77,7 @@ class MulServer {
 public class SeverTestMain {
 
 	public static void main(String[] args) {
-
-		try {
-			System.out.println("나 서버");
-			ServerSocket server = new ServerSocket(8888);
-			while(true) {
-				Socket client = server.accept();
-				new MulServer(client);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			new MulServer();
 	}
 
 }

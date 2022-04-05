@@ -22,7 +22,11 @@ public class MemberDAO {
 		String url = "jdbc:mariadb://192.168.20.28:3306/poker_db";
 		String username = "pokertest";
 		String password = "cksdnr12";
-		
+		// mysql -u pokertest -p -h 192.168.20.28 
+		// password cksdnr12
+		// use poker_db;
+		// select * from member
+		// select * from profile
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
 			

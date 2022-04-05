@@ -17,7 +17,6 @@ public class LobbyMain extends JFrame{
 		test=this;
 		setLayout(null);
 		setBounds(200, 100, 1200, 800);
-		add(new Lobby(client,this));
 		
 		setVisible(true);
 		setResizable(false);
