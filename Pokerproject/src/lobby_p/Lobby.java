@@ -39,7 +39,6 @@ public class Lobby extends JPanel {
 	JTextArea jta;
 	String addr;
 	Socket client;
-	Lobby sss;
 	ObjectOutputStream oos;
 	ObjectInputStream ois;
 	ProfileDTO data;
