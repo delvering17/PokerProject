@@ -27,7 +27,7 @@ public class Making implements RoomAction {
 	@Override
 	public void room(HashMap<InetAddress, Object> roomChk,Login_frame mainJf) {
 		
-		String[] beting = {"1만","2만","5만","10만","100만"};
+		String[] beting = {"1원","10원","100원","1000원"};
 		JFrame jf = new JFrame();
 		jf.setBounds(600, 200, 300, 400);
 		jf.setLayout(null);

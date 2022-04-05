@@ -68,8 +68,5 @@ class Textfiled_password extends JPasswordField implements ActionListener  {
 		// TODO Auto-generated method stub
 		
 	}
-	
-
-
 
 }

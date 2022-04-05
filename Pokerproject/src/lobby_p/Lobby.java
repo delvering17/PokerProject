@@ -136,8 +136,9 @@ public class Lobby extends JPanel {
 		
 		Component userList = new Component(820,520 , 350, 230);
 		add(userList);
-		Component profile = new Component(820,10 , 350, 500);
-		add(profile);
+		
+		UserProfile_panel profilePanel = new UserProfile_panel(data);
+		add(profilePanel);
 		
 		Receiver ch = new Receiver();
 		ch.start();
