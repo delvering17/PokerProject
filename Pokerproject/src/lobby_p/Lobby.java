@@ -119,7 +119,6 @@ public class Lobby extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
 				try {
 					data.msg = jtf.getText();
 					oos.writeObject(data);

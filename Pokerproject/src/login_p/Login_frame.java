@@ -65,8 +65,10 @@ public class Login_frame extends JFrame {
 				while(ois!=null) {
 					ProfileDTO data=(ProfileDTO)ois.readObject();
 					System.out.println(data.nickname);
-					jta.append(data.nickname + " : "+ data.msg+"\n");
-					System.out.println(data.nickname +" : "+ data.msg);
+					if(data.msg!=null) {
+						jta.append(data.nickname + " : "+ data.msg+"\n");
+						System.out.println(data.nickname +" : "+ data.msg);
+					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
