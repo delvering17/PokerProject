@@ -31,9 +31,11 @@ public class Enter implements RoomAction{
 		
 		login_frame.remove(login_frame.lobby_panel);
 		data.roomNum = 1;
-		data.msg = "[입장]";
+
 		try {
 			oos.writeObject(data);
+			oos.flush();
+			oos.reset();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

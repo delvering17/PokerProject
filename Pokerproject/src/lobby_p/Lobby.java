@@ -66,8 +66,8 @@ public class Lobby extends JPanel {
 		Component roomAdd = new Component(10, 10, 800, 100);
 		add(roomAdd);
 		
-		btnlist.add(new RoomBtn("방만들기","Making",590,35,100,60,data));		
-		btnlist.add(new RoomBtn("바로입장","Enter",695,35,100,60,data));
+		btnlist.add(new RoomBtn("방만들기","Making",590,35,100,60,datathis));		
+		btnlist.add(new RoomBtn("바로입장","Enter",695,35,100,60,datathis));
 		
 		roomAdd.add(btnlist.get(0));
 		roomAdd.add(btnlist.get(1));

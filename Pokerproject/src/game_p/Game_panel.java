@@ -253,6 +253,8 @@ public class Game_panel extends JPanel implements ActionListener {
 				try {
 					data.msg = chf.getText();
 					oos.writeObject(data);
+					oos.flush();
+					oos.reset();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
