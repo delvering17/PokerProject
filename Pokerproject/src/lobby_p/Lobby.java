@@ -70,7 +70,7 @@ public class Lobby extends JPanel {
 //		btnlist.add();
 		
 		roomAdd.add(new RoomBtn("방만들기","Making",590,35,100,60,datathis));
-		roomAdd.add(new RoomBtn("바로입장","Enter",695,35,100,60,datathis));
+		roomAdd.add(new RoomBtn("바로입장","Enter",0,695,35,100,60,datathis));
 		
 		JScrollPane roomList = new JScrollPane();//스크롤팬 생성
 		roomList.setBounds(10, 120, 800, 400);
