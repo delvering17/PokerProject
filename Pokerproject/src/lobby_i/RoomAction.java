@@ -16,5 +16,5 @@ import login_p.Login_frame;
 
 public interface RoomAction {
 	void room(HashMap<InetAddress, Object> roomChk,Login_frame mainJf,ObjectOutputStream oos,
-	ObjectInputStream ois,ProfileDTO data);
+	ObjectInputStream ois,ProfileDTO data,int addr);
 }

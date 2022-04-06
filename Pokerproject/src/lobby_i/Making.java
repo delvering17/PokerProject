@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
@@ -21,6 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
 import DB_p.ProfileDTO;
+import game_p.Game_panel;
 import lobby_p.Lobby;
 import lobby_p.LobbyMain;
 import login_p.Login_frame;
@@ -29,8 +31,8 @@ public class Making implements RoomAction {
 
 	@Override
 	public void room(HashMap<InetAddress, Object> roomChk,Login_frame mainJf,ObjectOutputStream oos,
-	ObjectInputStream ois,ProfileDTO data) {
-		
+	ObjectInputStream ois,ProfileDTO data,int addr) {
+		data.roomNum = addr;
 		String[] beting = {"1원","10원","100원","1000원"};
 		JFrame jf = new JFrame();
 		jf.setBounds(600, 200, 300, 400);
@@ -80,10 +82,22 @@ public class Making implements RoomAction {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				jf.setVisible(false);
-				JPanel a = new JPanel();
-				a.setBounds(0, 0, 1200, 800);
-				a.setBackground(Color.blue);
-				mainJf.add(a);
+
+				
+				mainJf.remove(mainJf.lobby_panel);
+				data.roomNum = addr;
+				try {
+					oos.writeObject(data);
+					oos.flush();
+					oos.reset();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				Game_panel game_panel = new Game_panel(mainJf,oos,ois,data,addr);
+				mainJf.add(game_panel);
+				mainJf.game_panelarr.add(game_panel);
 				mainJf.repaint();
 			}
 		});

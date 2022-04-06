@@ -51,11 +51,11 @@ public class Game_panel extends JPanel implements ActionListener {
 	ArrayList<Ingame_userProfile_panel> userprofile = new ArrayList<Ingame_userProfile_panel>();
 	Login_frame login_frame;
 	Game_panel game_panel;
-	public Game_panel(Login_frame login_frame,ObjectOutputStream oos,ObjectInputStream ois,ProfileDTO data) {
+	public Game_panel(Login_frame login_frame,ObjectOutputStream oos,ObjectInputStream ois,ProfileDTO data,int addr) {
 		this.data = data;
 		this.login_frame = login_frame;
 		game_panel =this;
-		data.roomNum=1;
+		data.roomNum=addr;
 		setBounds(0, 0, 1200, 800);
 		setBackground(new Color(32,56,48));
 		setLayout(null);

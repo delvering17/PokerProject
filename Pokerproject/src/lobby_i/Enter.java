@@ -19,7 +19,7 @@ public class Enter implements RoomAction{
 
 	@Override
 	public void room(HashMap<InetAddress, Object> roomChk,Login_frame login_frame,ObjectOutputStream oos,
-	ObjectInputStream ois,ProfileDTO data) {
+	ObjectInputStream ois,ProfileDTO data,int addr) {
 		
 //		for (Object chk : roomChk.values()) {
 //			if(chk!=null) {
@@ -30,8 +30,7 @@ public class Enter implements RoomAction{
 //		}
 		
 		login_frame.remove(login_frame.lobby_panel);
-		data.roomNum = 1;
-
+		data.roomNum = addr;
 		try {
 			oos.writeObject(data);
 			oos.flush();
@@ -40,7 +39,7 @@ public class Enter implements RoomAction{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Game_panel game_panel = new Game_panel(login_frame,oos,ois,data);
+		Game_panel game_panel = new Game_panel(login_frame,oos,ois,data,addr);
 		login_frame.add(game_panel);
 		login_frame.game_panelarr.add(game_panel);
 		login_frame.repaint();

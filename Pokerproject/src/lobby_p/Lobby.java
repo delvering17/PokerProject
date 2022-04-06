@@ -84,12 +84,12 @@ public class Lobby extends JPanel {
 			jl.setBorder(new LineBorder(Color.black,2));
 			jl.setOpaque(true);
 			jl.setBackground(new Color(255,111,111));
-			RoomBtn rBtn = new RoomBtn("만들기","Making","231.0.0."+(i+1),90,110,80,40,data);
-			try {
-				InetAddress ad = InetAddress.getByName(rBtn.addr);
-			} catch (UnknownHostException e1) {
-				e1.printStackTrace();
-			}
+			RoomBtn rBtn = new RoomBtn("만들기","Making",i+1,90,110,80,40,data);
+//			try {
+//				InetAddress ad = InetAddress.getByName(rBtn.addr);
+//			} catch (UnknownHostException e1) {
+//				e1.printStackTrace();
+//			}
 			jl.add(rBtn);
 			roomPanel.add(jl);
 		}
@@ -150,8 +150,8 @@ public class Lobby extends JPanel {
 			setBounds(x, y, width, height);
 			addActionListener(this);
 		}
-		String addr;
-		public RoomBtn(String name,String cname,String addr,int x,int y,int width , int height,ProfileDTO data) {
+		Integer addr;
+		public RoomBtn(String name,String cname,int addr,int x,int y,int width , int height,ProfileDTO data) {
 			super(name);
 			this.cname = cname;
 			this.addr = addr;
@@ -164,7 +164,7 @@ public class Lobby extends JPanel {
 			try {
 				System.out.println(cname);
 				RoomAction ra = (RoomAction)Class.forName("lobby_i."+cname).newInstance();
-				ra.room(roomChk,mainJf,oos,ois,data);
+				ra.room(roomChk,mainJf,oos,ois,data,addr);
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			} 
