@@ -1,4 +1,4 @@
-package poker_p;
+package game_p;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;

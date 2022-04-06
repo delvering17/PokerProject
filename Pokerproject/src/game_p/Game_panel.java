@@ -26,7 +26,7 @@ import javax.swing.JTextField;
 import DB_p.ProfileDTO;
 import lobby_p.Lobby;
 import login_p.Login_frame;
-import poker_p.PokerGameMain;
+
 
 
 
@@ -39,6 +39,10 @@ public class Game_panel extends JPanel implements ActionListener {
 	JButton bt; 
 	
 	JPanel p1;
+	JPanel p2;
+	JPanel p3;
+	JPanel p4;
+	JPanel p5;
 	
 	JLabel timebel;
 	
@@ -99,37 +103,20 @@ public class Game_panel extends JPanel implements ActionListener {
 			}
 			
 		});
-		// Player user(user 카드)
-		p1 = new JPanel();
-		p1.setBounds(420, 520, 290, 200);
-		p1.setBackground(new Color(41,67,58));
+		
+		
+		p1 = new PlayerCard_panel(420, 520, 290, 200);
 		add(p1);
-		
-		// player2(p2 카드)
-		JPanel p2 = new JPanel();
-		p2.setBounds(200, 50, 290, 200);
-		p2.setBackground(new Color(41,67,58));
+		p2 = new PlayerCard_panel(200, 50, 290, 200);
 		add(p2);
-		
-		
-		
-		// player3(p3 카드)
-		JPanel p3 = new JPanel();
-		p3.setBounds(200,280,290,200);
-		p3.setBackground(new Color(41,67,58));
+		p3 = new PlayerCard_panel(200,280,290,200);
 		add(p3);
-		
-	
-		
-		// player4(p4 카드)
-		JPanel p4 = new JPanel();
-		p4.setBounds(710, 50, 290, 200);
-		p4.setBackground(new Color(41,67,58));
-		p4.setLayout(null);
-		ArrayList<JLabel> cardshow = new ArrayList<JLabel>();
-		 
-		pokerGamemain = new PokerGameMain(); 
-		p4.add(pokerGamemain.deck.get(0));
+		p4 = new PlayerCard_panel(710, 50, 290, 200);
+		add(p4);
+		p5 = new PlayerCard_panel(710, 280, 290, 200);
+		add(p5);
+
+//		ArrayList<JLabel> cardshow = new ArrayList<JLabel>();
 	
 //		ImageIcon img = new ImageIcon("test/100Card23.png");
 //		JLabel card = new JLabel();
@@ -158,19 +145,7 @@ public class Game_panel extends JPanel implements ActionListener {
 //		JLabel card6 = new JLabel(img);
 //		card6.setBounds(20,0, 100,200);
 //		p4.add(card6);
-		
-		
-		
-		add(p4);
-		
-		
-		
-		
-		// player5(p5 카드)
-		JPanel p5 = new JPanel();
-		p5.setBounds(710, 280, 290, 200);
-		p5.setBackground(new Color(41,67,58));
-		add(p5);
+
 		
 		// test user profile
 		
@@ -214,31 +189,33 @@ public class Game_panel extends JPanel implements ActionListener {
 				}
 			});
         }
-        timebel = new JLabel();
-        timebel.setLayout(new FlowLayout());
-        timebel.setBounds(0, 300, 400, 100);
-        p1.add(timebel);
+//        timebel = new JLabel();
+//        timebel.setLayout(new FlowLayout());
+//        timebel.setBounds(0, 300, 400, 100);
+//        p1.add(timebel);
+//        
+//        timer = new Timer();
+//
+//        timer.scheduleAtFixedRate(new TimerTask() {
+//        	int i = 5;
+//			
+//        	@Override
+//			public void run() {
+//        		timebel.setText("Time left: " + i);
+//        		
+//                i--;
+//
+//                if (i < 0) {
+//                	timer.cancel();
+//                    timebel.setText("Time Over");
+//              
+//                     
+//                }
+//                
+//			}
+//		}, 0, 1000);
         
-        timer = new Timer();
-
-        timer.scheduleAtFixedRate(new TimerTask() {
-        	int i = 5;
-			
-        	@Override
-			public void run() {
-        		timebel.setText("Time left: " + i);
-        		
-                i--;
-
-                if (i < 0) {
-                	timer.cancel();
-                    timebel.setText("Time Over");
-              
-                     
-                }
-                
-			}
-		}, 0, 1000);
+        
         
         
     	JPanel chat = new JPanel();
@@ -278,6 +255,8 @@ public class Game_panel extends JPanel implements ActionListener {
 			}
 		});
   
+		
+		
         }
 
 
@@ -314,7 +293,13 @@ class Help_pg extends JFrame{
 
 }	
 
-// 클래스 betting
-// 메소드(int panMoney) int call(int panMoney), bbing() , ddadang(), half() die() check() max() ;
-//"콜","삥","따당","하프","다이","체크","맥스"}
+class PlayerCard_panel extends JPanel {
+	
+	public PlayerCard_panel(int x, int y, int width, int height) {
+		setBounds(x, y, width, height);
+		setBackground(new Color(41,67,58));
+	}
+}
+
+
 

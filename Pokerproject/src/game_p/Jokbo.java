@@ -1,64 +1,23 @@
-package poker_p;
+package game_p;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-import game_p.Game_panel;
-
-
-
-public class PokerGameMain {
-	public ArrayList<PokerCard> deck = new ArrayList<PokerCard>();;
-	 ArrayList<PokerCard> myDeck;
-	 Game_panel gamepanel;
-	public PokerGameMain() {
-		deck = new ArrayList<PokerCard>();
+public class Jokbo {
 	
-		myDeck = new ArrayList<PokerCard>();
-		for (int i = 2; i < 15; i++) {
-			for (int j = 1; j < 5; j++) {
-				deck.add(new PokerCard(i,j,new JLabel(new ImageIcon("Card/"+myDeck.get(i).imgname+".png"))));
-			}
-		}
-		myDeck.add(Split());
-		myDeck.add(Split());
-		myDeck.add(Split());
-		myDeck.add(Split());
-		myDeck.add(Split());
-		myDeck.add(Split());
-		myDeck.add(Split());
+	
+	
+	public Jokbo() {
 		
-//		myDeck.add(new PokerCard(1,2));
-//		myDeck.add(new PokerCard(3,2));
-//		myDeck.add(new PokerCard(4,2));
-//		myDeck.add(new PokerCard(5,2));
-//		myDeck.add(new PokerCard(6,2));
-//		myDeck.add(new PokerCard(11,3));
-//		myDeck.add(new PokerCard(10,3));
-		for (PokerCard pokerCard : myDeck) {
-			//System.out.println(pokerCard.number+","+pokerCard.shape); 
-		}
-		System.out.println(jokbo(myDeck));
+		
+		
+		
 	}
-	PokerCard Split() {
-		PokerCard send;
-		
-		Random num = new Random();
-		int a = num.nextInt(deck.size());
-		
-		send = deck.get(a);
-		deck.remove(send);
-		return send;
-	}
-	
-	// 스트레이트// 23456
-	
 	
 	int straightcon = 0;
 	
@@ -90,7 +49,7 @@ public class PokerGameMain {
 		}
 	}
 	
-	//
+	
 	String jokbo(ArrayList<PokerCard> myDeck) {
 		String res = "";
 		int top =0;
@@ -290,14 +249,7 @@ public class PokerGameMain {
 		}
 		
 		return res;
+	
 	}
-	
-	
-	
-	public static void main(String[] args) {
-		
-		new PokerGameMain(this);
-		
-	}
-	
 }
+
