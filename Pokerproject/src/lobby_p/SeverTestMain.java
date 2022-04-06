@@ -69,6 +69,7 @@ class MulServer {
 					dd.writeObject(data);
 					dd.flush();
 					dd.reset();
+					
 				}
 				
 			} catch (IOException e) {

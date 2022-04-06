@@ -77,6 +77,14 @@ public class Game_panel extends JPanel implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
 					if (e.getSource() == exit) {
 						data.roomNum = 0;
+						try {
+							oos.writeObject(data);
+							oos.flush();
+							oos.reset();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 						login_frame.remove(game_panel);
 						login_frame.add(new Lobby(login_frame, data, oos, ois));
 						

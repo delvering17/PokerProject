@@ -21,13 +21,7 @@ public class Enter implements RoomAction{
 	public void room(HashMap<InetAddress, Object> roomChk,Login_frame login_frame,ObjectOutputStream oos,
 	ObjectInputStream ois,ProfileDTO data,int addr) {
 		
-//		for (Object chk : roomChk.values()) {
-//			if(chk!=null) {
-//				Object.arraylist.size() <4 {
-//					new Objcet();
-//				}
-//			}
-//		}
+		
 		
 		login_frame.remove(login_frame.lobby_panel);
 		data.roomNum = addr;

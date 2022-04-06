@@ -1,6 +1,7 @@
 package DB_p;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 public class ProfileDTO implements Serializable{
 	
@@ -18,9 +19,14 @@ public class ProfileDTO implements Serializable{
 	public long money;
 	public int witch;
 	public int roomNum = -1;
+	public boolean[] roomchk;
 	public ProfileDTO(int profilenum, String nickname, String gender, String introduce, int totalGame, int win,
 			int lose, long money) {
 		super();
+		roomchk = new boolean[9];
+		for (boolean rc : roomchk) {
+			rc=false;
+		}
 		this.profilenum = profilenum;
 		this.nickname = nickname;
 		this.gender = gender;

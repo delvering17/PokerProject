@@ -66,11 +66,11 @@ public class Lobby extends JPanel {
 		Component roomAdd = new Component(10, 10, 800, 100);
 		add(roomAdd);
 		
-		btnlist.add(new RoomBtn("방만들기","Making",590,35,100,60,datathis));		
-		btnlist.add(new RoomBtn("바로입장","Enter",695,35,100,60,datathis));
+//		btnlist.add();		
+//		btnlist.add();
 		
-		roomAdd.add(btnlist.get(0));
-		roomAdd.add(btnlist.get(1));
+		roomAdd.add(new RoomBtn("방만들기","Making",590,35,100,60,datathis));
+		roomAdd.add(new RoomBtn("바로입장","Enter",695,35,100,60,datathis));
 		
 		JScrollPane roomList = new JScrollPane();//스크롤팬 생성
 		roomList.setBounds(10, 120, 800, 400);
@@ -90,6 +90,7 @@ public class Lobby extends JPanel {
 //			} catch (UnknownHostException e1) {
 //				e1.printStackTrace();
 //			}
+			btnlist.add(rBtn);
 			jl.add(rBtn);
 			roomPanel.add(jl);
 		}
@@ -144,9 +145,11 @@ public class Lobby extends JPanel {
 	
 	class RoomBtn extends JButton implements ActionListener{
 		String cname;
+		String name;
 		public RoomBtn(String name,String cname,int x,int y,int width , int height,ProfileDTO data) {
 			super(name);
 			this.cname = cname;
+			this.name = name;
 			setBounds(x, y, width, height);
 			addActionListener(this);
 		}
@@ -154,6 +157,7 @@ public class Lobby extends JPanel {
 		public RoomBtn(String name,String cname,int addr,int x,int y,int width , int height,ProfileDTO data) {
 			super(name);
 			this.cname = cname;
+			this.name = name;
 			this.addr = addr;
 			setBounds(x, y, width, height);
 			addActionListener(this);
