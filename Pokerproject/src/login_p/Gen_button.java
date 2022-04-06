@@ -102,7 +102,7 @@ class LogIn_in implements Inter_button_login {
 						Socket client = new Socket("192.168.20.39", 8888);
 						login_frame.remove(login_frame.login_panel);
 						datathis.roomNum = 0;
-						Lobby lobby_panel = new Lobby(client,login_frame,datathis,oos,ois);
+						Lobby lobby_panel = new Lobby(login_frame,datathis,oos,ois);
 						login_frame.add(lobby_panel) ;
 						login_frame.userDTO = datathis;
 						login_frame.lobby_panel = lobby_panel;

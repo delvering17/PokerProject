@@ -24,6 +24,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import DB_p.ProfileDTO;
+import lobby_p.Lobby;
 import login_p.Login_frame;
 
 
@@ -48,9 +49,12 @@ public class Game_panel extends JPanel implements ActionListener {
 	ObjectOutputStream oos;
 	ObjectInputStream ois;
 	ArrayList<Ingame_userProfile_panel> userprofile = new ArrayList<Ingame_userProfile_panel>();
-	
+	Login_frame login_frame;
+	Game_panel game_panel;
 	public Game_panel(Login_frame login_frame,ObjectOutputStream oos,ObjectInputStream ois,ProfileDTO data) {
 		this.data = data;
+		this.login_frame = login_frame;
+		game_panel =this;
 		data.roomNum=1;
 		setBounds(0, 0, 1200, 800);
 		setBackground(new Color(32,56,48));
@@ -72,7 +76,11 @@ public class Game_panel extends JPanel implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 					if (e.getSource() == exit) {
-						// 방 나가기 
+						data.roomNum = 0;
+						login_frame.remove(game_panel);
+						login_frame.add(new Lobby(login_frame, data, oos, ois));
+						
+						login_frame.repaint();
 					}
 //					dispose(); // 원래있던 창이 꺼지며 새로운 창 나오게함
 //					Exit_pg ex_pg = new Exit_pg();
@@ -220,17 +228,19 @@ public class Game_panel extends JPanel implements ActionListener {
         
         
     	JPanel chat = new JPanel();
+    	chat.setLayout(new BorderLayout());
 		chat.setBounds(920,520,250,220);
 		chat.setBackground(Color.black);
 		add(chat);
 		
-		chf = new JTextField(22);
-		chf.setBounds(920, 550, 20, 20);
+		chf = new JTextField();
+		chf.setBounds(920, 550, 220, 20);
 		chf.addActionListener(this);
 		
-		cht = new JTextArea(22,22);
+		cht = new JTextArea();
 		login_frame.jta = cht;
 		JScrollPane jp = new JScrollPane(cht);
+		jp.setBounds(920, 580, 220, 20);
 		cht.setEditable(false);
 		
 		chat.add(chf,BorderLayout.SOUTH);
@@ -240,16 +250,13 @@ public class Game_panel extends JPanel implements ActionListener {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String tt = chf.getText();
-				data.msg = tt;
 				try {
+					data.msg = chf.getText();
 					oos.writeObject(data);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-//				cht.append(tt+"\n");
-				chf.selectAll();
 				cht.setCaretPosition(cht.getDocument().getLength());
 				chf.setText("");
 			}
