@@ -1,5 +1,6 @@
 package lobby_i;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
@@ -29,6 +30,14 @@ public class Enter implements RoomAction{
 //		}
 		
 		login_frame.remove(login_frame.lobby_panel);
+		data.roomNum = 1;
+		data.msg = "[입장]";
+		try {
+			oos.writeObject(data);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Game_panel game_panel = new Game_panel(login_frame,oos,ois,data);
 		login_frame.add(game_panel);
 		login_frame.game_panelarr.add(game_panel);
