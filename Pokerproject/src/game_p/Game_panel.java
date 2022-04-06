@@ -51,6 +51,7 @@ public class Game_panel extends JPanel implements ActionListener {
 	
 	public Game_panel(Login_frame login_frame,ObjectOutputStream oos,ObjectInputStream ois,ProfileDTO data) {
 		this.data = data;
+		data.roomNum=1;
 		setBounds(0, 0, 1200, 800);
 		setBackground(new Color(32,56,48));
 		setLayout(null);
