@@ -38,7 +38,6 @@ public class Lobby extends JPanel {
 	JTextField jtf;
 	JTextArea jta;
 	String addr;
-	Socket client;
 	ObjectOutputStream oos;
 	ObjectInputStream ois;
 	ProfileDTO data;
@@ -49,12 +48,11 @@ public class Lobby extends JPanel {
 	//방 체크할 리스트
 	HashMap<InetAddress, Object> roomChk;
 	ArrayList<RoomBtn> btnlist = new ArrayList<RoomBtn>();
-	public Lobby(Socket client,Login_frame mainJf,ProfileDTO datathis,ObjectOutputStream oos,ObjectInputStream ois) {
+	public Lobby(Login_frame mainJf,ProfileDTO datathis,ObjectOutputStream oos,ObjectInputStream ois) {
 		
 		this.mainJf = mainJf;
-		data = datathis;
+		this.data = datathis;
 		try {
-			System.out.println(client);
 			this.oos = oos;
 			this.ois = ois;
 		}catch (Exception e2) {
