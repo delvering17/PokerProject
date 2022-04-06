@@ -19,6 +19,7 @@ public class ProfileDTO implements Serializable{
 	public long money;
 	public int witch;
 	public int roomNum = -1;
+	public int playerNum = -1;
 	public static int[] roomchk = {0,0,0,0,0,0,0,0,0};
 	public ProfileDTO(int profilenum, String nickname, String gender, String introduce, int totalGame, int win,
 			int lose, long money) {

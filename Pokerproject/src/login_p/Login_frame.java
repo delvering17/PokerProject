@@ -14,8 +14,15 @@ import javax.swing.JTextField;
 import DB_p.ProfileDTO;
 import game_p.Game_panel;
 import lobby_p.Lobby;
+import net_p.NetExecute;
+import net_p.Receiver;
+import net_p.TCPData;
 
-public class Login_frame extends JFrame {
+
+
+
+
+public class Login_frame extends JFrame implements NetExecute{
 	Login_panel login_panel;
 	Signin_panel signin_panel;
 	FindIDPW_panel findIDPW_panel;
@@ -26,55 +33,31 @@ public class Login_frame extends JFrame {
 	
 	public JTextArea jta;
 	
-	ObjectOutputStream oos;
-	ObjectInputStream ois;
+	
 	
 	public Login_frame(Socket client) {
-		try {
-			oos = new ObjectOutputStream(client.getOutputStream());
-			ois = new ObjectInputStream(client.getInputStream());
-		}catch (Exception e2) {
-			e2.printStackTrace();
-		}
+		
 		login_frame=this;
 		setBounds(50,50,1200,800);
 		setLayout(null);
 	
-		login_panel = new Login_panel(this,oos,ois);
+		
+		
+		Receiver ch = new Receiver(this, client);
+		ch.start();
+		
+		
+		login_panel = new Login_panel(this, ch);
+		//ch.login_panel = login_panel;
+		ch.map.put("login_panel", login_panel);
 		add(login_panel);
 		
-		Receiver ch = new Receiver();
-		ch.start();
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		
 	}
-	class RepaintT extends Thread {
-		@Override
-		public void run() {
-			login_frame.repaint();
-		}
-	}
-
-	class Receiver extends Thread {
-		@Override
-		
-		public void run() {
-			try {
-				while(ois!=null) {
-					ProfileDTO data=(ProfileDTO)ois.readObject();
-					System.out.println(data.nickname);
-					if(data.msg!=null) {
-						jta.append(data.nickname + " : "+ data.msg+"\n");
-						System.out.println(data.nickname +" : "+ data.msg);
-					}
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
+	
 	public static void main(String[] args) {
 		
 		try {
@@ -85,6 +68,19 @@ public class Login_frame extends JFrame {
 			e.printStackTrace();
 		}
 
+	}
+
+	@Override
+	public void execute(TCPData data) {
+		
+		ProfileDTO dto = (ProfileDTO)data.rdata;
+		
+		System.out.println(dto.nickname);
+		if(dto.msg!=null) {
+			jta.append(dto.nickname + " : "+ dto.msg+"\n");
+			System.out.println(dto.nickname +" : "+ dto.msg);
+		}
+		
 	}
 
 }
