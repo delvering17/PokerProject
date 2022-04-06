@@ -48,7 +48,6 @@ class MulServer {
 			try {
 				while(ois!=null) {
 					ProfileDTO data = (ProfileDTO)ois.readObject();
-					name = data.nickname;
 					userList.put(oos,data);
 					System.out.println(data.nickname +" : "+ data.msg);
 					sendToAll(data);
@@ -82,7 +81,7 @@ class MulServer {
 public class SeverTestMain {
 
 	public static void main(String[] args) {
-			new MulServer();
+			 new MulServer();
 	}
 
 }
