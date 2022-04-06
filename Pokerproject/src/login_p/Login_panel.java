@@ -34,9 +34,9 @@ public class Login_panel extends JPanel  implements NetExecute{
 		add(id_login);
 		add(pw_login);
 		
-		//add(new Gen_button_login(login_frame,"로그인","LogIn_in",600,400, 100,100,oos,ois));
-		//add(new Gen_button_login(login_frame,"아이디/비밀번호찾기","FindInfo_in",400,500, 200,50,oos,ois));
-		//add(new Gen_button_login(login_frame,"회원가입","SignIn_in",400,550, 200,50,oos,ois));
+		//add(new Gen_button_login(login_frame,"로그인","LogIn_in",600,400, 100,100,ch));
+		//add(new Gen_button_login(login_frame,"아이디/비밀번호찾기","FindInfo_in",400,500, 200,50,ch));
+		//add(new Gen_button_login(login_frame,"회원가입","SignIn_in",400,550, 200,50,ch));
 		
 		//ch.send(data);
 	//통신 금; 

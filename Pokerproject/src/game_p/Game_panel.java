@@ -23,9 +23,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import DB_p.ProfileDTO;
+
 import lobby_p.Lobby;
 import login_p.Login_frame;
+import net_p.Receiver;
+import net_p.TCPData;
 
 
 
@@ -50,24 +52,22 @@ public class Game_panel extends JPanel implements ActionListener {
 	
 	JTextField chf;
 	JTextArea cht;
-	ProfileDTO data;
-	ObjectOutputStream oos;
-	ObjectInputStream ois;
+	TCPData tcpdata;
+
 	ArrayList<Ingame_userProfile_panel> userprofile = new ArrayList<Ingame_userProfile_panel>();
 	Login_frame login_frame;
 	Game_panel game_panel;
 	PokerGameMain pokerGamemain;
 	
-	public Game_panel(Login_frame login_frame,ObjectOutputStream oos,ObjectInputStream ois,ProfileDTO data,int addr) {
-		this.data = data;
+	public Game_panel(Login_frame login_frame,Receiver ch,TCPData tcpdata) {
+		this.tcpdata = tcpdata;
 		this.login_frame = login_frame;
 		game_panel =this;
-		data.roomNum=addr;
+		
 		setBounds(0, 0, 1200, 800);
 		setBackground(new Color(32,56,48));
 		setLayout(null);
-		this.oos = oos;
-		this.ois = ois;
+		
 		help = new JButton("help");
 		help.setBounds(1040, 0, 70, 30);
 		help.setBackground(Color.white);
@@ -83,17 +83,17 @@ public class Game_panel extends JPanel implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 					if (e.getSource() == exit) {
-						data.roomNum = 0;
+						tcpdata.roomNum = 0;
 						try {
-							oos.writeObject(data);
-							oos.flush();
-							oos.reset();
+							ch.oos.writeObject(tcpdata);
+							ch.oos.flush();
+							ch.oos.reset();
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 						login_frame.remove(game_panel);
-						login_frame.add(new Lobby(login_frame, data, oos, ois));
+						login_frame.add(new Lobby(login_frame, ch, tcpdata));
 						
 						login_frame.repaint();
 					}
@@ -242,10 +242,10 @@ public class Game_panel extends JPanel implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					data.msg = chf.getText();
-					oos.writeObject(data);
-					oos.flush();
-					oos.reset();
+					tcpdata.msg = chf.getText();
+					ch.oos.writeObject(tcpdata);
+					ch.oos.flush();
+					ch.oos.reset();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

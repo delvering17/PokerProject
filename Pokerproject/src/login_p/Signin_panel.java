@@ -8,6 +8,8 @@ import java.util.Iterator;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import net_p.Receiver;
+
 public class Signin_panel extends JPanel {
 	Login_frame login_frame;
 	
@@ -16,12 +18,9 @@ public class Signin_panel extends JPanel {
 	
 	boolean doubleCheck_id = true;
 	boolean doublecCheck_nickname = true;
-	ObjectOutputStream oos;
-	ObjectInputStream ois;
-	public Signin_panel(Login_frame login_frame,ObjectOutputStream oos,
-	ObjectInputStream ois) {
-		this.oos = oos;
-		this.ois = ois;
+
+	public Signin_panel(Login_frame login_frame,Receiver ch) {
+		
 		this.login_frame = login_frame;
 		setBounds(0,0,1200,800);
 		setLayout(null);
@@ -66,11 +65,11 @@ public class Signin_panel extends JPanel {
 			add(textfiled_password);
 		}
 		
-		add(new Gen_button_login(login_frame,"완료","SignInComplete_in",550,620, 100,50,oos,ois));
-		add(new Gen_button_login(login_frame,"취소","SignInCancel_in",400,620, 100,50,oos,ois));
+		add(new Gen_button_login(login_frame,"완료","SignInComplete_in",550,620, 100,50,ch));
+		add(new Gen_button_login(login_frame,"취소","SignInCancel_in",400,620, 100,50,ch));
 		
-		add(new Gen_button_login(login_frame,"중복 확인","SignIn_ID_DoubleCheck",700,100, 100,50,oos,ois));
-		add(new Gen_button_login(login_frame,"중복 확인","SignIn_Nickname_DoubleCheck",700,350, 100,50,oos,ois));
+		add(new Gen_button_login(login_frame,"중복 확인","SignIn_ID_DoubleCheck",700,100, 100,50,ch));
+		add(new Gen_button_login(login_frame,"중복 확인","SignIn_Nickname_DoubleCheck",700,350, 100,50,ch));
 		
 		
 	}

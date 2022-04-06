@@ -12,9 +12,12 @@ import DB_p.ProfileDTO;
 import lobby_p.Lobby;
 import lobby_p.LobbyMain;
 import login_p.Login_frame;
+import net_p.Receiver;
+import net_p.TCPData;
 
 
 public interface RoomAction {
-	void room(HashMap<InetAddress, Object> roomChk,Login_frame mainJf,ObjectOutputStream oos,
-	ObjectInputStream ois,ProfileDTO data,int addr);
+
+
+	void room(Login_frame mainJf, Receiver ch, TCPData data);
 }

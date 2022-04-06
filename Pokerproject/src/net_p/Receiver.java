@@ -18,8 +18,8 @@ public class Receiver extends Thread {
 	
 	public HashMap<String, NetExecute>map = new  HashMap<>();
 	
-	ObjectInputStream ois;
-	ObjectOutputStream oos;
+	public ObjectInputStream ois;
+	public ObjectOutputStream oos;
 	
 	
 	public void send(TCPData data) {

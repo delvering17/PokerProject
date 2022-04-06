@@ -26,12 +26,13 @@ import game_p.Game_panel;
 import lobby_p.Lobby;
 import lobby_p.LobbyMain;
 import login_p.Login_frame;
+import net_p.Receiver;
+import net_p.TCPData;
 
 public class Making implements RoomAction {
 
 	@Override
-	public void room(HashMap<InetAddress, Object> roomChk,Login_frame mainJf,ObjectOutputStream oos,
-	ObjectInputStream ois,ProfileDTO data,int addr) {
+	public void room(Login_frame mainJf,Receiver ch, TCPData data) {
 	
 		String[] beting = {"1원","10원","100원","1000원"};
 		JFrame jf = new JFrame();
@@ -87,15 +88,15 @@ public class Making implements RoomAction {
 				ProfileDTO.roomchk[addr-1]++;
 				mainJf.remove(mainJf.lobby_panel);
 				try {
-					oos.writeObject(data);
-					oos.flush();
-					oos.reset();
+					ch.oos.writeObject(data);
+					ch.oos.flush();
+					ch.oos.reset();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 
-				Game_panel game_panel = new Game_panel(mainJf,oos,ois,data,addr);
+				Game_panel game_panel = new Game_panel(mainJf,ch,tcpdata);
 				mainJf.add(game_panel);
 				mainJf.game_panelarr.add(game_panel);
 				mainJf.repaint();

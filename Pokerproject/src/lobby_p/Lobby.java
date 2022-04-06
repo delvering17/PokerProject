@@ -1,22 +1,12 @@
 package lobby_p;
 
-import java.awt.BorderLayout;
+
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.MulticastSocket;
-import java.net.Socket;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -26,39 +16,36 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.ScrollPaneLayout;
 import javax.swing.border.LineBorder;
 
-import DB_p.ProfileDTO;
 import lobby_i.RoomAction;
-import lobby_i.UserData;
 import login_p.Login_frame;
+import net_p.Receiver;
+import net_p.TCPData;
 
 public class Lobby extends JPanel {
 	JTextField jtf;
 	JTextArea jta;
 	String addr;
-	ObjectOutputStream oos;
-	ObjectInputStream ois;
-	ProfileDTO data;
+
+	
 	//들어올 유져 객체
 //	ArrayList<Object> userList = new ArrayList<Object>();
 	Login_frame mainJf;
-	
+	TCPData tcpdata;
 	//방 체크할 리스트
 	HashMap<InetAddress, Object> roomChk;
 	ArrayList<RoomBtn> btnlist = new ArrayList<RoomBtn>();
-	public Lobby(Login_frame mainJf,ProfileDTO datathis,ObjectOutputStream oos,ObjectInputStream ois) {
+	public Lobby(Login_frame mainJf,Receiver ch, TCPData tcpdata) {
 		
 		this.mainJf = mainJf;
-		this.data = datathis;
+		this.tcpdata = tcpdata;
 		try {
-			this.oos = oos;
-			this.ois = ois;
+		
 		}catch (Exception e2) {
 			e2.printStackTrace();
 		}
-		System.out.println(data.nickname);
+		System.out.println(tcpdata.nickname);
 		setBounds(0, 0, 1200, 800);
 		setBackground(Color.black);
 		setLayout(null);
@@ -69,8 +56,8 @@ public class Lobby extends JPanel {
 //		btnlist.add();		
 //		btnlist.add();
 		
-		roomAdd.add(new RoomBtn("방만들기","Making",590,35,100,60,datathis));
-		roomAdd.add(new RoomBtn("바로입장","Enter",0,695,35,100,60,datathis));
+		roomAdd.add(new RoomBtn("방만들기","Making",590,35,100,60,tcpdata));
+		roomAdd.add(new RoomBtn("바로입장","Enter",0,695,35,100,60,tcpdata));
 		
 		JScrollPane roomList = new JScrollPane();//스크롤팬 생성
 		roomList.setBounds(10, 120, 800, 400);
@@ -84,7 +71,7 @@ public class Lobby extends JPanel {
 			jl.setBorder(new LineBorder(Color.black,2));
 			jl.setOpaque(true);
 			jl.setBackground(new Color(255,111,111));
-			RoomBtn rBtn = new RoomBtn("만들기","Making",i+1,90,110,80,40,data);
+			RoomBtn rBtn = new RoomBtn("만들기","Making",i+1,90,110,80,40,tcpdata);
 //			try {
 //				InetAddress ad = InetAddress.getByName(rBtn.addr);
 //			} catch (UnknownHostException e1) {
@@ -120,10 +107,10 @@ public class Lobby extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					data.msg = jtf.getText();
-					oos.writeObject(data);
-					oos.flush();
-					oos.reset();
+					tcpdata.msg = jtf.getText();
+					ch.oos.writeObject(tcpdata);
+					ch.oos.flush();
+					ch.oos.reset();
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				} 
@@ -135,7 +122,7 @@ public class Lobby extends JPanel {
 		Component userList = new Component(820,520 , 350, 230);
 		add(userList);
 		
-		UserProfile_panel profilePanel = new UserProfile_panel(data);
+		UserProfile_panel profilePanel = new UserProfile_panel(tcpdata);
 		add(profilePanel);
 		
 //		Receiver ch = new Receiver();
@@ -145,7 +132,7 @@ public class Lobby extends JPanel {
 	class RoomBtn extends JButton implements ActionListener{
 		String cname;
 		String name;
-		public RoomBtn(String name,String cname,int x,int y,int width , int height,ProfileDTO data) {
+		public RoomBtn(String name,String cname,int x,int y,int width , int height,TCPData tcptcpdata) {
 			super(name);
 			this.cname = cname;
 			this.name = name;
@@ -153,7 +140,7 @@ public class Lobby extends JPanel {
 			addActionListener(this);
 		}
 		Integer addr;
-		public RoomBtn(String name,String cname,int addr,int x,int y,int width , int height,ProfileDTO data) {
+		public RoomBtn(String name,String cname,int addr,int x,int y,int width , int height,TCPData tcptcpdata) {
 			super(name);
 			this.cname = cname;
 			this.name = name;
@@ -167,7 +154,7 @@ public class Lobby extends JPanel {
 			try {
 				System.out.println(cname);
 				RoomAction ra = (RoomAction)Class.forName("lobby_i."+cname).newInstance();
-				ra.room(roomChk,mainJf,oos,ois,data,addr);
+				ra.room(mainJf,ch,tcpdata);
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			} 
