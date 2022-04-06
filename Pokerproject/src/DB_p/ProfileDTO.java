@@ -19,13 +19,13 @@ public class ProfileDTO implements Serializable{
 	public long money;
 	public int witch;
 	public int roomNum = -1;
-	public boolean[] roomchk;
+	public static int[] roomchk;
 	public ProfileDTO(int profilenum, String nickname, String gender, String introduce, int totalGame, int win,
 			int lose, long money) {
 		super();
-		roomchk = new boolean[9];
-		for (boolean rc : roomchk) {
-			rc=false;
+		roomchk = new int[9];
+		for (int rc : roomchk) {
+			rc=0;
 		}
 		this.profilenum = profilenum;
 		this.nickname = nickname;

@@ -33,6 +33,7 @@ public class Making implements RoomAction {
 	public void room(HashMap<InetAddress, Object> roomChk,Login_frame mainJf,ObjectOutputStream oos,
 	ObjectInputStream ois,ProfileDTO data,int addr) {
 		data.roomNum = addr;
+		ProfileDTO.roomchk[addr-1]++;
 		String[] beting = {"1원","10원","100원","1000원"};
 		JFrame jf = new JFrame();
 		jf.setBounds(600, 200, 300, 400);
