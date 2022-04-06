@@ -26,6 +26,7 @@ import javax.swing.JTextField;
 import DB_p.ProfileDTO;
 import lobby_p.Lobby;
 import login_p.Login_frame;
+import poker_p.PokerGameMain;
 
 
 
@@ -51,6 +52,8 @@ public class Game_panel extends JPanel implements ActionListener {
 	ArrayList<Ingame_userProfile_panel> userprofile = new ArrayList<Ingame_userProfile_panel>();
 	Login_frame login_frame;
 	Game_panel game_panel;
+	PokerGameMain pokerGamemain;
+	
 	public Game_panel(Login_frame login_frame,ObjectOutputStream oos,ObjectInputStream ois,ProfileDTO data,int addr) {
 		this.data = data;
 		this.login_frame = login_frame;
@@ -116,34 +119,37 @@ public class Game_panel extends JPanel implements ActionListener {
 		p4.setBackground(new Color(41,67,58));
 		p4.setLayout(null);
 		ArrayList<JLabel> cardshow = new ArrayList<JLabel>();
-		
-		ImageIcon img = new ImageIcon("test/100Card23.png");
-		JLabel card = new JLabel(img);
-		card.setBounds(170,0, 100,200);
-		p4.add(card);
-		
-		JLabel card1 = new JLabel(img);
-		card1.setBounds(145,0, 100,200);
-		p4.add(card1);
-
-		JLabel card2 = new JLabel(img);
-		card2.setBounds(120,0, 100,200);
-		p4.add(card2);
+		 
+		pokerGamemain = new PokerGameMain(); 
+		p4.add(pokerGamemain.deck.get(0));
 	
-		JLabel card3 = new JLabel(img);
-		card3.setBounds(95,0, 100,200);
-		p4.add(card3);
-	
-		JLabel card4 = new JLabel(img);
-		card4.setBounds(70,0, 100,200);
-		p4.add(card4);
-		
-		JLabel card5 = new JLabel(img);
-		card5.setBounds(45,0, 100,200);
-		p4.add(card5);
-		JLabel card6 = new JLabel(img);
-		card6.setBounds(20,0, 100,200);
-		p4.add(card6);
+//		ImageIcon img = new ImageIcon("test/100Card23.png");
+//		JLabel card = new JLabel();
+//		card.setBounds(170,0, 100,200);
+//	
+//		
+//		JLabel card1 = new JLabel(img);
+//		card1.setBounds(145,0, 100,200);
+//		p4.add(card1);
+//
+//		JLabel card2 = new JLabel(img);
+//		card2.setBounds(120,0, 100,200);
+//		p4.add(card2);
+//	
+//		JLabel card3 = new JLabel(img);
+//		card3.setBounds(95,0, 100,200);
+//		p4.add(card3);
+//	
+//		JLabel card4 = new JLabel(img);
+//		card4.setBounds(70,0, 100,200);
+//		p4.add(card4);
+//		
+//		JLabel card5 = new JLabel(img);
+//		card5.setBounds(45,0, 100,200);
+//		p4.add(card5);
+//		JLabel card6 = new JLabel(img);
+//		card6.setBounds(20,0, 100,200);
+//		p4.add(card6);
 		
 		
 		

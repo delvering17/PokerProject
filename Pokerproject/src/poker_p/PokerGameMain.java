@@ -6,18 +6,24 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Random;
 
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+
+import game_p.Game_panel;
+
 
 
 public class PokerGameMain {
-	ArrayList<PokerCard> deck;
-	ArrayList<PokerCard> myDeck;
+	public ArrayList<PokerCard> deck = new ArrayList<PokerCard>();;
+	 ArrayList<PokerCard> myDeck;
+	 Game_panel gamepanel;
 	public PokerGameMain() {
 		deck = new ArrayList<PokerCard>();
 	
 		myDeck = new ArrayList<PokerCard>();
 		for (int i = 2; i < 15; i++) {
 			for (int j = 1; j < 5; j++) {
-				deck.add(new PokerCard(i,j));
+				deck.add(new PokerCard(i,j,new JLabel(new ImageIcon("Card/"+myDeck.get(i).imgname+".png"))));
 			}
 		}
 		myDeck.add(Split());
@@ -290,7 +296,7 @@ public class PokerGameMain {
 	
 	public static void main(String[] args) {
 		
-		new PokerGameMain();
+		new PokerGameMain(this);
 		
 	}
 	
