@@ -99,7 +99,6 @@ class LogIn_in implements Inter_button_login {
 					
 					ProfileDTO datathis = new SignDB().num_profileRead(" profilenum = " +memberNum+ ";");
 					try {
-						Socket client = new Socket("192.168.20.39", 8888);
 						login_frame.remove(login_frame.login_panel);
 						datathis.roomNum = 0;
 						Lobby lobby_panel = new Lobby(login_frame,datathis,oos,ois);
@@ -107,7 +106,7 @@ class LogIn_in implements Inter_button_login {
 						login_frame.userDTO = datathis;
 						login_frame.lobby_panel = lobby_panel;
 						login_frame.repaint();
-					}catch (IOException e) {
+					}catch (Exception e) {
 						e.printStackTrace();
 					}
 				} else {
