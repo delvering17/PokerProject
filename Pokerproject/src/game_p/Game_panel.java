@@ -6,6 +6,9 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -20,6 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import DB_p.ProfileDTO;
 import login_p.Login_frame;
 
 
@@ -40,15 +44,18 @@ public class Game_panel extends JPanel implements ActionListener {
 	
 	JTextField chf;
 	JTextArea cht;
-	
+	ProfileDTO data;
+	ObjectOutputStream oos;
+	ObjectInputStream ois;
 	ArrayList<Ingame_userProfile_panel> userprofile = new ArrayList<Ingame_userProfile_panel>();
 	
-	public Game_panel(Login_frame login_frame) {
-		
+	public Game_panel(Login_frame login_frame,ObjectOutputStream oos,ObjectInputStream ois,ProfileDTO data) {
+		this.data = data;
 		setBounds(0, 0, 1200, 800);
 		setBackground(new Color(32,56,48));
 		setLayout(null);
-		
+		this.oos = oos;
+		this.ois = ois;
 		help = new JButton("help");
 		help.setBounds(1040, 0, 70, 30);
 		help.setBackground(Color.white);
@@ -221,6 +228,7 @@ public class Game_panel extends JPanel implements ActionListener {
 		chf.addActionListener(this);
 		
 		cht = new JTextArea(22,22);
+		login_frame.jta = cht;
 		JScrollPane jp = new JScrollPane(cht);
 		cht.setEditable(false);
 		
@@ -232,7 +240,14 @@ public class Game_panel extends JPanel implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String tt = chf.getText();
-				cht.append(tt+"\n");
+				data.msg = tt;
+				try {
+					oos.writeObject(data);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+//				cht.append(tt+"\n");
 				chf.selectAll();
 				cht.setCaretPosition(cht.getDocument().getLength());
 				chf.setText("");

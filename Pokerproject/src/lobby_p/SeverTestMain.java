@@ -13,12 +13,12 @@ import DB_p.ProfileDTO;
 import lobby_i.UserData;
 class MulServer {
 
-	HashMap<String, ObjectOutputStream> userList;
+	HashMap<ObjectOutputStream, ProfileDTO> userList;
 	
 	public MulServer() {
 		try {
 			System.out.println("나 서버");
-			userList = new HashMap<String, ObjectOutputStream>();
+			userList = new HashMap<ObjectOutputStream,ProfileDTO>();
 			Collections.synchronizedMap(userList);
 			ServerSocket server = new ServerSocket(8888);
 			while(true) {
@@ -49,7 +49,7 @@ class MulServer {
 				while(ois!=null) {
 					ProfileDTO data = (ProfileDTO)ois.readObject();
 					name = data.nickname;
-					userList.put(data.nickname, oos);
+					userList.put(oos,data);
 					System.out.println(data.nickname +" : "+ data.msg);
 					sendToAll(data);
 				}
@@ -63,12 +63,14 @@ class MulServer {
 		}
 	}
 	void sendToAll(ProfileDTO data) {
-		for (ObjectOutputStream dd : userList.values()) {
+		for (ObjectOutputStream dd : userList.keySet()) {
 			try {
 				
-				dd.writeObject(data);
-				dd.flush();
-				dd.reset();
+				if(data.roomNum==((ProfileDTO)userList.get(dd)).roomNum) {
+					dd.writeObject(data);
+					dd.flush();
+					dd.reset();
+				}
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

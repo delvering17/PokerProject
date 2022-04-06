@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,6 +20,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
+import DB_p.ProfileDTO;
 import lobby_p.Lobby;
 import lobby_p.LobbyMain;
 import login_p.Login_frame;
@@ -25,7 +28,8 @@ import login_p.Login_frame;
 public class Making implements RoomAction {
 
 	@Override
-	public void room(HashMap<InetAddress, Object> roomChk,Login_frame mainJf) {
+	public void room(HashMap<InetAddress, Object> roomChk,Login_frame mainJf,ObjectOutputStream oos,
+	ObjectInputStream ois,ProfileDTO data) {
 		
 		String[] beting = {"1원","10원","100원","1000원"};
 		JFrame jf = new JFrame();

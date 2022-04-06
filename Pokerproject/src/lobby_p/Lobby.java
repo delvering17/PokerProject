@@ -68,8 +68,8 @@ public class Lobby extends JPanel {
 		Component roomAdd = new Component(10, 10, 800, 100);
 		add(roomAdd);
 		
-		btnlist.add(new RoomBtn("방만들기","Making",590,35,100,60));		
-		btnlist.add(new RoomBtn("바로입장","Enter",695,35,100,60));
+		btnlist.add(new RoomBtn("방만들기","Making",590,35,100,60,data));		
+		btnlist.add(new RoomBtn("바로입장","Enter",695,35,100,60,data));
 		
 		roomAdd.add(btnlist.get(0));
 		roomAdd.add(btnlist.get(1));
@@ -86,7 +86,7 @@ public class Lobby extends JPanel {
 			jl.setBorder(new LineBorder(Color.black,2));
 			jl.setOpaque(true);
 			jl.setBackground(new Color(255,111,111));
-			RoomBtn rBtn = new RoomBtn("만들기","Making","231.0.0."+(i+1),90,110,80,40);
+			RoomBtn rBtn = new RoomBtn("만들기","Making","231.0.0."+(i+1),90,110,80,40,data);
 			try {
 				InetAddress ad = InetAddress.getByName(rBtn.addr);
 			} catch (UnknownHostException e1) {
@@ -108,6 +108,7 @@ public class Lobby extends JPanel {
 		jtf = new JTextField();
 		jtf.setBounds(0, 200, 800, 20);
 		jta = new JTextArea();
+		mainJf.jta = jta;
 		JScrollPane js = new JScrollPane(jta);
 		js.setBounds(0, 0, 800, 200);
 		jta.setEditable(false);
@@ -139,20 +140,20 @@ public class Lobby extends JPanel {
 		UserProfile_panel profilePanel = new UserProfile_panel(data);
 		add(profilePanel);
 		
-		Receiver ch = new Receiver();
-		ch.start();
+//		Receiver ch = new Receiver();
+//		ch.start();
 	}
 	
 	class RoomBtn extends JButton implements ActionListener{
 		String cname;
-		public RoomBtn(String name,String cname,int x,int y,int width , int height) {
+		public RoomBtn(String name,String cname,int x,int y,int width , int height,ProfileDTO data) {
 			super(name);
 			this.cname = cname;
 			setBounds(x, y, width, height);
 			addActionListener(this);
 		}
 		String addr;
-		public RoomBtn(String name,String cname,String addr,int x,int y,int width , int height) {
+		public RoomBtn(String name,String cname,String addr,int x,int y,int width , int height,ProfileDTO data) {
 			super(name);
 			this.cname = cname;
 			this.addr = addr;
@@ -165,7 +166,7 @@ public class Lobby extends JPanel {
 			try {
 				System.out.println(cname);
 				RoomAction ra = (RoomAction)Class.forName("lobby_i."+cname).newInstance();
-				ra.room(roomChk,mainJf);
+				ra.room(roomChk,mainJf,oos,ois,data);
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			} 
@@ -181,25 +182,4 @@ public class Lobby extends JPanel {
 	}
 	
 
-	class Receiver extends Thread {
-		@Override
-		
-		public void run() {
-//			ProfileDTO data = null;
-			try {
-				while(ois!=null) {
-					ProfileDTO data=(ProfileDTO)ois.readObject();
-					System.out.println(data.nickname);
-					jta.append(data.nickname + " : "+ data.msg+"\n");
-					System.out.println(data.nickname +" : "+ data.msg);
-				}
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
 }
