@@ -20,7 +20,7 @@ import net_p.TCPData;
 public class Enter implements RoomAction{
 
 	@Override
-	public void room(Login_frame login_frame,Receiver ch,TCPData tcpdata) {
+	public void room(Login_frame login_frame,Receiver ch,TCPData tcpdata,Integer addr) {
 		
 		login_frame.remove(login_frame.lobby_panel);
 		Game_panel game_panel = new Game_panel(login_frame,ch,tcpdata);

@@ -94,6 +94,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 							e1.printStackTrace();
 						}
 						login_frame.remove(game_panel);
+						tcpdata.UserPos = -1;
 						login_frame.add(new Lobby(login_frame,tcpdata));
 						
 						login_frame.repaint();
@@ -158,38 +159,28 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		betting.setBackground(new Color(41,67,58));
 		add(betting);
 		
-		JPanel betbuttonarea = new JPanel(new GridLayout(4,2));
+		JPanel betbuttonarea = new JPanel();
+		betbuttonarea.setLayout(null);
         betbuttonarea.setBounds(740,520,170,220);
         add(betbuttonarea);
        
         String [] betbt = {"콜","삥","따당","하프","다이","체크","맥스"};
-        for (int i = 0; i < 7; i++) {
-            bt = new JButton(betbt[i]);
-            bt.setBackground(Color.white);
+        	BetBtn bt = new BetBtn("콜",0,0);
+        	BetBtn bt1 = new BetBtn("삥",85,0);
+        	BetBtn bt2 = new BetBtn("따당",0,55);
+        	BetBtn bt3 = new BetBtn("하프",85,55);
+        	BetBtn bt4 = new BetBtn("다이",0,110);
+        	BetBtn bt5 = new BetBtn("체크",85,110);
+        	BetBtn bt6 = new BetBtn("맥스",0,165);
+        	
             betbuttonarea.add(bt);
-            
-           // bt.addActionListener(this);
+            betbuttonarea.add(bt1);
+            betbuttonarea.add(bt2);
+            betbuttonarea.add(bt3);
+            betbuttonarea.add(bt4);
+            betbuttonarea.add(bt5);
+            betbuttonarea.add(bt6);
           
-            // 버튼 누를때 액션 하다말았음
-            bt.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-						Long qua = (long) 100000;
-					
-					try {
-						qua = Long.parseLong(JOptionPane.showInputDialog(" 금액을 입력해주세요."));
-						if(qua<1000000) {
-							System.out.println("10만 이상부터 배팅 가능");
-							
-						} 
-					} catch(Exception e1) {
-						System.out.println("숫자를 입력해주세요.");
-						
-					}
-					  
-				}
-			});
-        }
 //        timebel = new JLabel();
 //        timebel.setLayout(new FlowLayout());
 //        timebel.setBounds(0, 300, 400, 100);
@@ -225,18 +216,18 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		chat.setBackground(Color.black);
 		add(chat);
 		
+		
 		chf = new JTextField();
-		chf.setBounds(920, 550, 220, 20);
+		chf.setBounds(0,200, 250, 20);
 		chf.addActionListener(this);
 		
 		cht = new JTextArea();
-		login_frame.jta = cht;
 		JScrollPane jp = new JScrollPane(cht);
-		jp.setBounds(920, 580, 220, 20);
+		jp.setBounds(0, 0, 250, 200);
 		cht.setEditable(false);
 		
-		chat.add(chf,BorderLayout.SOUTH);
-		chat.add(jp,BorderLayout.CENTER);
+		chat.add(chf,"South");
+		chat.add(jp,"Center");
 		
 		chf.addActionListener(new ActionListener() {
 			
@@ -256,9 +247,9 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			}
 		});
   
+
 		
-		
-        }
+   }
 
 
 
@@ -274,7 +265,13 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	}
 
 
-
+	class BetBtn extends JButton {
+		public BetBtn(String name,int x,int y) {
+			super(name);
+			setBounds(x, y,85, 55);
+			setBackground(Color.white);
+		}
+	}
 
 
 	@Override
@@ -302,6 +299,8 @@ class Help_pg extends JFrame{
 		
 		
 	}
+	
+
 
 }	
 

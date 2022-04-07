@@ -32,7 +32,7 @@ import net_p.TCPData;
 public class Making implements RoomAction {
 	TCPData tcpdata;
 	@Override
-	public void room(Login_frame mainJf,Receiver ch, TCPData tcpdata) {
+	public void room(Login_frame mainJf,Receiver ch, TCPData tcpdata,Integer addr) {
 		this.tcpdata = tcpdata;
 		String[] beting = {"1원","10원","100원","1000원"};
 		JFrame jf = new JFrame();
@@ -83,20 +83,17 @@ public class Making implements RoomAction {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				jf.setVisible(false);
-
-//				data.roomNum = addr;
-//				ProfileDTO.roomchk[addr-1]++;
 				mainJf.remove(mainJf.lobby_panel);
-				try {
-					ch.oos.writeObject(tcpdata);
-					ch.oos.flush();
-					ch.oos.reset();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
 				Game_panel game_panel = new Game_panel(mainJf,ch,tcpdata);
+				
+				if(addr!=null) {
+					tcpdata.UserPos = addr;
+				}else {
+					
+				}
+				ch.game_panel = game_panel;
+				ch.send(tcpdata);
+
 				mainJf.add(game_panel);
 				mainJf.game_panelarr.add(game_panel);
 				mainJf.repaint();

@@ -152,7 +152,7 @@ public class Lobby extends JPanel implements NetExecute {
 		public void actionPerformed(ActionEvent e) {
 			try {
 				RoomAction ra = (RoomAction)Class.forName("lobby_i."+cname).newInstance();
-				ra.room(mainJf,ch,tcpdata);
+				ra.room(mainJf,ch,tcpdata,addr);
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			} 
