@@ -184,6 +184,14 @@ public class Lobby extends JPanel implements NetExecute {
 			break;
 		case "RoomChk":
 			data.easyStudy = this.tcpdata.easyStudy;
+			for (RoomBtn roomBtn : btnlist) {
+				
+				if(this.tcpdata.easyStudy[roomBtn.addr]!=0) {
+					roomBtn.setText("입장");
+				}else {
+					roomBtn.setText("만들기");
+				}
+			}
 		}
 		
 		
