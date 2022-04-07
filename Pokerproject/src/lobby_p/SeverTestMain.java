@@ -64,14 +64,9 @@ class MulServer {
 	void sendToAll(TCPData data) {
 		for (ObjectOutputStream dd : userList.keySet()) {
 			try {
-				
-				if(data.UserPos==((TCPData)userList.get(dd)).UserPos) {
-					dd.writeObject(data);
-					dd.flush();
-					dd.reset();
-					
-				}
-				
+				dd.writeObject(data);
+				dd.flush();
+				dd.reset();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

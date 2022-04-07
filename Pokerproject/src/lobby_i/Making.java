@@ -94,6 +94,7 @@ public class Making implements RoomAction {
 					
 				}
 				ch.game_panel = game_panel;
+				tcpdata.msg = "[입장]";
 				ch.send(tcpdata);
 
 				mainJf.add(game_panel);

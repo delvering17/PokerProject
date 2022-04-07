@@ -84,19 +84,10 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 					if (e.getSource() == exit) {
-//						tcpdata.roomNum = 0;
-						try {
-							ch.oos.writeObject(tcpdata);
-							ch.oos.flush();
-							ch.oos.reset();
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
+						ch.send(tcpdata);
 						login_frame.remove(game_panel);
 						tcpdata.UserPos = -1;
 						login_frame.add(new Lobby(login_frame,tcpdata));
-						
 						login_frame.repaint();
 					}
 //					dispose(); // 원래있던 창이 꺼지며 새로운 창 나오게함
@@ -235,10 +226,8 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					tcpdata.msg = chf.getText();
-					ch.oos.writeObject(tcpdata);
-					ch.oos.flush();
-					ch.oos.reset();
-				} catch (IOException e1) {
+					ch.send(tcpdata);
+				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
@@ -277,6 +266,9 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	@Override
 	public void execute(TCPData data) {
 		
+		if(data.UserPos==this.tcpdata.UserPos&&data.msg!=null) {
+			cht.append(data.name+" : "+data.msg+"\n");
+		}
 		
 		
 	}
