@@ -47,10 +47,13 @@ public class Lobby extends JPanel implements NetExecute {
 			//클라이언트를 서버에 보내기 시작
 			client = new Socket("192.168.20.39", 8888);
 			ch = new Receiver(mainJf, client);
+			ch.lobby_panel=this;
 			ch.start();
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
+		tcpdata.msg = "[입장]";
+		tcpdata.DataDestination = "Chatting";
 		ch.send(tcpdata);
 		this.mainJf = mainJf;
 		this.tcpdata = tcpdata;
@@ -99,7 +102,6 @@ public class Lobby extends JPanel implements NetExecute {
 		jtf = new JTextField();
 		jtf.setBounds(0, 200, 800, 20);
 		jta = new JTextArea();
-		mainJf.jta = jta;
 		JScrollPane js = new JScrollPane(jta);
 		js.setBounds(0, 0, 800, 200);
 		jta.setEditable(false);
@@ -168,14 +170,14 @@ public class Lobby extends JPanel implements NetExecute {
 	@Override
 	public void execute(TCPData data) {
 		
-		System.out.println(data.name);
-		
+		System.out.println(data.name+","+data.msg);
+		System.out.println(data.DataDestination);
 		switch (data.DataDestination) {
 		case "Chatting":
 			jta.append(data.name + " : "+ data.msg+"\n");
 			break;
 
-		case "Room":
+		case "GameData":
 			
 			break;
 		}

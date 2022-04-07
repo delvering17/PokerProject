@@ -18,7 +18,7 @@ public class Receiver extends Thread {
 	public Game_panel game_panel;
 	public Lobby lobby_panel;
 	
-	public HashMap<String, NetExecute>map = new  HashMap<String, NetExecute>();
+	//public HashMap<String, NetExecute>map = new  HashMap<String, NetExecute>();
 	
 	public ObjectInputStream ois;
 	public ObjectOutputStream oos;
@@ -39,8 +39,8 @@ public class Receiver extends Thread {
 	public Receiver(Login_frame lframe, Socket client) {
 		// TODO Auto-generated constructor stub
 		//this.lframe = lframe;
-		map.put("lobby_panel",lobby_panel);
-		map.put("game_panel",game_panel);
+		//map.put("lobby_panel",lobby_panel);
+		//map.put("game_panel",game_panel);
 		try {
 			oos = new ObjectOutputStream(client.getOutputStream());
 			ois = new ObjectInputStream(client.getInputStream());
@@ -57,11 +57,11 @@ public class Receiver extends Thread {
 			while(ois!=null) {
 				
 				TCPData data=(TCPData)ois.readObject();
-				
+				System.out.println(data.DataDestination);
 				if(data.UserPos==-1) {
-					map.get("lobby_panel").execute(data);
+					lobby_panel.execute(data);
 				}else if(data.UserPos>-1) {
-					map.get("game_panel").execute(data);					
+					game_panel.execute(data);					
 				}
 				
 			}
