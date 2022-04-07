@@ -11,14 +11,15 @@ import java.util.HashMap;
 import DB_p.ProfileDAO;
 import DB_p.ProfileDTO;
 import lobby_i.UserData;
+import net_p.TCPData;
 class MulServer {
 
-	HashMap<ObjectOutputStream, ProfileDTO> userList;
+	HashMap<ObjectOutputStream, TCPData> userList;
 	
 	public MulServer() {
 		try {
 			System.out.println("나 서버");
-			userList = new HashMap<ObjectOutputStream,ProfileDTO>();
+			userList = new HashMap<ObjectOutputStream,TCPData>();
 			Collections.synchronizedMap(userList);
 			ServerSocket server = new ServerSocket(8888);
 			while(true) {
@@ -33,7 +34,6 @@ class MulServer {
 	class Reciver extends Thread {
 		ObjectInputStream ois;
 		ObjectOutputStream oos;
-		String name;
 		public Reciver(Socket client) {
 			try {
 				oos = new ObjectOutputStream(client.getOutputStream());
@@ -47,25 +47,25 @@ class MulServer {
 			
 			try {
 				while(ois!=null) {
-					ProfileDTO data = (ProfileDTO)ois.readObject();
+					TCPData data = (TCPData)ois.readObject();
 					userList.put(oos,data);
-					System.out.println(data.nickname +" : "+ data.msg);
+					System.out.println(data.name +" : "+ data.msg);
 					sendToAll(data);
 				}
 			}catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}finally {
-				userList.remove(name);
+				
 			}
 			
 		}
 	}
-	void sendToAll(ProfileDTO data) {
+	void sendToAll(TCPData data) {
 		for (ObjectOutputStream dd : userList.keySet()) {
 			try {
 				
-				if(data.roomNum==((ProfileDTO)userList.get(dd)).roomNum) {
+				if(data.UserPos==((TCPData)userList.get(dd)).UserPos) {
 					dd.writeObject(data);
 					dd.flush();
 					dd.reset();

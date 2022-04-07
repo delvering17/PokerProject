@@ -26,14 +26,15 @@ import javax.swing.JTextField;
 
 import lobby_p.Lobby;
 import login_p.Login_frame;
+import net_p.NetExecute;
 import net_p.Receiver;
 import net_p.TCPData;
 
 
 
+ 
 
-
-public class Game_panel extends JPanel implements ActionListener {
+public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	JButton help ;
 	JButton exit;
 	
@@ -83,7 +84,7 @@ public class Game_panel extends JPanel implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 					if (e.getSource() == exit) {
-						tcpdata.roomNum = 0;
+//						tcpdata.roomNum = 0;
 						try {
 							ch.oos.writeObject(tcpdata);
 							ch.oos.flush();
@@ -93,7 +94,7 @@ public class Game_panel extends JPanel implements ActionListener {
 							e1.printStackTrace();
 						}
 						login_frame.remove(game_panel);
-						login_frame.add(new Lobby(login_frame, ch, tcpdata));
+						login_frame.add(new Lobby(login_frame,tcpdata));
 						
 						login_frame.repaint();
 					}
@@ -269,6 +270,17 @@ public class Game_panel extends JPanel implements ActionListener {
 		if(e.getSource() == help) {
 			Help_pg pg = new Help_pg();
 		}	
+		
+	}
+
+
+
+
+
+	@Override
+	public void execute(TCPData data) {
+		
+		
 		
 	}
 }	

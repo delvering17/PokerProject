@@ -7,16 +7,18 @@ import java.net.Socket;
 import java.util.HashMap;
 
 import DB_p.ProfileDTO;
+import game_p.Game_panel;
+import lobby_p.Lobby;
 import login_p.Login_frame;
 import login_p.Login_panel;
 
 public class Receiver extends Thread {
 	
 	
-	//public Login_frame lframe;
-	//public Login_panel login_panel;
+	public Game_panel game_panel;
+	public Lobby lobby_panel;
 	
-	public HashMap<String, NetExecute>map = new  HashMap<>();
+	public HashMap<String, NetExecute>map = new  HashMap<String, NetExecute>();
 	
 	public ObjectInputStream ois;
 	public ObjectOutputStream oos;
@@ -37,13 +39,12 @@ public class Receiver extends Thread {
 	public Receiver(Login_frame lframe, Socket client) {
 		// TODO Auto-generated constructor stub
 		//this.lframe = lframe;
-		map.put("lframe", lframe);
+		map.put("lobby_panel",lobby_panel);
+		map.put("game_panel",game_panel);
 		try {
 			oos = new ObjectOutputStream(client.getOutputStream());
 			ois = new ObjectInputStream(client.getInputStream());
-			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -54,20 +55,14 @@ public class Receiver extends Thread {
 	public void run() {
 		try {
 			while(ois!=null) {
+				
 				TCPData data=(TCPData)ois.readObject();
 				
-				map.get(data.kind).execute(data);
-//				switch(data.pos) {
-//				case :
-//					lframe.execute(data);
-//					break;
-//				case "login_panel":
-//					login_panel.execute(data);
-//					break;
-//				
-//				}
-				
-				
+				if(data.UserPos==-1) {
+					map.get("lobby_panel").execute(data);
+				}else if(data.UserPos>-1) {
+					map.get("game_panel").execute(data);					
+				}
 				
 			}
 		} catch (Exception e) {

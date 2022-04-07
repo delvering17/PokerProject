@@ -30,10 +30,10 @@ import net_p.Receiver;
 import net_p.TCPData;
 
 public class Making implements RoomAction {
-
+	TCPData tcpdata;
 	@Override
-	public void room(Login_frame mainJf,Receiver ch, TCPData data) {
-	
+	public void room(Login_frame mainJf,Receiver ch, TCPData tcpdata) {
+		this.tcpdata = tcpdata;
 		String[] beting = {"1원","10원","100원","1000원"};
 		JFrame jf = new JFrame();
 		jf.setBounds(600, 200, 300, 400);
@@ -84,11 +84,11 @@ public class Making implements RoomAction {
 			public void actionPerformed(ActionEvent e) {
 				jf.setVisible(false);
 
-				data.roomNum = addr;
-				ProfileDTO.roomchk[addr-1]++;
+//				data.roomNum = addr;
+//				ProfileDTO.roomchk[addr-1]++;
 				mainJf.remove(mainJf.lobby_panel);
 				try {
-					ch.oos.writeObject(data);
+					ch.oos.writeObject(tcpdata);
 					ch.oos.flush();
 					ch.oos.reset();
 				} catch (IOException e1) {

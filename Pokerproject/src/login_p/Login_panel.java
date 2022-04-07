@@ -14,13 +14,11 @@ import net_p.TCPData;
 // 
 
 
-public class Login_panel extends JPanel  implements NetExecute{
+public class Login_panel extends JPanel implements NetExecute{
 	Login_frame login_frame;
 	Gen_textfiled id_login ;
 	Textfiled_password pw_login;
-	Receiver ch ;
-	public Login_panel(Login_frame login_frame, Receiver ch ) {
-		this.ch = ch;
+	public Login_panel(Login_frame login_frame) {
 		
 		setBounds(0,0,1200,800);
 		setLayout(null);
@@ -34,9 +32,9 @@ public class Login_panel extends JPanel  implements NetExecute{
 		add(id_login);
 		add(pw_login);
 		
-		//add(new Gen_button_login(login_frame,"로그인","LogIn_in",600,400, 100,100,ch));
-		//add(new Gen_button_login(login_frame,"아이디/비밀번호찾기","FindInfo_in",400,500, 200,50,ch));
-		//add(new Gen_button_login(login_frame,"회원가입","SignIn_in",400,550, 200,50,ch));
+		add(new Gen_button_login(login_frame,"로그인","LogIn_in",600,400, 100,100));
+		add(new Gen_button_login(login_frame,"아이디/비밀번호찾기","FindInfo_in",400,500, 200,50));
+		add(new Gen_button_login(login_frame,"회원가입","SignIn_in",400,550, 200,50));
 		
 		//ch.send(data);
 	//통신 금; 
@@ -46,13 +44,22 @@ public class Login_panel extends JPanel  implements NetExecute{
 	@Override
 	public void execute(TCPData data) {
 		
-		ProfileDTO dto = (ProfileDTO)data.rdata;
+//		TCPData dto = data;
 		
-		System.out.println(dto.nickname);
+//		System.out.println(data.name);
+//		
+//		switch (data.DataDestination) {
+//		case "Chatting":
+//			jta.append(data.name + " : "+ data.msg+"\n");
+//			break;
+//
+//		case "Room":
+//			
+//			break;
+//		}
 		
-		if(dto.msg!=null) {
-			//jta.append(dto.nickname + " : "+ dto.msg+"\n");
-			System.out.println(dto.nickname +" : "+ dto.msg);
+		if(data.msg!=null) {
+			System.out.println(data.name +" : "+ data.msg);
 		}	
 	}
 	

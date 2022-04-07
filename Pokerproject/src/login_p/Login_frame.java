@@ -22,7 +22,7 @@ import net_p.TCPData;
 
 
 
-public class Login_frame extends JFrame implements NetExecute{
+public class Login_frame extends JFrame{
 	Login_panel login_panel;
 	Signin_panel signin_panel;
 	FindIDPW_panel findIDPW_panel;
@@ -35,21 +35,13 @@ public class Login_frame extends JFrame implements NetExecute{
 	
 	
 	
-	public Login_frame(Socket client) {
+	public Login_frame() {
 		
 		login_frame=this;
 		setBounds(50,50,1200,800);
 		setLayout(null);
 	
-		
-		
-		Receiver ch = new Receiver(this, client);
-		ch.start();
-		
-		
-		login_panel = new Login_panel(this, ch);
-		//ch.login_panel = login_panel;
-		ch.map.put("login_panel", login_panel);
+		login_panel = new Login_panel(this);
 		add(login_panel);
 		
 		setVisible(true);
@@ -60,27 +52,8 @@ public class Login_frame extends JFrame implements NetExecute{
 	
 	public static void main(String[] args) {
 		
-		try {
-			Socket client = new Socket("192.168.20.39", 8888);
-			new Login_frame(client);
-		}catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		new Login_frame();
 
-	}
-
-	@Override
-	public void execute(TCPData data) {
-		
-		ProfileDTO dto = (ProfileDTO)data.rdata;
-		
-		System.out.println(dto.nickname);
-		if(dto.msg!=null) {
-			jta.append(dto.nickname + " : "+ dto.msg+"\n");
-			System.out.println(dto.nickname +" : "+ dto.msg);
-		}
-		
 	}
 
 }

@@ -6,7 +6,10 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -20,14 +23,15 @@ import javax.swing.border.LineBorder;
 
 import lobby_i.RoomAction;
 import login_p.Login_frame;
+import net_p.NetExecute;
 import net_p.Receiver;
 import net_p.TCPData;
 
-public class Lobby extends JPanel {
+public class Lobby extends JPanel implements NetExecute {
 	JTextField jtf;
 	JTextArea jta;
 	String addr;
-
+	Receiver ch;
 	
 	//들어올 유져 객체
 //	ArrayList<Object> userList = new ArrayList<Object>();
@@ -36,8 +40,18 @@ public class Lobby extends JPanel {
 	//방 체크할 리스트
 	HashMap<InetAddress, Object> roomChk;
 	ArrayList<RoomBtn> btnlist = new ArrayList<RoomBtn>();
-	public Lobby(Login_frame mainJf,Receiver ch, TCPData tcpdata) {
+	public Lobby(Login_frame mainJf,TCPData tcpdata) {
 		
+		Socket client;
+		try {
+			//클라이언트를 서버에 보내기 시작
+			client = new Socket("192.168.20.39", 8888);
+			ch = new Receiver(mainJf, client);
+			ch.start();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		ch.send(tcpdata);
 		this.mainJf = mainJf;
 		this.tcpdata = tcpdata;
 		try {
@@ -45,16 +59,12 @@ public class Lobby extends JPanel {
 		}catch (Exception e2) {
 			e2.printStackTrace();
 		}
-		System.out.println(tcpdata.nickname);
 		setBounds(0, 0, 1200, 800);
 		setBackground(Color.black);
 		setLayout(null);
 		
 		Component roomAdd = new Component(10, 10, 800, 100);
 		add(roomAdd);
-		
-//		btnlist.add();		
-//		btnlist.add();
 		
 		roomAdd.add(new RoomBtn("방만들기","Making",590,35,100,60,tcpdata));
 		roomAdd.add(new RoomBtn("바로입장","Enter",0,695,35,100,60,tcpdata));
@@ -72,11 +82,6 @@ public class Lobby extends JPanel {
 			jl.setOpaque(true);
 			jl.setBackground(new Color(255,111,111));
 			RoomBtn rBtn = new RoomBtn("만들기","Making",i+1,90,110,80,40,tcpdata);
-//			try {
-//				InetAddress ad = InetAddress.getByName(rBtn.addr);
-//			} catch (UnknownHostException e1) {
-//				e1.printStackTrace();
-//			}
 			btnlist.add(rBtn);
 			jl.add(rBtn);
 			roomPanel.add(jl);
@@ -101,20 +106,14 @@ public class Lobby extends JPanel {
 		chatting.add(jtf,"Center");
 		chatting.add(js,"South");
 		
-		
+		//ch 리시버 연결 필요
 		jtf.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					tcpdata.msg = jtf.getText();
-					ch.oos.writeObject(tcpdata);
-					ch.oos.flush();
-					ch.oos.reset();
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				} 
-
+				tcpdata.msg = jtf.getText();
+				tcpdata.DataDestination = "Chatting";
+				ch.send(tcpdata);
 				jtf.setText("");
 			}
 		});
@@ -122,11 +121,9 @@ public class Lobby extends JPanel {
 		Component userList = new Component(820,520 , 350, 230);
 		add(userList);
 		
-		UserProfile_panel profilePanel = new UserProfile_panel(tcpdata);
-		add(profilePanel);
-		
-//		Receiver ch = new Receiver();
-//		ch.start();
+		//아직 모름 일딴 TCP 데이터 정지
+//		UserProfile_panel profilePanel = new UserProfile_panel(tcpdata);
+//		add(profilePanel);
 	}
 	
 	class RoomBtn extends JButton implements ActionListener{
@@ -152,7 +149,6 @@ public class Lobby extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			try {
-				System.out.println(cname);
 				RoomAction ra = (RoomAction)Class.forName("lobby_i."+cname).newInstance();
 				ra.room(mainJf,ch,tcpdata);
 			} catch (Exception e1) {
@@ -167,6 +163,28 @@ public class Lobby extends JPanel {
 			setBackground(Color.blue);
 			setLayout(null);
 		}
+	}
+
+	@Override
+	public void execute(TCPData data) {
+		
+		System.out.println(data.name);
+		
+		switch (data.DataDestination) {
+		case "Chatting":
+			jta.append(data.name + " : "+ data.msg+"\n");
+			break;
+
+		case "Room":
+			
+			break;
+		}
+		
+		
+//		if(data.msg!=null) {
+//			jta.append(data.name + " : "+ data.msg+"\n");
+//			System.out.println(data.name +" : "+ data.msg);
+//		}
 	}
 	
 
