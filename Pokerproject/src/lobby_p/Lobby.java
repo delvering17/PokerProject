@@ -52,9 +52,7 @@ public class Lobby extends JPanel implements NetExecute {
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		tcpdata.msg = "[입장]";
-		tcpdata.DataDestination = "Chatting";
-		ch.send(tcpdata);
+
 		this.mainJf = mainJf;
 		this.tcpdata = tcpdata;
 		try {
@@ -122,7 +120,9 @@ public class Lobby extends JPanel implements NetExecute {
 		
 		Component userList = new Component(820,520 , 350, 230);
 		add(userList);
-		
+		tcpdata.msg = "[입장]";
+		tcpdata.DataDestination = "Chatting";
+		ch.send(tcpdata);
 		//아직 모름 일딴 TCP 데이터 정지
 //		UserProfile_panel profilePanel = new UserProfile_panel(tcpdata);
 //		add(profilePanel);
