@@ -66,8 +66,8 @@ public class Lobby extends JPanel implements NetExecute {
 		Component roomAdd = new Component(10, 10, 800, 100);
 		add(roomAdd);
 		
-		roomAdd.add(new RoomBtn("방만들기","Making",590,35,100,60,tcpdata));
-		roomAdd.add(new RoomBtn("바로입장","Enter",0,695,35,100,60,tcpdata));
+		roomAdd.add(new RoomBtn("방만들기","Making",590,35,100,60,this,tcpdata));
+		roomAdd.add(new RoomBtn("바로입장","Enter",0,695,35,100,60,this,tcpdata));
 		
 		JScrollPane roomList = new JScrollPane();//스크롤팬 생성
 		roomList.setBounds(10, 120, 800, 400);
@@ -81,7 +81,7 @@ public class Lobby extends JPanel implements NetExecute {
 			jl.setBorder(new LineBorder(Color.black,2));
 			jl.setOpaque(true);
 			jl.setBackground(new Color(255,111,111));
-			RoomBtn rBtn = new RoomBtn("만들기","Making",i,90,110,80,40,tcpdata);
+			RoomBtn rBtn = new RoomBtn("만들기","Making",i,90,110,80,40,this,tcpdata);
 			btnlist.add(rBtn);
 			jl.add(rBtn);
 			roomPanel.add(jl);
@@ -131,19 +131,22 @@ public class Lobby extends JPanel implements NetExecute {
 	class RoomBtn extends JButton implements ActionListener{
 		String cname;
 		String name;
-		public RoomBtn(String name,String cname,int x,int y,int width , int height,TCPData tcptcpdata) {
+		Lobby lobby;
+		public RoomBtn(String name,String cname,int x,int y,int width , int height,Lobby lobby,TCPData tcptcpdata) {
 			super(name);
 			this.cname = cname;
 			this.name = name;
+			this.lobby = lobby;
 			setBounds(x, y, width, height);
 			addActionListener(this);
 		}
 		Integer addr;
-		public RoomBtn(String name,String cname,int addr,int x,int y,int width , int height,TCPData tcptcpdata) {
+		public RoomBtn(String name,String cname,int addr,int x,int y,int width , int height,Lobby lobby,TCPData tcptcpdata) {
 			super(name);
 			this.cname = cname;
 			this.name = name;
 			this.addr = addr;
+			this.lobby = lobby;
 			setBounds(x, y, width, height);
 			addActionListener(this);
 		}
@@ -152,7 +155,7 @@ public class Lobby extends JPanel implements NetExecute {
 		public void actionPerformed(ActionEvent e) {
 			try {
 				RoomAction ra = (RoomAction)Class.forName("lobby_i."+cname).newInstance();
-				ra.room(mainJf,ch,tcpdata,addr);
+				ra.room(mainJf,ch,lobby,tcpdata,addr);
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			} 

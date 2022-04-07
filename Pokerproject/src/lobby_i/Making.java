@@ -31,9 +31,11 @@ import net_p.TCPData;
 
 public class Making implements RoomAction {
 	TCPData tcpdata;
+	Lobby lobby;
 	@Override
-	public void room(Login_frame mainJf,Receiver ch, TCPData tcpdata,Integer addr) {
+	public void room(Login_frame mainJf,Receiver ch,Lobby lobby, TCPData tcpdata,Integer addr) {
 		this.tcpdata = tcpdata;
+		this.lobby = lobby;
 		String[] beting = {"1원","10원","100원","1000원"};
 		JFrame jf = new JFrame();
 		jf.setBounds(600, 200, 300, 400);
@@ -83,7 +85,7 @@ public class Making implements RoomAction {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				jf.setVisible(false);
-				mainJf.remove(mainJf.lobby_panel);
+				mainJf.remove(lobby);
 				Game_panel game_panel = new Game_panel(mainJf,ch,tcpdata);
 				
 				if(addr!=null) {
