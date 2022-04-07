@@ -18,10 +18,6 @@ import net_p.NetExecute;
 import net_p.Receiver;
 import net_p.TCPData;
 
-
-
-
-
 public class Login_frame extends JFrame{
 	Login_panel login_panel;
 	Signin_panel signin_panel;

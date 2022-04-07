@@ -64,7 +64,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		this.tcpdata = tcpdata;
 		this.login_frame = login_frame;
 		game_panel =this;
-		
+		tcpdata.DataDestination=null;
 		setBounds(0, 0, 1200, 800);
 		setBackground(new Color(32,56,48));
 		setLayout(null);

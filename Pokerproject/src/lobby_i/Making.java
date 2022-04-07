@@ -87,9 +87,11 @@ public class Making implements RoomAction {
 				jf.setVisible(false);
 				mainJf.remove(lobby);
 				Game_panel game_panel = new Game_panel(mainJf,ch,tcpdata);
+				tcpdata.DataDestination = "RoomChk";
 				
 				if(addr!=null) {
 					tcpdata.UserPos = addr;
+					tcpdata.easyStudy[addr]++;
 				}else {
 					
 				}

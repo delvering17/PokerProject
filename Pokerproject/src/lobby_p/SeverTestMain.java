@@ -8,9 +8,6 @@ import java.net.Socket;
 import java.util.Collections;
 import java.util.HashMap;
 
-import DB_p.ProfileDAO;
-import DB_p.ProfileDTO;
-import lobby_i.UserData;
 import net_p.TCPData;
 class MulServer {
 
@@ -34,8 +31,10 @@ class MulServer {
 	class Reciver extends Thread {
 		ObjectInputStream ois;
 		ObjectOutputStream oos;
+		Socket client;
 		public Reciver(Socket client) {
 			try {
+				this.client = client;
 				oos = new ObjectOutputStream(client.getOutputStream());
 				ois = new ObjectInputStream(client.getInputStream());
 			} catch (Exception e) {
@@ -53,10 +52,17 @@ class MulServer {
 					sendToAll(data);
 				}
 			}catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}finally {
-				
+				try {
+					userList.remove(oos);
+					oos.close();
+					ois.close();
+					client.close();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 			
 		}

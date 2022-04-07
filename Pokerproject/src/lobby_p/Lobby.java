@@ -173,8 +173,7 @@ public class Lobby extends JPanel implements NetExecute {
 	@Override
 	public void execute(TCPData data) {
 		
-		System.out.println(data.name+","+data.msg);
-		System.out.println(data.DataDestination);
+		
 		switch (data.DataDestination) {
 		case "Chatting":
 			jta.append(data.name + " : "+ data.msg+"\n");
@@ -183,6 +182,8 @@ public class Lobby extends JPanel implements NetExecute {
 		case "GameData":
 			
 			break;
+		case "RoomChk":
+			data.easyStudy = this.tcpdata.easyStudy;
 		}
 		
 		
