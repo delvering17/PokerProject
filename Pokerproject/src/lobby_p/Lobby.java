@@ -30,7 +30,6 @@ import net_p.TCPData;
 public class Lobby extends JPanel implements NetExecute {
 	JTextField jtf;
 	JTextArea jta;
-	String addr;
 	Receiver ch;
 	
 	//들어올 유져 객체
@@ -82,7 +81,7 @@ public class Lobby extends JPanel implements NetExecute {
 			jl.setBorder(new LineBorder(Color.black,2));
 			jl.setOpaque(true);
 			jl.setBackground(new Color(255,111,111));
-			RoomBtn rBtn = new RoomBtn("만들기","Making",i+1,90,110,80,40,tcpdata);
+			RoomBtn rBtn = new RoomBtn("만들기","Making",i,90,110,80,40,tcpdata);
 			btnlist.add(rBtn);
 			jl.add(rBtn);
 			roomPanel.add(jl);
@@ -114,6 +113,7 @@ public class Lobby extends JPanel implements NetExecute {
 				tcpdata.msg = jtf.getText();
 				tcpdata.DataDestination = "Chatting";
 				ch.send(tcpdata);
+				jta.setCaretPosition(jta.getDocument().getLength());
 				jtf.setText("");
 			}
 		});
