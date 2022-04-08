@@ -16,11 +16,13 @@ import java.util.HashMap;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
+import game_p.Game_panel;
 import lobby_i.RoomAction;
 import login_p.Login_frame;
 import net_p.NetExecute;
@@ -31,7 +33,7 @@ public class Lobby extends JPanel implements NetExecute {
 	JTextField jtf;
 	JTextArea jta;
 	Receiver ch;
-	
+	Lobby lobby;
 	//들어올 유져 객체
 //	ArrayList<Object> userList = new ArrayList<Object>();
 	Login_frame mainJf;
@@ -40,7 +42,8 @@ public class Lobby extends JPanel implements NetExecute {
 	HashMap<InetAddress, Object> roomChk;
 	ArrayList<RoomBtn> btnlist = new ArrayList<RoomBtn>();
 	public Lobby(Login_frame mainJf,TCPData tcpdata) {
-		
+		this.mainJf = mainJf;
+		lobby = this;
 		Socket client;
 		try {
 			//클라이언트를 서버에 보내기 시작
@@ -155,8 +158,20 @@ public class Lobby extends JPanel implements NetExecute {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			try {
-				RoomAction ra = (RoomAction)Class.forName("lobby_i."+cname).newInstance();
-				ra.room(mainJf,ch,lobby,tcpdata,addr);
+				if(e.getActionCommand().equals("만들기")) {
+					RoomAction ra = (RoomAction)Class.forName("lobby_i."+cname).newInstance();
+					ra.room(mainJf,ch,lobby,tcpdata,addr);
+				}else {
+					tcpdata.DataDestination = "RoomChk";
+					tcpdata.easyStudy[addr]++;
+					tcpdata.UserPos = addr;
+					ch.send(tcpdata);
+					mainJf.remove(lobby);
+					Game_panel game_panel = new Game_panel(mainJf,ch,tcpdata);
+					mainJf.add(game_panel);
+					mainJf.game_panelarr.add(game_panel);
+					mainJf.repaint();
+				}
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			} 
@@ -174,11 +189,12 @@ public class Lobby extends JPanel implements NetExecute {
 	@Override
 	public void execute(TCPData data) {
 		
-		
+		this.tcpdata.easyStudy = data.easyStudy;
 		switch (data.DataDestination) {
 		case "Chatting":
 			if(data.UserPos==this.tcpdata.UserPos) {
 				jta.append(data.name + " : "+ data.msg+"\n");
+				jta.setCaretPosition(jta.getDocument().getLength());
 			}
 			break;
 
@@ -186,7 +202,7 @@ public class Lobby extends JPanel implements NetExecute {
 			
 			break;
 		case "RoomChk":
-			this.tcpdata.easyStudy = data.easyStudy;
+			
 			System.out.println(this.tcpdata.easyStudy[0]);
 			for (RoomBtn roomBtn : btnlist) {
 				

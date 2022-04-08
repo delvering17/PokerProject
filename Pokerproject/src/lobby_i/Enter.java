@@ -22,8 +22,8 @@ public class Enter implements RoomAction{
 	@Override
 	public void room(Login_frame login_frame,Receiver ch,Lobby lobby,TCPData tcpdata,Integer addr) {
 		int chk =0;
-		while(true) {
-			if(tcpdata.easyStudy[chk]==0) {
+		CHK:while(true) {
+			if(tcpdata.easyStudy[chk]>0&&tcpdata.easyStudy[chk]<=5) {
 				tcpdata.DataDestination = "RoomChk";
 				tcpdata.easyStudy[chk]++;
 				tcpdata.UserPos = chk;
@@ -33,9 +33,9 @@ public class Enter implements RoomAction{
 				login_frame.add(game_panel);
 				login_frame.game_panelarr.add(game_panel);
 				login_frame.repaint();
-				break;
+				break CHK;
 			}if(chk>9) {
-				break;
+				break CHK;
 			}
 			chk++;
 		}
