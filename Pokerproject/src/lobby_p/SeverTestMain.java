@@ -55,13 +55,12 @@ class MulServer {
 //				e.printStackTrace();
 			}finally {
 				try {
-					data.DataDestination = "Chatting";
-					data.msg = "[퇴장]";
 					userList.remove(oos);
-					oos.close();
-					ois.close();
-					client.close();
-					sendToAll(data);
+//					data.DataDestination = "Chatting";
+//					data.msg = "[퇴장]";
+//					sendToAll(data);
+//					oos.close();
+//					ois.close();
 				} catch (Exception e1) {
 
 				}

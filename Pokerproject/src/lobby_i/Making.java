@@ -86,7 +86,6 @@ public class Making implements RoomAction {
 			public void actionPerformed(ActionEvent e) {
 				jf.setVisible(false);
 				mainJf.remove(lobby);
-				Game_panel game_panel = new Game_panel(mainJf,ch,tcpdata);
 				
 				tcpdata.DataDestination = "RoomChk";
 				if(addr!=null) {
@@ -95,6 +94,7 @@ public class Making implements RoomAction {
 				}else {
 					
 				}
+				Game_panel game_panel = new Game_panel(mainJf,ch,tcpdata);
 				ch.game_panel = game_panel;
 				tcpdata.msg = "[입장]";
 				ch.send(tcpdata);
