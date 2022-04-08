@@ -60,6 +60,12 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	Game_panel game_panel;
 	PokerGameMain pokerGamemain;
 	
+	ArrayList<JLabel> player1cardShow;
+	ArrayList<JLabel> player2cardShow;
+	ArrayList<JLabel> player3cardShow;
+	ArrayList<JLabel> player4cardShow;
+	ArrayList<JLabel> player5cardShow;
+	
 	public Game_panel(Login_frame login_frame,Receiver ch,TCPData tcpdata) {
 		this.tcpdata = tcpdata;
 		this.login_frame = login_frame;
@@ -97,16 +103,59 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			
 		});
 		
-		
+
 		p1 = new PlayerCard_panel(420, 520, 290, 200);
-		add(p1);
+		player1cardShow = new ArrayList<JLabel>();
+//		for (int i = 20 ; i >= 170 ; i += 25) {
+//			player1cardShow.add(new PlayerCard_Label(i, 0, 100, 200));
+//		}
+//		for(int i = player1cardShow.size()-1 ; i >= 0 ; i--) {
+//			p1.add(player1cardShow.get(i));
+//		}
+		add(p1);	
+		ImageIcon img = new ImageIcon("test/100Card23.png");
+		JLabel aa = new JLabel(img);
+		aa.setBounds(20,0,100,200);
+		p1.add(aa);
+	
+		
+		
 		p2 = new PlayerCard_panel(200, 50, 290, 200);
+		player2cardShow = new ArrayList<JLabel>();
+		for (int i = 20 ; i >= 170 ; i += 25) {
+			player1cardShow.add(new PlayerCard_Label(i, 0, 100, 200));
+			
+		}
+		for(int i = player2cardShow.size()-1 ; i >= 0 ; i--) {
+			p2.add(player2cardShow.get(i));
+		}
 		add(p2);
 		p3 = new PlayerCard_panel(200,280,290,200);
+		player3cardShow = new ArrayList<JLabel>();
+		for (int i = 20 ; i >= 170 ; i += 25) {
+			player3cardShow.add(new PlayerCard_Label(i, 0, 100, 200));
+		}
+		for(int i = player3cardShow.size()-1 ; i >= 0 ; i--) {
+			p3.add(player3cardShow.get(i));
+		}
 		add(p3);
 		p4 = new PlayerCard_panel(710, 50, 290, 200);
+		player4cardShow = new ArrayList<JLabel>();
+		for (int i = 20 ; i >= 170 ; i += 25) {
+			player4cardShow.add(new PlayerCard_Label(i, 0, 100, 200));
+		}
+		for(int i = player4cardShow.size()-1 ; i >= 0 ; i--) {
+			p4.add(player4cardShow.get(i));
+		}
 		add(p4);
 		p5 = new PlayerCard_panel(710, 280, 290, 200);
+		player5cardShow = new ArrayList<JLabel>();
+		for (int i = 20 ; i >= 170 ; i += 25) {
+			player5cardShow.add(new PlayerCard_Label(i, 0, 100, 200));
+		}
+		for(int i = player5cardShow.size()-1 ; i >= 0 ; i--) {
+			p5.add(player5cardShow.get(i));
+		}
 		add(p5);
 
 //		ArrayList<JLabel> cardshow = new ArrayList<JLabel>();
@@ -225,7 +274,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					tcpdata.DataDestination = "Chatting";
+					tcpdata.DataDestination = "Game";
 					tcpdata.panelChk = "Game";
 					tcpdata.msg = chf.getText();
 					ch.send(tcpdata);
@@ -285,7 +334,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	    	System.out.println("생성");
 	    	ttt.setBounds(50,50,250,220);
 	    	ttt.setBackground(Color.black);
-	    	setComponentZOrder(ttt, 10);
+
 	    	add(ttt);
 	    	repaint();
 			break;
@@ -321,8 +370,15 @@ class PlayerCard_panel extends JPanel {
 	public PlayerCard_panel(int x, int y, int width, int height) {
 		setBounds(x, y, width, height);
 		setBackground(new Color(41,67,58));
+		setLayout(null);
 	}
 }
 
+class PlayerCard_Label extends JLabel {
+	
+	public PlayerCard_Label(int x, int y, int width, int height) {
+		setBounds(x, y, width, height);
 
+	}
+}
 
