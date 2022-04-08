@@ -11,7 +11,7 @@ public class Shuffle {
 	}	
 	 
 	 
-	 int  go() {
+	 int go() {
 			PokerCard send;
 			
 			Random num = new Random();

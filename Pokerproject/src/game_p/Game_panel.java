@@ -65,11 +65,22 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	ArrayList<JLabel> player3cardShow;
 	ArrayList<JLabel> player4cardShow;
 	ArrayList<JLabel> player5cardShow;
-	
+	int num;
 	public Game_panel(Login_frame login_frame,Receiver ch,TCPData tcpdata) {
 		this.tcpdata = tcpdata;
 		this.login_frame = login_frame;
 		game_panel =this;
+		num=0;
+		while(true) {
+			if(tcpdata.playData.get(tcpdata.UserPos)[num] == -1) {
+				tcpdata.playData.get(tcpdata.UserPos)[num] = 1;
+				break;
+			}
+			num++;
+		}
+		System.out.println(num);
+		tcpdata.DataDestination = "enter";
+		ch.send(tcpdata);
 		setBounds(0, 0, 1200, 800);
 		setBackground(new Color(32,56,48));
 		setLayout(null);
@@ -91,6 +102,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					if (e.getSource() == exit) {
 						login_frame.remove(game_panel);
 						tcpdata.easyStudy[tcpdata.UserPos]--;
+						tcpdata.playData.get(tcpdata.UserPos)[num]=-1;
 						tcpdata.UserPos = -1;
 						ch.send(tcpdata);
 						login_frame.add(new Lobby(login_frame,tcpdata));
@@ -322,8 +334,11 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 
 	@Override
 	public void execute(TCPData data) {
-		
+		this.tcpdata.playData = data.playData;
 		switch (data.DataDestination) {
+		case "enter":
+			this.tcpdata.playData = data.playData;
+			break;
 		case "Chatting":
 			if(data.UserPos==this.tcpdata.UserPos) {
 				cht.append(data.name+" : "+data.msg+"\n");

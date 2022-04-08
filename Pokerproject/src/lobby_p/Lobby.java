@@ -165,6 +165,7 @@ public class Lobby extends JPanel implements NetExecute {
 					tcpdata.DataDestination = "RoomChk";
 					tcpdata.easyStudy[addr]++;
 					tcpdata.UserPos = addr;
+					
 					ch.send(tcpdata);
 					mainJf.remove(lobby);
 					Game_panel game_panel = new Game_panel(mainJf,ch,tcpdata);
@@ -188,7 +189,7 @@ public class Lobby extends JPanel implements NetExecute {
 
 	@Override
 	public void execute(TCPData data) {
-		
+		this.tcpdata.playData = data.playData;
 		this.tcpdata.easyStudy = data.easyStudy;
 		switch (data.DataDestination) {
 		case "Chatting":

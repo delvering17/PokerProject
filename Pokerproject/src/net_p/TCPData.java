@@ -1,6 +1,7 @@
 package net_p;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 import DB_p.ProfileDTO;
 
@@ -12,10 +13,10 @@ public class TCPData implements Serializable{
 	public String name;				//닉네임
 	public String DataDestination;	//Chatting , GameData 등등		--> 익스큐트에서 걸러짐 ,서버에서 확인
 	public int UserPos;           	//자신의 위치 -1= 로비, 0=1번방		--> 서버에서 걸러짐
-	public int PlayNum;
+	public HashMap<Integer,Integer[]> playData;
 	public String msg;
 	public MyData rdata;			//돈,전적,게임채팅,전체카드,개인카드,상대카드,승패,카드오픈,족보,배팅,기본판돈,게임판돈,개인베팅금액;
-	public int[] easyStudy;
+	public int[] easyStudy; 
 	public String panelChk;
 	public TCPData(ProfileDTO datathis) {
 		easyStudy = new int[9];
@@ -24,7 +25,12 @@ public class TCPData implements Serializable{
 		}
 		name = datathis.nickname;
 		UserPos = -1;
-		PlayNum = -1;
-		
+		playData = new HashMap<Integer,Integer[]>();
+		for (int j = 0; j < 9; j++) {
+			playData.put(j,new Integer[5]);
+			for (int i = 0; i < playData.get(j).length; i++) {
+				playData.get(j)[i] = -1;
+			}
+		}
 	}
 }
