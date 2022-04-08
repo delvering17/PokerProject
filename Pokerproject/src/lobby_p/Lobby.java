@@ -177,7 +177,9 @@ public class Lobby extends JPanel implements NetExecute {
 		
 		switch (data.DataDestination) {
 		case "Chatting":
-			jta.append(data.name + " : "+ data.msg+"\n");
+			if(data.UserPos==this.tcpdata.UserPos) {
+				jta.append(data.name + " : "+ data.msg+"\n");
+			}
 			break;
 
 		case "GameData":
