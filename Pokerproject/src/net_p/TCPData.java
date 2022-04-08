@@ -16,6 +16,7 @@ public class TCPData implements Serializable{
 	public String msg;
 	public MyData rdata;			//돈,전적,게임채팅,전체카드,개인카드,상대카드,승패,카드오픈,족보,배팅,기본판돈,게임판돈,개인베팅금액;
 	public int[] easyStudy;
+	public String panelChk;
 	public TCPData(ProfileDTO datathis) {
 		easyStudy = new int[9];
 		for (int i = 0; i < easyStudy.length; i++) {

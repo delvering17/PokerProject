@@ -37,10 +37,7 @@ public class Receiver extends Thread {
 	
 	
 	public Receiver(Login_frame lframe, Socket client) {
-		// TODO Auto-generated constructor stub
-		//this.lframe = lframe;
-		//map.put("lobby_panel",lobby_panel);
-		//map.put("game_panel",game_panel);
+		
 		try {
 			oos = new ObjectOutputStream(client.getOutputStream());
 			ois = new ObjectInputStream(client.getInputStream());
@@ -49,24 +46,29 @@ public class Receiver extends Thread {
 		}
 		
 	}
-	
+	TCPData data;
 	@Override
 	
 	public void run() {
 		try {
 			while(ois!=null) {
 				
-				TCPData data=(TCPData)ois.readObject();
+				data=(TCPData)ois.readObject();
 				System.out.println(data.DataDestination);
-				if(data.UserPos==-1) {
-					lobby_panel.execute(data);
-				}else if(data.UserPos>-1) {
-					game_panel.execute(data);					
+				switch (data.panelChk) {
+				case "Lobby":
+					lobby_panel.execute(data);				
+					break;
+				case "Game":
+					game_panel.execute(data);				
+					break;
 				}
+				
 				
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+		}finally {
+
 		}
 	}
 }

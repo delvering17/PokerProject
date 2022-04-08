@@ -47,6 +47,7 @@ public class Lobby extends JPanel implements NetExecute {
 			client = new Socket("192.168.20.39", 8888);
 			ch = new Receiver(mainJf, client);
 			ch.lobby_panel=this;
+			tcpdata.panelChk = "Lobby";
 			ch.start();
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -183,13 +184,18 @@ public class Lobby extends JPanel implements NetExecute {
 			
 			break;
 		case "RoomChk":
-			data.easyStudy = this.tcpdata.easyStudy;
+			this.tcpdata.easyStudy = data.easyStudy;
+			System.out.println(this.tcpdata.easyStudy[0]);
 			for (RoomBtn roomBtn : btnlist) {
 				
-				if(this.tcpdata.easyStudy[roomBtn.addr]!=0) {
+				if(this.tcpdata.easyStudy[roomBtn.addr]>0) {
 					roomBtn.setText("입장");
+					if(this.tcpdata.easyStudy[roomBtn.addr]==5) roomBtn.setEnabled(false);
+					else roomBtn.setEnabled(true);
+					repaint();
 				}else {
 					roomBtn.setText("만들기");
+					repaint();
 				}
 			}
 		}

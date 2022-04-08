@@ -93,7 +93,6 @@ class LogIn_in implements Inter_button_login {
 					ProfileDTO datathis = new SignDB().num_profileRead(" profilenum = " +memberNum+ ";");
 					try {
 						TCPData tcpdata = new TCPData(datathis);
-						
 						login_frame.remove(login_frame.login_panel);
 						Lobby lobby_panel = new Lobby(login_frame,tcpdata);
 						login_frame.add(lobby_panel) ;

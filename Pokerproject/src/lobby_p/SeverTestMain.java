@@ -41,27 +41,29 @@ class MulServer {
 				e.printStackTrace();
 			}
 		}
+		TCPData data;
 		@Override
 		public void run() {
-			
 			try {
 				while(ois!=null) {
-					TCPData data = (TCPData)ois.readObject();
+					data = (TCPData)ois.readObject();
 					userList.put(oos,data);
 					System.out.println(data.name +" : "+ data.msg);
 					sendToAll(data);
 				}
 			}catch (Exception e) {
-				e.printStackTrace();
+//				e.printStackTrace();
 			}finally {
 				try {
+					data.DataDestination = "Chatting";
+					data.msg = "[퇴장]";
 					userList.remove(oos);
 					oos.close();
 					ois.close();
 					client.close();
+					sendToAll(data);
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+
 				}
 			}
 			
@@ -83,7 +85,7 @@ class MulServer {
 public class SeverTestMain {
 
 	public static void main(String[] args) {
-			 new MulServer();
+		new MulServer();
 	}
 
 }
