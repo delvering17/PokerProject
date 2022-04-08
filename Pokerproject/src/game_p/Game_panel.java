@@ -224,13 +224,18 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					tcpdata.msg = chf.getText();
-					ch.send(tcpdata);
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+//				try {
+//					tcpdata.msg = chf.getText();
+//					tcpdata.DataDestination = "Chatting";
+//					tcpdata.panelChk = "Game";
+//					ch.send(tcpdata);
+//				} catch (Exception e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				}
+				tcpdata.DataDestination = "Game";
+				tcpdata.panelChk = "Game";
+				ch.send(tcpdata);
 				cht.setCaretPosition(cht.getDocument().getLength());
 				chf.setText("");
 			}
@@ -251,6 +256,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			Help_pg pg = new Help_pg();
 		}	
 		
+		
 	}
 
 
@@ -266,10 +272,20 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	@Override
 	public void execute(TCPData data) {
 		
-		if(data.UserPos==this.tcpdata.UserPos&&data.msg!=null) {
-			cht.append(data.name+" : "+data.msg+"\n");
+		if (data.DataDestination.equals("Chatting")) {
+			if(data.UserPos==this.tcpdata.UserPos&&data.msg!=null) {
+				
+				cht.append(data.name+" : "+data.msg+"\n");
+			}
+		} else if (data.DataDestination.equals("Game")) {
+	    	JPanel ttt = new JPanel();
+	    	System.out.println("생성");
+	    	ttt.setBounds(50,50,250,220);
+	    	ttt.setBackground(Color.black);
+	    	setComponentZOrder(ttt, 10);
+	    	add(ttt);
+	    	repaint();
 		}
-		
 		
 	}
 }	
