@@ -17,7 +17,7 @@ public class CardSet {
 		ArrayList<PokerCard> deck = new ArrayList<PokerCard>();
 		for (int i = 2; i < 15; i++) {
 			for (int j = 1; j < 5; j++) {
-				deck.add(new PokerCard(i,j,new JLabel(new ImageIcon("card/Card"+i+"_"+j+".png"))));
+				deck.add(new PokerCard(i,j));
 			}
 		}
 		

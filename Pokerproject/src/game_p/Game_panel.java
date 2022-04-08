@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -65,8 +66,12 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	ArrayList<JLabel> player3cardShow;
 	ArrayList<JLabel> player4cardShow;
 	ArrayList<JLabel> player5cardShow;
-	int num;
+	Integer num;
+	Receiver ch;
 	public Game_panel(Login_frame login_frame,Receiver ch,TCPData tcpdata) {
+		tcpdata.panelChk = "Game";
+		this.ch = ch;
+		this.ch.game_panel = this;
 		this.tcpdata = tcpdata;
 		this.login_frame = login_frame;
 		game_panel =this;
@@ -77,6 +82,29 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				break;
 			}
 			num++;
+		}
+		if(num==0) {
+			JButton GameStart = new JButton("게임 시작");
+			GameStart.setBounds(500, 280, 200, 80);
+			add(GameStart);
+			GameStart.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					for (int i = 2; i < 15; i++) {
+						for (int j = 1; j < 5; j++) {
+							tcpdata.dealerDeck.add(new PokerCard(i,j));
+						}
+					}
+					tcpdata.DataDestination ="Game";
+					split();
+					
+					ch.send(tcpdata);
+					System.out.println("카드 52장 넣음");
+					game_panel.remove(GameStart);
+					repaint();
+				}
+			});
 		}
 		System.out.println(num);
 		tcpdata.DataDestination = "enter";
@@ -286,8 +314,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					tcpdata.DataDestination = "Game";
-					tcpdata.panelChk = "Game";
+					tcpdata.DataDestination = "Chatting";
 					tcpdata.msg = chf.getText();
 					ch.send(tcpdata);
 					cht.setCaretPosition(cht.getDocument().getLength());
@@ -334,6 +361,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 
 	@Override
 	public void execute(TCPData data) {
+		System.out.println("왔니?");
 		this.tcpdata.playData = data.playData;
 		switch (data.DataDestination) {
 		case "enter":
@@ -345,16 +373,35 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			}
 			break;
 		case "Game":
-			JPanel ttt = new JPanel();
-	    	System.out.println("생성");
-	    	ttt.setBounds(50,50,250,220);
-	    	ttt.setBackground(Color.black);
-
-	    	add(ttt);
+			System.out.println("왔니?2");
+			this.tcpdata.playerDeck = data.playerDeck;
+			System.out.println(this.tcpdata.playerDeck.get(0).get(0).number);
 	    	repaint();
 			break;
 		}
 		
+	}
+	
+	void split() {
+		
+		
+		tcpdata.playerDeck.put(num,new ArrayList<PokerCard>());
+		tcpdata.playData.get(tcpdata.UserPos);
+		int chkd = 0;
+		while(true) {
+			Random number = new Random();
+			int a = number.nextInt(tcpdata.dealerDeck.size());
+			if(chkd==4) {
+				break;
+			}
+			if(tcpdata.playData.get(tcpdata.UserPos)[chkd] != -1) {
+				tcpdata.playerDeck.get(chkd).add(tcpdata.dealerDeck.get(a));
+				tcpdata.dealerDeck.remove(a);
+			}
+			chkd++;
+		}
+		tcpdata.DataDestination = "Game";
+		ch.send(tcpdata);
 	}
 }	
 	

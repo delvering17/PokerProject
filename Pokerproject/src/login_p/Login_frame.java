@@ -24,7 +24,7 @@ public class Login_frame extends JFrame{
 	FindIDPW_panel findIDPW_panel;
 	public Lobby lobby_panel;
 	ProfileDTO userDTO;
-	public ArrayList <Game_panel> game_panelarr= new ArrayList <Game_panel>();
+	public ArrayList <Game_panel> game_panelarr= new ArrayList<Game_panel>();
 	Login_frame login_frame;
 	
 	public JTextArea jta;
