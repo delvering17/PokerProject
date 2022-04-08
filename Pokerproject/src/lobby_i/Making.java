@@ -91,8 +91,6 @@ public class Making implements RoomAction {
 				if(addr!=null) {
 					tcpdata.UserPos = addr;
 					tcpdata.easyStudy[addr]++;
-				}else {
-					
 				}
 				Game_panel game_panel = new Game_panel(mainJf,ch,tcpdata);
 				ch.game_panel = game_panel;

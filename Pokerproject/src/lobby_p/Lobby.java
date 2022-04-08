@@ -72,7 +72,6 @@ public class Lobby extends JPanel implements NetExecute {
 		
 		JScrollPane roomList = new JScrollPane();//스크롤팬 생성
 		roomList.setBounds(10, 120, 800, 400);
-		roomList.setBackground(Color.red);
 		JPanel roomPanel = new JPanel();//스크롤팬에 붙일 패널 생성
 		roomPanel.setBorder(new LineBorder(Color.white,10));
 		roomPanel.setLayout(new GridLayout(3,3,10,10));
@@ -127,6 +126,7 @@ public class Lobby extends JPanel implements NetExecute {
 		//아직 모름 일딴 TCP 데이터 정지
 //		UserProfile_panel profilePanel = new UserProfile_panel(tcpdata);
 //		add(profilePanel);
+		repaint();
 	}
 	
 	class RoomBtn extends JButton implements ActionListener{
@@ -194,11 +194,10 @@ public class Lobby extends JPanel implements NetExecute {
 					roomBtn.setText("입장");
 					if(this.tcpdata.easyStudy[roomBtn.addr]==5) roomBtn.setEnabled(false);
 					else roomBtn.setEnabled(true);
-					repaint();
 				}else {
 					roomBtn.setText("만들기");
-					repaint();
 				}
+				repaint();
 			}
 		}
 		
