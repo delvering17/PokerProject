@@ -4,19 +4,16 @@ package lobby_p;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -32,6 +29,7 @@ import net_p.TCPData;
 public class Lobby extends JPanel implements NetExecute {
 	JTextField jtf;
 	JTextArea jta;
+	JTextArea userArea;
 	Receiver ch;
 	Lobby lobby;
 	//들어올 유져 객체
@@ -108,13 +106,30 @@ public class Lobby extends JPanel implements NetExecute {
 				jtf.setText("");
 			}
 		});
-		
-		Component userList = new Component(820,520 , 350, 230);
-		add(userList);
+		JPanel userP = new JPanel();
+		userP.setBounds(820,10,350, 510);
+		userArea = new JTextArea();
+		JScrollPane userList = new JScrollPane(userArea);
+		userList.setBounds(10,10,330,490);
+		userArea.setEditable(false);
+		userP.add(userList);
+		add(userP);
 		//아직 모름 일딴 TCP 데이터 정지
 //		UserProfile_panel profilePanel = new UserProfile_panel(tcpdata);
 //		add(profilePanel);
-
+		roomList.getVerticalScrollBar().setValue(1);
+		roomList.getVerticalScrollBar().setValue(0);
+		
+		JTextArea profile = new JTextArea();
+		profile.setBounds(10, 10, 330, 200);
+		JPanel userProfile = new JPanel();
+		userProfile.add(profile);
+		profile.setEditable(false);
+		
+		profile.setText("닉네임 : "+tcpdata.name+"\n\n"+"성별 : "+tcpdata.gender+"\n\n"+"보유머니 : "+tcpdata.money+"\n\n"+"승 : "+tcpdata.win+" 패 : "+tcpdata.lose);
+		
+		userProfile.setBounds(820,530,350, 220);
+		add(userProfile);
 		ch.send(tcpdata);
 		repaint();
 	}
@@ -178,7 +193,12 @@ public class Lobby extends JPanel implements NetExecute {
 		System.out.println("??");
 		this.tcpdata.playData = data.playData;
 		this.tcpdata.easyStudy = data.easyStudy;
+		this.tcpdata.userName = data.userName;
+		userArea.setText("");
 		
+		for (String un : this.tcpdata.userName) {
+			userArea.append(un+"\n");
+		}
 		for (RoomBtn roomBtn : btnlist) {
 			if(this.tcpdata.easyStudy[roomBtn.addr]>0) {
 				roomBtn.setText("입장");

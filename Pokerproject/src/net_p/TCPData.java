@@ -3,6 +3,7 @@ package net_p;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import DB_p.ProfileDTO;
 import game_p.PokerCard;
@@ -18,14 +19,20 @@ public class TCPData implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	//자신 기본
-	public String name;				//닉네임
+	public String name,gender;				//닉네임
+	public int totalGame;
+	public int win;
+	public int lose;
+	public long money;
 	public int UserPos;           	//자신의 위치 -1= 로비, 0=1번방		--> 서버에서 걸러짐
 	public String msg;
 	public String DataDestination;	//Chatting , GameData 등등		--> 익스큐트에서 걸러짐 ,서버에서 확인
 	public String panelChk;
+	public String[] res;
 	//전체 기본
 	public int[] easyStudy; 
 	public HashMap<Integer,Integer[]> playData;
+	public HashSet<String> userName;
 	
 	//Game data
 	public MyData rdata;			//돈,전적,게임채팅,전체카드,개인카드,상대카드,승패,카드오픈,족보,배팅,기본판돈,게임판돈,개인베팅금액;
@@ -38,6 +45,7 @@ public class TCPData implements Serializable{
 	
 	
 	public TCPData(ProfileDTO datathis) {
+		userName = new HashSet<String>();
 		dealerDeck = new ArrayList<PokerCard>();
 		playerDeck = new HashMap<Integer, ArrayList<PokerCard>>();
 		for (int i = 0; i < 5; i++) {
@@ -49,6 +57,16 @@ public class TCPData implements Serializable{
 			easyStudy[i] = 0;
 		}
 		name = datathis.nickname;
+		
+		
+		this.gender = datathis.gender;
+
+		this.totalGame = datathis.totalGame;
+		this.win = datathis.win;
+		this.lose = datathis.lose;
+		this.money = datathis.money;
+		
+		
 		UserPos = -1;
 		playData = new HashMap<Integer,Integer[]>();
 		for (int j = 0; j < 9; j++) {

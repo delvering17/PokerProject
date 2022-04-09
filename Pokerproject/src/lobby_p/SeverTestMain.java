@@ -7,14 +7,16 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import net_p.TCPData;
 class MulServer {
-
+	HashSet<String> userName;
 	HashMap<String,ObjectOutputStream> userList;
 	HashMap<Integer,Integer[]> playData;
 	public int[] easyStudy;
 	public MulServer() {
+		userName = new HashSet<String>();
 		playData = new HashMap<Integer, Integer[]>();
 		easyStudy = new int[9];
 		for (int j = 0; j < 9; j++) {
@@ -57,12 +59,14 @@ class MulServer {
 				while(ois!=null) {
 					data = (TCPData)ois.readObject();
 					userList.put(data.name,oos);
+					userName.add(data.name);
 					System.out.println(data.name +" : "+ data.msg);
 					if(data.DataDestination.equals("first")) {
 						for (String name : userList.keySet()) {
 							if(name==data.name) {
 								data.playData = playData;
 								data.easyStudy = easyStudy;
+								data.userName = userName;
 								oos.writeObject(data);
 								oos.flush();
 								oos.reset();
@@ -71,6 +75,7 @@ class MulServer {
 					}else {
 						playData = data.playData;
 						easyStudy = data.easyStudy;
+						data.userName = userName;
 						sendToAll(data);
 					}
 				}
