@@ -117,8 +117,6 @@ public class Lobby extends JPanel implements NetExecute {
 		//아직 모름 일딴 TCP 데이터 정지
 //		UserProfile_panel profilePanel = new UserProfile_panel(tcpdata);
 //		add(profilePanel);
-		roomList.getVerticalScrollBar().setValue(1);
-		roomList.getVerticalScrollBar().setValue(0);
 		
 		JTextArea profile = new JTextArea();
 		profile.setBounds(10, 10, 330, 200);
@@ -131,6 +129,7 @@ public class Lobby extends JPanel implements NetExecute {
 		userProfile.setBounds(820,530,350, 220);
 		add(userProfile);
 		ch.send(tcpdata);
+		roomList.getVerticalScrollBar().setValue(1);
 		repaint();
 	}
 	
