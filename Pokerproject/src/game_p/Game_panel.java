@@ -35,7 +35,7 @@ import net_p.TCPData;
 
  
 
-public class Game_panel extends JPanel implements ActionListener,NetExecute {
+public class Game_panel2 extends JPanel implements ActionListener,NetExecute {
 	JButton help ;
 	JButton exit;
 	
@@ -58,7 +58,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 
 	ArrayList<Ingame_userProfile_panel> userprofile = new ArrayList<Ingame_userProfile_panel>();
 	Login_frame login_frame;
-	Game_panel game_panel;
+	Game_panel2 game_panel;
 	PokerGameMain pokerGamemain;
 	
 	ArrayList<PlayerCard_Label> player1cardShow;
@@ -69,7 +69,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	Integer num;
 	Receiver ch;
 	
-	public Game_panel(Login_frame login_frame,Receiver ch,TCPData tcpdata,Integer addr) {
+	public Game_panel2(Login_frame login_frame,Receiver ch,TCPData tcpdata,Integer addr) {
 		tcpdata.panelChk = "Game";
 		this.ch = ch;
 		this.ch.game_panel = this;
@@ -107,7 +107,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 						}
 					}
 					tcpdata.DataDestination ="Game";
-					split();
+					GameProcess();
 					
 					ch.send(tcpdata);
 					System.out.println("카드 52장 넣음");
@@ -365,10 +365,14 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	@Override
 	public void execute(TCPData data) {
 		this.tcpdata.playData = data.playData;
+		this.tcpdata.playerDeck = data.playerDeck;
 		for (Integer aa : this.tcpdata.playData.get(0)) {
 			System.out.println(aa);
 		}
 		System.out.println();
+		
+		System.out.println(data.msg);
+		
 		this.tcpdata.easyStudy = data.easyStudy;
 		switch (data.DataDestination) {
 		case "enter":
@@ -380,39 +384,105 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			}
 			break;
 		case "Game":
-			this.tcpdata.playerDeck = data.playerDeck;
-			System.out.println(this.tcpdata.playerDeck.get(0).get(0).number);
-			ImageIcon img = new ImageIcon(this.tcpdata.playerDeck.get(0).get(0).imgname);
-			player3cardShow.get(0).setIcon(img);
+			ImageIcon img;
+//			this.tcpdata.playerDeck = data.playerDeck;
+//			System.out.println(this.tcpdata.playerDeck.get(0).get(0).number);
+//			ImageIcon img = new ImageIcon(this.tcpdata.playerDeck.get(0).get(0).imgname);
+//			player3cardShow.get(0).setIcon(img);
+			
+			
+			for (int i =0 ; i < 7 ; i++) {
+				img = new ImageIcon(data.playerDeck.get(0).get(i).imgname);
+				player1cardShow.get(i).setIcon(img);
+			}
+			
+			for (int i =0 ; i < 7 ; i++) {
+				img = new ImageIcon(data.playerDeck.get(1).get(i).imgname);
+				player2cardShow.get(i).setIcon(img);
+			}
+			
+
 			
 	    	this.repaint();
-	    	p3.repaint();
+	    
 			break;
 		}
 		
 	}
 	
+//	void cardShow() {
+//		
+//		switch () {
+//		
+//		case :
+//			break;
+//		
+//		}
+//		
+//	}
+	
 	void split() {
 		
 		
-		tcpdata.playerDeck.put(num,new ArrayList<PokerCard>());
+		tcpdata.playerDeck.put(0,new ArrayList<PokerCard>());
+		tcpdata.playerDeck.put(1,new ArrayList<PokerCard>());
 		tcpdata.playData.get(tcpdata.UserPos);
 		int chkd = 0;
+//		while(true) {
+//			Random number = new Random();
+//			int a = number.nextInt(tcpdata.dealerDeck.size());
+//			if(chkd==2) {
+//				break;
+//			}
+//			if(tcpdata.playData.get(tcpdata.UserPos)[chkd] != -1) {
+//				tcpdata.playerDeck.get(chkd).add(tcpdata.dealerDeck.get(a));
+//				tcpdata.dealerDeck.remove(a);
+//			}
+//			chkd++;
+//		}
+		int people = 0;
+		
 		while(true) {
-			Random number = new Random();
-			int a = number.nextInt(tcpdata.dealerDeck.size());
-			if(chkd==4) {
+			
+			if (people == 2) {
 				break;
 			}
-			if(tcpdata.playData.get(tcpdata.UserPos)[chkd] != -1) {
-				tcpdata.playerDeck.get(chkd).add(tcpdata.dealerDeck.get(a));
-				tcpdata.dealerDeck.remove(a);
+			for (int i = 0 ; i < 7 ;  i++) {
+				Random number = new Random();
+				int a = number.nextInt(tcpdata.dealerDeck.size());
+				tcpdata.playerDeck.get(people).add(tcpdata.dealerDeck.get(a));
+				tcpdata.dealerDeck.remove(a);			
 			}
-			chkd++;
+			
+			
+			people ++;
 		}
+		System.out.println("0번");
+		for (PokerCard aa : tcpdata.playerDeck.get(0)) {
+			System.out.println(aa.number + ", " + aa.shape);
+		}
+		System.out.println("1번");
+		for (PokerCard aa : tcpdata.playerDeck.get(1)) {
+			System.out.println(aa.number + ", " + aa.shape);
+		}
+		
+
+		System.out.println(new Jokbo().jokbo(tcpdata.playerDeck.get(0)));
+		System.out.println(new Jokbo().jokbo(tcpdata.playerDeck.get(1)));
+		
 		tcpdata.DataDestination = "Game";
+		tcpdata.msg = "카드 나와라";
 		ch.send(tcpdata);
+		
 	}
+	
+	void GameProcess() {
+		split();
+		
+	}
+	
+	
+	
 }	
 	
 class Help_pg extends JFrame{
