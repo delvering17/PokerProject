@@ -35,7 +35,7 @@ import net_p.TCPData;
 
  
 
-public class Game_panel2 extends JPanel implements ActionListener,NetExecute {
+public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	JButton help ;
 	JButton exit;
 	
@@ -58,7 +58,7 @@ public class Game_panel2 extends JPanel implements ActionListener,NetExecute {
 
 	ArrayList<Ingame_userProfile_panel> userprofile = new ArrayList<Ingame_userProfile_panel>();
 	Login_frame login_frame;
-	Game_panel2 game_panel;
+	Game_panel game_panel;
 	PokerGameMain pokerGamemain;
 	
 	ArrayList<PlayerCard_Label> player1cardShow;
@@ -69,7 +69,7 @@ public class Game_panel2 extends JPanel implements ActionListener,NetExecute {
 	Integer num;
 	Receiver ch;
 	
-	public Game_panel2(Login_frame login_frame,Receiver ch,TCPData tcpdata,Integer addr) {
+	public Game_panel(Login_frame login_frame,Receiver ch,TCPData tcpdata,Integer addr) {
 		tcpdata.panelChk = "Game";
 		this.ch = ch;
 		this.ch.game_panel = this;
