@@ -84,21 +84,13 @@ public class Making implements RoomAction {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				jf.setVisible(false);
 				mainJf.remove(lobby);
-				
-				tcpdata.DataDestination = "RoomChk";
-				if(addr!=null) {
-					tcpdata.UserPos = addr;
-					tcpdata.easyStudy[addr]++;
-				}
-				Game_panel game_panel = new Game_panel(mainJf,ch,tcpdata);
-				ch.game_panel = game_panel;
-				tcpdata.msg = "[입장]";
-				ch.send(tcpdata);
-
+				tcpdata.DataDestination = "Chatting";
+				Game_panel game_panel = new Game_panel(mainJf,ch,tcpdata,addr);
+				//ch.send(tcpdata);
 				mainJf.add(game_panel);
-				mainJf.game_panelarr.add(game_panel);
+//				mainJf.game_panelarr.add(game_panel);
+				jf.setVisible(false);
 				mainJf.repaint();
 			}
 		});

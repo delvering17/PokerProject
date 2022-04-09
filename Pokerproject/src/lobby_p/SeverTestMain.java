@@ -11,12 +11,21 @@ import java.util.HashMap;
 import net_p.TCPData;
 class MulServer {
 
-	HashMap<ObjectOutputStream, TCPData> userList;
-	
+	HashMap<String,ObjectOutputStream> userList;
+	HashMap<Integer,Integer[]> playData;
+	public int[] easyStudy;
 	public MulServer() {
+		playData = new HashMap<Integer, Integer[]>();
+		easyStudy = new int[9];
+		for (int j = 0; j < 9; j++) {
+			playData.put(j,new Integer[5]);
+			for (int i = 0; i < playData.get(j).length; i++) {
+				playData.get(j)[i] = -1;
+			}
+		}
 		try {
 			System.out.println("나 서버");
-			userList = new HashMap<ObjectOutputStream,TCPData>();
+			userList = new HashMap<String,ObjectOutputStream>();
 			Collections.synchronizedMap(userList);
 			ServerSocket server = new ServerSocket(8888);
 			while(true) {
@@ -47,15 +56,29 @@ class MulServer {
 			try {
 				while(ois!=null) {
 					data = (TCPData)ois.readObject();
-					userList.put(oos,data);
+					userList.put(data.name,oos);
 					System.out.println(data.name +" : "+ data.msg);
-					sendToAll(data);
+					if(data.DataDestination.equals("first")) {
+						for (String name : userList.keySet()) {
+							if(name==data.name) {
+								data.playData = playData;
+								data.easyStudy = easyStudy;
+								oos.writeObject(data);
+								oos.flush();
+								oos.reset();
+							}
+						}
+					}else {
+						playData = data.playData;
+						easyStudy = data.easyStudy;
+						sendToAll(data);
+					}
 				}
 			}catch (Exception e) {
 //				e.printStackTrace();
 			}finally {
 				try {
-					userList.remove(oos);
+					userList.remove(data.name);
 //					data.DataDestination = "Chatting";
 //					data.msg = "[퇴장]";
 //					sendToAll(data);
@@ -69,7 +92,7 @@ class MulServer {
 		}
 	}
 	void sendToAll(TCPData data) {
-		for (ObjectOutputStream dd : userList.keySet()) {
+		for (ObjectOutputStream dd : userList.values()) {
 			try {
 				dd.writeObject(data);
 				dd.flush();

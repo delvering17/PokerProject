@@ -69,13 +69,16 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	Integer num;
 	Receiver ch;
 	
-	public Game_panel(Login_frame login_frame,Receiver ch,TCPData tcpdata) {
+	public Game_panel(Login_frame login_frame,Receiver ch,TCPData tcpdata,Integer addr) {
 		tcpdata.panelChk = "Game";
 		this.ch = ch;
 		this.ch.game_panel = this;
 		this.tcpdata = tcpdata;
 		this.login_frame = login_frame;
 		game_panel =this;
+		tcpdata.easyStudy[addr]++;
+		tcpdata.UserPos = addr;
+		tcpdata.DataDestination = "Chatting";
 		num=0;
 		while(true) {
 			if(tcpdata.playData.get(tcpdata.UserPos)[num] == -1) {
@@ -84,6 +87,12 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			}
 			num++;
 		}
+		tcpdata.msg = addr+"번방,"+num+"번 플레이어 "+"[입장]";
+		for (Integer a : tcpdata.playData.get(tcpdata.UserPos)) {
+			System.out.println(a);
+			
+		}
+		ch.send(tcpdata);
 		if(num==0) {
 			JButton GameStart = new JButton("게임 시작");
 			GameStart.setBounds(500, 280, 200, 80);
@@ -107,9 +116,6 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				}
 			});
 		}
-		System.out.println(num);
-		tcpdata.DataDestination = "enter";
-		ch.send(tcpdata);
 		setBounds(0, 0, 1200, 800);
 		setBackground(new Color(32,56,48));
 		setLayout(null);
@@ -128,16 +134,16 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-					if (e.getSource() == exit) {
-						login_frame.remove(game_panel);
-						tcpdata.easyStudy[tcpdata.UserPos]--;
-						tcpdata.playData.get(tcpdata.UserPos)[num]=-1;
-						ch.send(tcpdata);
-						login_frame.add(new Lobby(login_frame,tcpdata,ch));
-						login_frame.repaint();
-					}
-//					dispose(); // 원래있던 창이 꺼지며 새로운 창 나오게함
-//					Exit_pg ex_pg = new Exit_pg();
+				if (e.getSource() == exit) {
+					login_frame.remove(game_panel);
+					tcpdata.easyStudy[tcpdata.UserPos]--;
+					tcpdata.playData.get(tcpdata.UserPos)[num]=-1;
+					ch.send(tcpdata);
+					login_frame.add(new Lobby(login_frame,tcpdata,ch));
+					login_frame.repaint();
+				}
+//				dispose(); // 원래있던 창이 꺼지며 새로운 창 나오게함
+//				Exit_pg ex_pg = new Exit_pg();
 					
 			}
 			
@@ -148,14 +154,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		p1 = new PlayerCard_panel(420, 520, 290, 200);
 		add(p1);	
 		
-		
 		ImageIcon img = new ImageIcon("img/card/Card10_2.png");
-//		JLabel aa = new JLabel(img);
-//		aa.setBounds(20,0,100,200);
-		
-		
-//		p1.add(aa);
-		
 		
 		for (int i = 20 ; i <= 170 ; i += 25) {
 			PlayerCard_Label cd = new PlayerCard_Label(i, 0, 100, 200);
@@ -172,9 +171,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			p2.add(cd);
 			player2cardShow.add(cd);
 		}
-//		for(int i = player2cardShow.size()-1 ; i >= 0 ; i--) {
-//			p2.add(player2cardShow.get(i));
-//		}
+
 		player2cardShow.get(0).setIcon(img);
 		
 		p3 = new PlayerCard_panel(200,280,290,200);
@@ -252,21 +249,21 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
         add(betbuttonarea);
        
         String [] betbt = {"콜","삥","따당","하프","다이","체크","맥스"};
-        	BetBtn bt = new BetBtn("콜",0,0);
-        	BetBtn bt1 = new BetBtn("삥",85,0);
-        	BetBtn bt2 = new BetBtn("따당",0,55);
-        	BetBtn bt3 = new BetBtn("하프",85,55);
-        	BetBtn bt4 = new BetBtn("다이",0,110);
-        	BetBtn bt5 = new BetBtn("체크",85,110);
-        	BetBtn bt6 = new BetBtn("맥스",0,165);
-        	
-            betbuttonarea.add(bt);
-            betbuttonarea.add(bt1);
-            betbuttonarea.add(bt2);
-            betbuttonarea.add(bt3);
-            betbuttonarea.add(bt4);
-            betbuttonarea.add(bt5);
-            betbuttonarea.add(bt6);
+    	BetBtn bt = new BetBtn("콜",0,0);
+    	BetBtn bt1 = new BetBtn("삥",85,0);
+    	BetBtn bt2 = new BetBtn("따당",0,55);
+    	BetBtn bt3 = new BetBtn("하프",85,55);
+    	BetBtn bt4 = new BetBtn("다이",0,110);
+    	BetBtn bt5 = new BetBtn("체크",85,110);
+    	BetBtn bt6 = new BetBtn("맥스",0,165);
+    	
+        betbuttonarea.add(bt);
+        betbuttonarea.add(bt1);
+        betbuttonarea.add(bt2);
+        betbuttonarea.add(bt3);
+        betbuttonarea.add(bt4);
+        betbuttonarea.add(bt5);
+        betbuttonarea.add(bt6);
           
 //        timebel = new JLabel();
 //        timebel.setLayout(new FlowLayout());
@@ -298,7 +295,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
         
         
     	JPanel chat = new JPanel();
-    	chat.setLayout(new BorderLayout());
+    	chat.setLayout(null);
 		chat.setBounds(920,520,250,220);
 		chat.setBackground(Color.black);
 		add(chat);
@@ -313,8 +310,8 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		jp.setBounds(0, 0, 250, 200);
 		cht.setEditable(false);
 		
-		chat.add(chf,"South");
-		chat.add(jp,"Center");
+		chat.add(chf);
+		chat.add(jp);
 		
 		chf.addActionListener(new ActionListener() {
 			
@@ -324,7 +321,6 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					tcpdata.DataDestination = "Chatting";
 					tcpdata.msg = chf.getText();
 					ch.send(tcpdata);
-					cht.setCaretPosition(cht.getDocument().getLength());
 					chf.setText("");
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
@@ -368,8 +364,12 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 
 	@Override
 	public void execute(TCPData data) {
-		System.out.println("왔니?");
 		this.tcpdata.playData = data.playData;
+		for (Integer aa : this.tcpdata.playData.get(0)) {
+			System.out.println(aa);
+		}
+		System.out.println();
+		this.tcpdata.easyStudy = data.easyStudy;
 		switch (data.DataDestination) {
 		case "enter":
 			this.tcpdata.playData = data.playData;
@@ -380,7 +380,6 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			}
 			break;
 		case "Game":
-			System.out.println("왔니?2");
 			this.tcpdata.playerDeck = data.playerDeck;
 			System.out.println(this.tcpdata.playerDeck.get(0).get(0).number);
 			ImageIcon img = new ImageIcon(this.tcpdata.playerDeck.get(0).get(0).imgname);

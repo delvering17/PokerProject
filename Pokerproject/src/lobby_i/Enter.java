@@ -24,12 +24,12 @@ public class Enter implements RoomAction{
 		int chk =0;
 		CHK:while(true) {
 			if(tcpdata.easyStudy[chk]>0&&tcpdata.easyStudy[chk]<=5) {
-				tcpdata.DataDestination = "RoomChk";
-				tcpdata.easyStudy[chk]++;
-				tcpdata.UserPos = chk;
-				ch.send(tcpdata);
+//				tcpdata.DataDestination = "RoomChk";
+//				tcpdata.easyStudy[chk]++;
+//				tcpdata.UserPos = chk;
+				tcpdata.DataDestination = "Chatting";
 				login_frame.remove(login_frame.lobby_panel);
-				Game_panel game_panel = new Game_panel(login_frame,ch,tcpdata);
+				Game_panel game_panel = new Game_panel(login_frame,ch,tcpdata,chk);
 				login_frame.add(game_panel);
 				login_frame.game_panelarr.add(game_panel);
 				login_frame.repaint();

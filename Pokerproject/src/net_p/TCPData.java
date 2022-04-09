@@ -16,19 +16,25 @@ public class TCPData implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	//자신 기본
 	public String name;				//닉네임
-	public String DataDestination;	//Chatting , GameData 등등		--> 익스큐트에서 걸러짐 ,서버에서 확인
 	public int UserPos;           	//자신의 위치 -1= 로비, 0=1번방		--> 서버에서 걸러짐
-	public HashMap<Integer,Integer[]> playData;
 	public String msg;
-	public MyData rdata;			//돈,전적,게임채팅,전체카드,개인카드,상대카드,승패,카드오픈,족보,배팅,기본판돈,게임판돈,개인베팅금액;
-	public int[] easyStudy; 
+	public String DataDestination;	//Chatting , GameData 등등		--> 익스큐트에서 걸러짐 ,서버에서 확인
 	public String panelChk;
-	public GameData gamedata;
+	//전체 기본
+	public int[] easyStudy; 
+	public HashMap<Integer,Integer[]> playData;
 	
 	//Game data
+	public MyData rdata;			//돈,전적,게임채팅,전체카드,개인카드,상대카드,승패,카드오픈,족보,배팅,기본판돈,게임판돈,개인베팅금액;
+	public GameData gamedata;
 	public ArrayList<PokerCard> dealerDeck;
 	public HashMap<Integer, ArrayList<PokerCard>> playerDeck;
+	
+	
+	
 	
 	
 	public TCPData(ProfileDTO datathis) {

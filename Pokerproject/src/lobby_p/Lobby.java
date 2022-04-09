@@ -50,8 +50,6 @@ public class Lobby extends JPanel implements NetExecute {
 		tcpdata.panelChk = "Lobby";
 		this.tcpdata.UserPos = -1;
 		tcpdata.msg = "[입장]";
-		tcpdata.DataDestination = "Chatting";
-		ch.send(tcpdata);
 		
 		setBounds(0, 0, 1200, 800);
 		setBackground(Color.black);
@@ -116,6 +114,8 @@ public class Lobby extends JPanel implements NetExecute {
 		//아직 모름 일딴 TCP 데이터 정지
 //		UserProfile_panel profilePanel = new UserProfile_panel(tcpdata);
 //		add(profilePanel);
+
+		ch.send(tcpdata);
 		repaint();
 	}
 	
@@ -123,6 +123,7 @@ public class Lobby extends JPanel implements NetExecute {
 		String cname;
 		String name;
 		Lobby lobby;
+		Integer addr;
 		public RoomBtn(String name,String cname,int x,int y,int width , int height,Lobby lobby,TCPData tcptcpdata) {
 			super(name);
 			this.cname = cname;
@@ -131,7 +132,6 @@ public class Lobby extends JPanel implements NetExecute {
 			setBounds(x, y, width, height);
 			addActionListener(this);
 		}
-		Integer addr;
 		public RoomBtn(String name,String cname,int addr,int x,int y,int width , int height,Lobby lobby,TCPData tcptcpdata) {
 			super(name);
 			this.cname = cname;
@@ -145,17 +145,14 @@ public class Lobby extends JPanel implements NetExecute {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			try {
+				System.out.println(addr);
 				if(e.getActionCommand().equals("만들기")) {
 					RoomAction ra = (RoomAction)Class.forName("lobby_i."+cname).newInstance();
 					ra.room(mainJf,ch,lobby,tcpdata,addr);
 				}else {
-					tcpdata.DataDestination = "RoomChk";
-					tcpdata.easyStudy[addr]++;
-					tcpdata.UserPos = addr;
-					
 					ch.send(tcpdata);
 					mainJf.remove(lobby);
-					Game_panel game_panel = new Game_panel(mainJf,ch,tcpdata);
+					Game_panel game_panel = new Game_panel(mainJf,ch,tcpdata,addr);
 					mainJf.add(game_panel);
 					mainJf.game_panelarr.add(game_panel);
 					mainJf.repaint();
@@ -176,36 +173,31 @@ public class Lobby extends JPanel implements NetExecute {
 
 	@Override
 	public void execute(TCPData data) {
-		System.out.println("zzz");
+		
+		//전체 기본
+		System.out.println("??");
 		this.tcpdata.playData = data.playData;
 		this.tcpdata.easyStudy = data.easyStudy;
+		
+		for (RoomBtn roomBtn : btnlist) {
+			if(this.tcpdata.easyStudy[roomBtn.addr]>0) {
+				roomBtn.setText("입장");
+				if(this.tcpdata.easyStudy[roomBtn.addr]==5) roomBtn.setEnabled(false);
+				else roomBtn.setEnabled(true);
+			}else {
+				roomBtn.setText("만들기");
+			}
+		}
 		switch (data.DataDestination) {
+		
 		case "Chatting":
 			if(data.UserPos==this.tcpdata.UserPos) {
 				jta.append(data.name + " : "+ data.msg+"\n");
 				jta.setCaretPosition(jta.getDocument().getLength());
 			}
 			break;
-
-		case "GameData":
-			
-			break;
-		case "RoomChk":
-			
-			System.out.println(this.tcpdata.easyStudy[0]);
-			for (RoomBtn roomBtn : btnlist) {
-				
-				if(this.tcpdata.easyStudy[roomBtn.addr]>0) {
-					roomBtn.setText("입장");
-					if(this.tcpdata.easyStudy[roomBtn.addr]==5) roomBtn.setEnabled(false);
-					else roomBtn.setEnabled(true);
-				}else {
-					roomBtn.setText("만들기");
-				}
-				repaint();
-			}
 		}
-		
+		repaint();
 		
 //		if(data.msg!=null) {
 //			jta.append(data.name + " : "+ data.msg+"\n");
