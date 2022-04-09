@@ -61,13 +61,14 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	Game_panel game_panel;
 	PokerGameMain pokerGamemain;
 	
-	ArrayList<JLabel> player1cardShow;
-	ArrayList<JLabel> player2cardShow;
+	ArrayList<PlayerCard_Label> player1cardShow;
+	ArrayList<PlayerCard_Label> player2cardShow;
 	ArrayList<JLabel> player3cardShow;
 	ArrayList<JLabel> player4cardShow;
 	ArrayList<JLabel> player5cardShow;
 	Integer num;
 	Receiver ch;
+	
 	public Game_panel(Login_frame login_frame,Receiver ch,TCPData tcpdata) {
 		tcpdata.panelChk = "Game";
 		this.ch = ch;
@@ -131,9 +132,8 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 						login_frame.remove(game_panel);
 						tcpdata.easyStudy[tcpdata.UserPos]--;
 						tcpdata.playData.get(tcpdata.UserPos)[num]=-1;
-						tcpdata.UserPos = -1;
 						ch.send(tcpdata);
-						login_frame.add(new Lobby(login_frame,tcpdata));
+						login_frame.add(new Lobby(login_frame,tcpdata,ch));
 						login_frame.repaint();
 					}
 //					dispose(); // 원래있던 창이 꺼지며 새로운 창 나오게함
@@ -144,35 +144,42 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		});
 		
 
+		player1cardShow = new ArrayList<PlayerCard_Label>();
 		p1 = new PlayerCard_panel(420, 520, 290, 200);
-		player1cardShow = new ArrayList<JLabel>();
-//		for (int i = 20 ; i >= 170 ; i += 25) {
-//			player1cardShow.add(new PlayerCard_Label(i, 0, 100, 200));
-//		}
-//		for(int i = player1cardShow.size()-1 ; i >= 0 ; i--) {
-//			p1.add(player1cardShow.get(i));
-//		}
 		add(p1);	
-		ImageIcon img = new ImageIcon("test/100Card23.png");
-		JLabel aa = new JLabel(img);
-		aa.setBounds(20,0,100,200);
-		p1.add(aa);
-	
+		
+		
+		ImageIcon img = new ImageIcon("img/card/Card10_2.png");
+//		JLabel aa = new JLabel(img);
+//		aa.setBounds(20,0,100,200);
+		
+		
+//		p1.add(aa);
+		
+		
+		for (int i = 20 ; i <= 170 ; i += 25) {
+			PlayerCard_Label cd = new PlayerCard_Label(i, 0, 100, 200);
+			p1.add(cd);
+			player1cardShow.add(cd);
+		}
 		
 		
 		p2 = new PlayerCard_panel(200, 50, 290, 200);
-		player2cardShow = new ArrayList<JLabel>();
-		for (int i = 20 ; i >= 170 ; i += 25) {
-			player1cardShow.add(new PlayerCard_Label(i, 0, 100, 200));
-			
-		}
-		for(int i = player2cardShow.size()-1 ; i >= 0 ; i--) {
-			p2.add(player2cardShow.get(i));
-		}
 		add(p2);
+		player2cardShow = new ArrayList<PlayerCard_Label>();
+		for (int i = 20 ; i <= 170 ; i += 25) {
+			PlayerCard_Label cd = new PlayerCard_Label(i, 0, 100, 200);
+			p2.add(cd);
+			player2cardShow.add(cd);
+		}
+//		for(int i = player2cardShow.size()-1 ; i >= 0 ; i--) {
+//			p2.add(player2cardShow.get(i));
+//		}
+		player2cardShow.get(0).setIcon(img);
+		
 		p3 = new PlayerCard_panel(200,280,290,200);
 		player3cardShow = new ArrayList<JLabel>();
-		for (int i = 20 ; i >= 170 ; i += 25) {
+		for (int i = 20 ; i <= 170 ; i += 25) {
 			player3cardShow.add(new PlayerCard_Label(i, 0, 100, 200));
 		}
 		for(int i = player3cardShow.size()-1 ; i >= 0 ; i--) {
@@ -181,7 +188,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		add(p3);
 		p4 = new PlayerCard_panel(710, 50, 290, 200);
 		player4cardShow = new ArrayList<JLabel>();
-		for (int i = 20 ; i >= 170 ; i += 25) {
+		for (int i = 20 ; i <= 170 ; i += 25) {
 			player4cardShow.add(new PlayerCard_Label(i, 0, 100, 200));
 		}
 		for(int i = player4cardShow.size()-1 ; i >= 0 ; i--) {
@@ -190,7 +197,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		add(p4);
 		p5 = new PlayerCard_panel(710, 280, 290, 200);
 		player5cardShow = new ArrayList<JLabel>();
-		for (int i = 20 ; i >= 170 ; i += 25) {
+		for (int i = 20 ; i <= 170 ; i += 25) {
 			player5cardShow.add(new PlayerCard_Label(i, 0, 100, 200));
 		}
 		for(int i = player5cardShow.size()-1 ; i >= 0 ; i--) {
@@ -376,7 +383,11 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			System.out.println("왔니?2");
 			this.tcpdata.playerDeck = data.playerDeck;
 			System.out.println(this.tcpdata.playerDeck.get(0).get(0).number);
-	    	repaint();
+			ImageIcon img = new ImageIcon(this.tcpdata.playerDeck.get(0).get(0).imgname);
+			player3cardShow.get(0).setIcon(img);
+			
+	    	this.repaint();
+	    	p3.repaint();
 			break;
 		}
 		

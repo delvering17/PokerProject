@@ -12,7 +12,7 @@ public class PokerCard  extends JLabel{
 	public PokerCard(int number, int shape) {
 		this.number = number;
 		this.shape = shape;
-		imgname = "Card"+number+"_"+shape;
+		imgname = "img/card/"+"Card"+number+"_"+shape+".png";
 		
 	}
 

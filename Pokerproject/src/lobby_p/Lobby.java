@@ -41,28 +41,18 @@ public class Lobby extends JPanel implements NetExecute {
 	//방 체크할 리스트
 	HashMap<InetAddress, Object> roomChk;
 	ArrayList<RoomBtn> btnlist = new ArrayList<RoomBtn>();
-	public Lobby(Login_frame mainJf,TCPData tcpdata) {
-		this.mainJf = mainJf;
-		lobby = this;
-		Socket client;
-		try {
-			//클라이언트를 서버에 보내기 시작
-			client = new Socket("192.168.20.39", 8888);
-			ch = new Receiver(mainJf, client);
-			ch.lobby_panel=this;
-			tcpdata.panelChk = "Lobby";
-			ch.start();
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		this.mainJf = mainJf;
+	public Lobby(Login_frame mainJf,TCPData tcpdata,Receiver ch) {
+		this.ch = ch;
 		this.tcpdata = tcpdata;
-		try {
+		this.mainJf = mainJf;
+		ch.lobby_panel=this;
+		lobby = this;
+		tcpdata.panelChk = "Lobby";
+		this.tcpdata.UserPos = -1;
+		tcpdata.msg = "[입장]";
+		tcpdata.DataDestination = "Chatting";
+		ch.send(tcpdata);
 		
-		}catch (Exception e2) {
-			e2.printStackTrace();
-		}
 		setBounds(0, 0, 1200, 800);
 		setBackground(Color.black);
 		setLayout(null);
@@ -123,9 +113,6 @@ public class Lobby extends JPanel implements NetExecute {
 		
 		Component userList = new Component(820,520 , 350, 230);
 		add(userList);
-		tcpdata.msg = "[입장]";
-		tcpdata.DataDestination = "Chatting";
-		ch.send(tcpdata);
 		//아직 모름 일딴 TCP 데이터 정지
 //		UserProfile_panel profilePanel = new UserProfile_panel(tcpdata);
 //		add(profilePanel);
@@ -189,6 +176,7 @@ public class Lobby extends JPanel implements NetExecute {
 
 	@Override
 	public void execute(TCPData data) {
+		System.out.println("zzz");
 		this.tcpdata.playData = data.playData;
 		this.tcpdata.easyStudy = data.easyStudy;
 		switch (data.DataDestination) {

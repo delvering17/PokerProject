@@ -34,6 +34,9 @@ public class TCPData implements Serializable{
 	public TCPData(ProfileDTO datathis) {
 		dealerDeck = new ArrayList<PokerCard>();
 		playerDeck = new HashMap<Integer, ArrayList<PokerCard>>();
+		for (int i = 0; i < 5; i++) {
+			playerDeck.put(i, new ArrayList<PokerCard>());
+		}
 		gamedata = new GameData();
 		easyStudy = new int[9];
 		for (int i = 0; i < easyStudy.length; i++) {
