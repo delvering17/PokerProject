@@ -106,10 +106,9 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 							tcpdata.dealerDeck.add(new PokerCard(i,j));
 						}
 					}
-					tcpdata.DataDestination ="Game";
+
 					GameProcess();
-					
-					ch.send(tcpdata);
+
 					System.out.println("카드 52장 넣음");
 					game_panel.remove(GameStart);
 					repaint();
@@ -138,6 +137,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					login_frame.remove(game_panel);
 					tcpdata.easyStudy[tcpdata.UserPos]--;
 					tcpdata.playData.get(tcpdata.UserPos)[num]=-1;
+					tcpdata.UserPos =-1;
 					ch.send(tcpdata);
 					login_frame.add(new Lobby(login_frame,tcpdata,ch));
 					login_frame.repaint();
@@ -369,7 +369,6 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		for (Integer aa : this.tcpdata.playData.get(0)) {
 			System.out.println(aa);
 		}
-		System.out.println();
 		
 		System.out.println(data.msg);
 		
@@ -403,7 +402,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			
 
 			
-	    	this.repaint();
+	    	repaint();
 	    
 			break;
 		}
