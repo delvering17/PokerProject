@@ -60,14 +60,14 @@ class MulServer {
 			try {
 				while(ois!=null) {
 					data = (TCPData)ois.readObject();
-					userList.put(data.name,oos);
 					userName.add(data.name);
+					userList.put(data.name,oos);
 					data.userName = userName;
 					System.out.println(data.name +" : "+ data.msg);
 					if(data.DataDestination.equals("first")) {
-							data.playData = playData;
-							data.easyStudy = easyStudy;
-							sendTo(data);
+						data.playData = playData;
+						data.easyStudy = easyStudy;
+						sendToAll(data);
 					}else {
 						playData = data.playData;
 						easyStudy = data.easyStudy;
@@ -78,10 +78,10 @@ class MulServer {
 //				e.printStackTrace();
 			}finally {
 				try {
-					userList.remove(data.name);
-					userName.remove(data.name);
-					data.userName = userName;
-					sendToAll(data);
+//					userList.remove(data.name);
+//					userName.remove(data.name);
+//					data.userName = userName;
+//					sendToAll(data);
 //					data.DataDestination = "Chatting";
 //					data.msg = "[퇴장]";
 //					sendToAll(data);
@@ -99,25 +99,25 @@ class MulServer {
 			try {
 				dd.writeObject(data);
 				dd.flush();
-//				dd.reset();
+				dd.reset();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
-	void sendTo(TCPData data) {
-		for (String name : userList.keySet()) {
-			if(name==data.name) {
-				try {
-					userList.get(name).writeObject(data);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-	}
+//	void sendTo(TCPData data) {
+//		for (String name : userList.keySet()) {
+//			if(name==data.name) {
+//				try {
+//					userList.get(name).writeObject(data);
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//			}
+//		}
+//	}
 }
 public class SeverTestMain {
 

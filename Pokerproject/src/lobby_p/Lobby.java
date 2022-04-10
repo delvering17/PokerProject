@@ -202,9 +202,9 @@ public class Lobby extends JPanel implements NetExecute {
 			userArea.append(un+"\n");
 		}
 		for (RoomBtn roomBtn : btnlist) {
-			if(this.tcpdata.easyStudy[roomBtn.addr]>0) {
+			if(data.easyStudy[roomBtn.addr]>0) {
 				roomBtn.setText("입장");
-				if(this.tcpdata.easyStudy[roomBtn.addr]==5) roomBtn.setEnabled(false);
+				if(data.easyStudy[roomBtn.addr]==5) roomBtn.setEnabled(false);
 				else roomBtn.setEnabled(true);
 			}else {
 				roomBtn.setText("만들기");

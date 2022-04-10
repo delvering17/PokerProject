@@ -54,20 +54,19 @@ public class Receiver extends Thread {
 				
 				TCPData data=(TCPData)ois.readObject();
 				
-//				if(lobby_panel!=null) {
-//					lobby_panel.execute(data);				
-//				}
-//				if(game_panel!=null) {
-//					game_panel.execute(data);
-//				}
-				switch (data.panelChk) {
-				case "Lobby":
+				if(lobby_panel!=null) {
 					lobby_panel.execute(data);				
-					break;
-				case "Game":
-					game_panel.execute(data);				
-					break;
+				}else {
+					game_panel.execute(data);
 				}
+//				switch (data.panelChk) {
+//				case "Lobby":
+//					lobby_panel.execute(data);				
+//					break;
+//				case "Game":
+//					game_panel.execute(data);				
+//					break;
+//				}
 				
 				
 			}
