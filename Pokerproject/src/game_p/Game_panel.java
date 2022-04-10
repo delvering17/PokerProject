@@ -284,7 +284,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				tcpdata.DataDestination = "Game";
 				tcpdata.bettingMoney.set(num, panMoney);
 				tcpdata.wholeBettingMoney += panMoney;
-				tcpdata.msg = num+":betting";
+				tcpdata.msg = num+":betting_call";
 				
 				
 				ch.send(tcpdata);
@@ -791,11 +791,62 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
     void resultWinner() {
     	for (int i = 0 ; i < tcpdata.ipjang.size() ; i ++) {
     		tcpdata.res[i] = new Jokbo().jokbo(tcpdata.playerDeck.get(i));
-    		
+    		System.out.println(tcpdata.res.toString());
     	}
 						
     	
-		tcpdata.msg = "승: " ;	
+    	ArrayList<String> bb = new ArrayList<String>();
+    
+    			bb.add("2탑"	);
+    			bb.add("3탑"	);
+    			bb.add("4탑"	);
+    			bb.add("5탑"	);
+    			bb.add("6탑"	);
+    			bb.add("7탑"	);
+    			bb.add("8탑"	);
+    			bb.add("9탑"	);
+    			bb.add("10탑");
+    			bb.add("11탑");
+    			bb.add("12탑");
+    			bb.add("13탑");
+    			bb.add("14탑");
+    			bb.add("원페어");
+    			bb.add("투페어");
+    			bb.add("트리플");
+    			bb.add("스트레이트"	);
+    			bb.add("백스트레이트");
+    			bb.add("로얄스트레이트");
+    			bb.add("플러쉬");
+    			bb.add("풀하우스");
+    			bb.add("포카드");
+    			bb.add("스트레이트플러쉬");
+    			bb.add("백스트레이트플러쉬");
+    			bb.add("로얄스트레이트플러쉬");
+
+
+    			int[] test = new int[tcpdata.res.length];
+    			for (int i = 0; i < test.length; i++) {
+    				for (int j = 0; j < bb.size(); j++) {
+    					if(bb.get(j)==tcpdata.res[i]) {
+    						test[i]=j; 
+    					}
+    				}
+    			}
+
+    			int num = -1;
+    			int aaa = -1;
+    			for (int i = 0; i < test.length; i++) {
+    				if(test[i]>aaa) {
+    					aaa=test[i];
+    					num = i;
+    				}
+    			}
+    			
+    
+    	
+    	
+    	tcpdata.DataDestination = "Chatting";
+		tcpdata.msg = "승: "+num ;	
 		ch.send(tcpdata);
     }
 	
