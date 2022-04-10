@@ -471,9 +471,14 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			cht.append(data.name+" : "+data.msg+"\n");
 		}
 		if(data.msg.contains("[입장]")) {
-			ipjang.add(data.name);
-			System.out.println("입장 넣음:" + data.name);
-			System.out.println(ipjang.toString());
+			if (ipjang.contains(data.name)) {
+				System.out.println("이미" + data.name+"있음");
+			} else {
+				ipjang.add(data.name);
+				System.out.println("입장 넣음:" + data.name);
+				System.out.println(ipjang.toString());
+			}
+			
 		}
 		repaint();
 	
