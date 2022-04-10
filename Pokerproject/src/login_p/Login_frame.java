@@ -33,10 +33,10 @@ public class Login_frame extends JFrame{
 		login_frame=this;
 		setBounds(50,50,1200,800);
 		setLayout(null);
-	
+		
 		login_panel = new Login_panel(this);
 		add(login_panel);
-		
+		setResizable(false);
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
