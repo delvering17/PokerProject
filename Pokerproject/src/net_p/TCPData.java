@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import DB_p.ProfileDTO;
+import game_p.Ingame_userProfile_panel;
 import game_p.PokerCard;
 
 public class TCPData implements Serializable{
@@ -30,7 +31,7 @@ public class TCPData implements Serializable{
 	public String panelChk;
 	public String[] res;
 	//
-	public int[] bettingMoney;
+	public ArrayList<Integer> bettingMoney;
 	public int panMoney;
 	public int wholeBettingMoney;
 	public String winner;
@@ -47,14 +48,19 @@ public class TCPData implements Serializable{
 	public ArrayList<PokerCard> dealerDeck;
 	public HashMap<Integer, ArrayList<PokerCard>> playerDeck;
 	
-	
-	
+	public 	ArrayList<Ingame_userProfile_panel> userprofile; //  인게임 프로필 
+	public ArrayList<String> ipjang;
 	
 	
 	public TCPData(ProfileDTO datathis) {
+		
 		userName = new HashSet<String>();
 		dealerDeck = new ArrayList<PokerCard>();
 		playerDeck = new HashMap<Integer, ArrayList<PokerCard>>();
+		userprofile = new ArrayList<Ingame_userProfile_panel>();
+		ipjang = new ArrayList<String>();
+		bettingMoney = new ArrayList<Integer>();
+		
 		for (int i = 0; i < 5; i++) {
 			playerDeck.put(i, new ArrayList<PokerCard>());
 		}
