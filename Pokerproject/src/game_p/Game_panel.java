@@ -35,8 +35,13 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	JButton help ;
 	JButton exit;
 	
-	
-	JButton bt; 
+	BetBtn bt ;
+	BetBtn bt1 ;
+	BetBtn bt2 ;
+	BetBtn bt3 ;
+	BetBtn bt4 ;
+	BetBtn bt5 ;
+	BetBtn bt6 ;
 	
 	JPanel p1;
 	JPanel p2;
@@ -240,13 +245,76 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
         add(betbuttonarea);
        
         String [] betbt = {"콜","삥","따당","하프","다이","체크","맥스"};
-    	BetBtn bt = new BetBtn("콜",0,0);
-    	BetBtn bt1 = new BetBtn("삥",85,0);
-    	BetBtn bt2 = new BetBtn("따당",0,55);
-    	BetBtn bt3 = new BetBtn("하프",85,55);
-    	BetBtn bt4 = new BetBtn("다이",0,110);
-    	BetBtn bt5 = new BetBtn("체크",85,110);
-    	BetBtn bt6 = new BetBtn("맥스",0,165);
+    	bt = new BetBtn("콜",0,0);
+    	bt.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				System.out.println("콜 누름");
+				tcpdata.DataDestination = "Game";
+				tcpdata.msg = num+":betting";
+				
+				ch.send(tcpdata);
+			
+				
+				
+			}
+		});
+    	bt1 = new BetBtn("삥",85,0);
+    	bt1.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+    	bt2 = new BetBtn("따당",0,55);
+    	bt2.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+    	bt3 = new BetBtn("하프",85,55);
+    	bt3.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+    	bt4 = new BetBtn("다이",0,110);
+    	bt4.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+    	bt5 = new BetBtn("체크",85,110);
+    	bt5.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+    	bt6 = new BetBtn("맥스",0,165);
+    	bt6.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
     	
         betbuttonarea.add(bt);
         betbuttonarea.add(bt1);
@@ -373,17 +441,36 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 //			ImageIcon img = new ImageIcon(this.tcpdata.playerDeck.get(0).get(0).imgname);
 //			player3cardShow.get(0).setIcon(img);
 			
+			switch (data.msg) {
+			case "카드 나와라":
+				for (int i =0 ; i < 7 ; i++) {
+					img = new ImageIcon(data.playerDeck.get(0).get(i).imgname);
+					player1cardShow.get(i).setIcon(img);
+				}
+				
+				for (int i =0 ; i < 7 ; i++) {
+					img = new ImageIcon(data.playerDeck.get(1).get(i).imgname);
+					player2cardShow.get(i).setIcon(img);
+				}
+				break;
+			case "0:betting" :
+				//여기서 베팅 금액 맞춰지면 결과 보는 것  날려야함 
+				player1turn();
+				break;
+			case "1:betting" :
 			
-			for (int i =0 ; i < 7 ; i++) {
-				img = new ImageIcon(data.playerDeck.get(0).get(i).imgname);
-				player1cardShow.get(i).setIcon(img);
-			}
-			
-			for (int i =0 ; i < 7 ; i++) {
-				img = new ImageIcon(data.playerDeck.get(1).get(i).imgname);
-				player2cardShow.get(i).setIcon(img);
-			}
-			
+				player0turn();
+				break;
+			case "0:profileShow":
+				// 닉네임으로 불러오기
+				break;
+			case "1:profileShow":
+				// 닉네임으로 불러오기
+				break;
+			default :
+				System.out.println("빠져나감");
+				break;
+			} 
 
 			
 	    	repaint();
@@ -460,11 +547,54 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	}
 	
 	void GameProcess() {
+		// 카드  7장 나눠주기
 		split();
+		// 0번째 턴
+		player0turn();
 		
 	}
 	
+	void player0turn() {
+        System.out.println("0번 플레이어 배팅해주세요");
+        if (num == 0) {
+            betting_Button_true();
+
+        } else {
+            betting_Button_false();
+        }
+
+
+    }
+	void player1turn() {
+        System.out.println("1번 플레이어 배팅해주세요");
+        if (num == 1) {
+            betting_Button_true();
+
+        } else {
+            betting_Button_false();
+        }
+    }
 	
+    void betting_Button_false (){
+        bt.setEnabled(false);
+        bt1.setEnabled(false);
+        bt2.setEnabled(false);
+        bt3.setEnabled(false);
+        bt4.setEnabled(false);
+        bt5.setEnabled(false);
+        bt6.setEnabled(false);
+
+    }
+    void betting_Button_true (){
+        bt.setEnabled(true);
+        bt1.setEnabled(true);
+        bt2.setEnabled(true);
+        bt3.setEnabled(true);
+        bt4.setEnabled(true);
+        bt5.setEnabled(true);
+        bt6.setEnabled(true);
+
+    }
 	
 }	
 	

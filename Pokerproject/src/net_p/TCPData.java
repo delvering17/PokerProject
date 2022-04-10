@@ -29,6 +29,13 @@ public class TCPData implements Serializable{
 	public String DataDestination;	//Chatting , GameData 등등		--> 익스큐트에서 걸러짐 ,서버에서 확인
 	public String panelChk;
 	public String[] res;
+	//
+	public int[] bettingMoney;
+	public int panMoney;
+	public int wholeBettingMoney;
+	public String winner;
+	//
+	
 	//전체 기본
 	public int[] easyStudy; 
 	public HashMap<Integer,Integer[]> playData;
