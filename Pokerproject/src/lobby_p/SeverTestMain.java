@@ -62,20 +62,15 @@ class MulServer {
 					data = (TCPData)ois.readObject();
 					userList.put(data.name,oos);
 					userName.add(data.name);
+					data.userName = userName;
 					System.out.println(data.name +" : "+ data.msg);
 					if(data.DataDestination.equals("first")) {
-						for (String name : userList.keySet()) {
-							if(name==data.name) {
-								data.playData = playData;
-								data.easyStudy = easyStudy;
-								data.userName = userName;
-								sendToAll(data);
-							}
-						}
+							data.playData = playData;
+							data.easyStudy = easyStudy;
+							sendTo(data);
 					}else {
 						playData = data.playData;
 						easyStudy = data.easyStudy;
-						data.userName = userName;
 						sendToAll(data);
 					}
 				}
@@ -84,6 +79,9 @@ class MulServer {
 			}finally {
 				try {
 					userList.remove(data.name);
+					userName.remove(data.name);
+					data.userName = userName;
+					sendToAll(data);
 //					data.DataDestination = "Chatting";
 //					data.msg = "[퇴장]";
 //					sendToAll(data);
@@ -105,6 +103,18 @@ class MulServer {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
+		}
+	}
+	void sendTo(TCPData data) {
+		for (String name : userList.keySet()) {
+			if(name==data.name) {
+				try {
+					userList.get(name).writeObject(data);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	}

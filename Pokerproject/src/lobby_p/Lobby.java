@@ -39,6 +39,9 @@ public class Lobby extends JPanel implements NetExecute {
 	HashMap<InetAddress, Object> roomChk;
 	ArrayList<RoomBtn> btnlist = new ArrayList<RoomBtn>();
 	public Lobby(Login_frame mainJf,TCPData tcpdata,Receiver ch) {
+//		if(tcpdata.DataDestination.equals(`)) {
+//			
+//		}
 		tcpdata.panelChk = "Lobby";
 		this.ch = ch;
 		this.tcpdata = tcpdata;
