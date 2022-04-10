@@ -281,7 +281,13 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				
 				System.out.println("콜 누름");
 				
-			
+				tcpdata.DataDestination = "Game";
+				tcpdata.bettingMoney.set(num, panMoney);
+				tcpdata.wholeBettingMoney += panMoney;
+				tcpdata.msg = num+":betting";
+				
+				
+				ch.send(tcpdata);
 				
 				
 			}
@@ -528,11 +534,13 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				this.tcpdata.panMoney = data.panMoney;
 				this.panMoney = data.panMoney;
 				betting.setText("전체 베팅금액: "+data.wholeBettingMoney+ ", 현재 판돈: "+ data.panMoney);
+
 				player1turn();
 				
 				
 				break;
 			case "1:betting" :
+				
 				this.tcpdata.bettingMoney = data.bettingMoney;
 				this.bettingMoney = data.bettingMoney;
 				this.tcpdata.wholeBettingMoney = data.wholeBettingMoney;
@@ -540,9 +548,20 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				this.tcpdata.panMoney = data.panMoney;
 				this.panMoney = data.panMoney;
 				betting.setText("전체 베팅금액: "+data.wholeBettingMoney+ ", 현재 판돈: "+ data.panMoney);
+				
 				player0turn();
+		
+				
 				
 				break;
+			case "0:betting_call":
+				resultWinner();
+				break;
+				
+			case "1:betting_call":	
+				resultWinner();
+				break;	
+				
 			case "0:profileShow":
 				// 닉네임으로 불러오기
 				
@@ -763,6 +782,21 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
         bt5.setEnabled(true);
         bt6.setEnabled(true);
 
+    }
+    
+    
+    
+    
+    
+    void resultWinner() {
+    	for (int i = 0 ; i < tcpdata.ipjang.size() ; i ++) {
+    		tcpdata.res[i] = new Jokbo().jokbo(tcpdata.playerDeck.get(i));
+    		
+    	}
+						
+    	
+		tcpdata.msg = "승: " ;	
+		ch.send(tcpdata);
     }
 	
 }	
