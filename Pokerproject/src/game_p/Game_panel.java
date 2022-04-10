@@ -501,19 +501,19 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			case "카드 나와라":
 				betting.setText("전체 베팅금액: "+data.wholeBettingMoney+ ", 현재 판돈: "+ data.panMoney);
 				
-				for (int i =6 ; i >= 5 ; i--) {
-					img = new ImageIcon("img/card/CardBackImg.png");
-					player1cardShow.get(i).setIcon(img);
-				}
-				for (int i =4 ; i >= 0 ; i--) {
+//				for (int i =6 ; i >= 5 ; i--) {
+//					img = new ImageIcon("img/card/CardBackImg.png");
+//					player1cardShow.get(i).setIcon(img);
+//				}
+				for (int i =6 ; i >= 0 ; i--) {
 					img = new ImageIcon(data.playerDeck.get(0).get(i).imgname);
 					player1cardShow.get(i).setIcon(img);
 				}
-				for (int i =6 ; i >= 5 ; i--) {
-					img = new ImageIcon("img/card/CardBackImg.png");
-					player2cardShow.get(i).setIcon(img);
-				}
-				for (int i =4 ; i >= 0 ; i--) {
+//				for (int i =6 ; i >= 5 ; i--) {
+//					img = new ImageIcon("img/card/CardBackImg.png");
+//					player2cardShow.get(i).setIcon(img);
+//				}
+				for (int i =6 ; i >= 0 ; i--) {
 					img = new ImageIcon(data.playerDeck.get(1).get(i).imgname);
 					player2cardShow.get(i).setIcon(img);
 				}
@@ -524,7 +524,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				this.tcpdata.panMoney = data.panMoney;
 				this.panMoney = data.panMoney;
 				betting.setText("전체 베팅금액: "+data.wholeBettingMoney+ ", 현재 판돈: "+ data.panMoney);
-				player0turn();
+				resultWinner(this.tcpdata.res);
 				break;
 			case "0:betting" :
 				this.tcpdata.bettingMoney = data.bettingMoney;
@@ -555,11 +555,11 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				
 				break;
 			case "0:betting_call":
-				resultWinner();
+			
 				break;
 				
 			case "1:betting_call":	
-				resultWinner();
+			
 				break;	
 				
 			case "0:profileShow":
@@ -724,13 +724,14 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 //			System.out.println(aa.number + ", " + aa.shape);
 //		}
 		
+		String [] res = {new Jokbo().jokbo(tcpdata.playerDeck.get(0)),new Jokbo().jokbo(tcpdata.playerDeck.get(1))};
 
-//		System.out.println(new Jokbo().jokbo(tcpdata.playerDeck.get(0)));
-//		System.out.println(new Jokbo().jokbo(tcpdata.playerDeck.get(1)));
 		
 		tcpdata.DataDestination = "Game";
 		tcpdata.msg = "카드 나와라";
+		this.tcpdata.res = res;
 		ch.send(tcpdata);
+		
 		
 	}
 	
@@ -788,12 +789,9 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
     
     
     
-    void resultWinner() {
-    	for (int i = 0 ; i < tcpdata.ipjang.size() ; i ++) {
-    		tcpdata.res[i] = new Jokbo().jokbo(tcpdata.playerDeck.get(i));
-    		System.out.println(tcpdata.res.toString());
-    	}
-						
+    void resultWinner(String[] aa) {
+    	String [] res = aa;
+		
     	
     	ArrayList<String> bb = new ArrayList<String>();
     
@@ -824,10 +822,10 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
     			bb.add("로얄스트레이트플러쉬");
 
 
-    			int[] test = new int[tcpdata.res.length];
+    			int[] test = new int[res.length];
     			for (int i = 0; i < test.length; i++) {
     				for (int j = 0; j < bb.size(); j++) {
-    					if(bb.get(j)==tcpdata.res[i]) {
+    					if(bb.get(j)==res[i]) {
     						test[i]=j; 
     					}
     				}
@@ -846,7 +844,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
     	
     	
     	tcpdata.DataDestination = "Chatting";
-		tcpdata.msg = "승: "+num ;	
+		tcpdata.msg = "0번:"+res[0]+" 1번: "+res[1] +" 승: "+num +"번!";	
 		ch.send(tcpdata);
     }
 	
