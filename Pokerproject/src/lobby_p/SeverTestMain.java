@@ -16,20 +16,22 @@ class MulServer {
 	HashMap<Integer,Integer[]> playData;
 	public int[] easyStudy;
 	public MulServer() {
-		userName = new HashSet<String>();
-		playData = new HashMap<Integer, Integer[]>();
-		easyStudy = new int[9];
-		for (int j = 0; j < 9; j++) {
-			playData.put(j,new Integer[5]);
-			for (int i = 0; i < playData.get(j).length; i++) {
-				playData.get(j)[i] = -1;
-			}
-		}
 		try {
+			ServerSocket server = new ServerSocket(8888);
+			userName = new HashSet<String>();
+			playData = new HashMap<Integer, Integer[]>();
+			easyStudy = new int[9];
+			for (int j = 0; j < 9; j++) {
+				playData.put(j,new Integer[5]);
+				for (int i = 0; i < playData.get(j).length; i++) {
+					playData.get(j)[i] = -1;
+				}
+			}
 			System.out.println("나 서버");
 			userList = new HashMap<String,ObjectOutputStream>();
 			Collections.synchronizedMap(userList);
-			ServerSocket server = new ServerSocket(8888);
+			Collections.synchronizedMap(playData);
+			Collections.synchronizedSet(userName);
 			while(true) {
 				Socket client = server.accept();
 				new Reciver(client).start();
@@ -67,9 +69,7 @@ class MulServer {
 								data.playData = playData;
 								data.easyStudy = easyStudy;
 								data.userName = userName;
-								oos.writeObject(data);
-								oos.flush();
-								oos.reset();
+								sendToAll(data);
 							}
 						}
 					}else {
@@ -101,7 +101,7 @@ class MulServer {
 			try {
 				dd.writeObject(data);
 				dd.flush();
-				dd.reset();
+//				dd.reset();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

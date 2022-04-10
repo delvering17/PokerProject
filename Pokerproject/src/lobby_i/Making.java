@@ -85,11 +85,8 @@ public class Making implements RoomAction {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				mainJf.remove(lobby);
-				tcpdata.DataDestination = "Chatting";
 				Game_panel game_panel = new Game_panel(mainJf,ch,tcpdata,addr);
-				//ch.send(tcpdata);
 				mainJf.add(game_panel);
-//				mainJf.game_panelarr.add(game_panel);
 				jf.setVisible(false);
 				mainJf.repaint();
 			}

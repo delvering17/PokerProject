@@ -46,29 +46,28 @@ public class Receiver extends Thread {
 		}
 		
 	}
-	TCPData data;
 	@Override
 	
 	public void run() {
 		try {
 			while(ois!=null) {
 				
-				data=(TCPData)ois.readObject();
-				System.out.println(data.DataDestination);
-				if(lobby_panel!=null) {
-					lobby_panel.execute(data);				
-				}
-				if(game_panel!=null) {
-					game_panel.execute(data);
-				}
-//				switch (data.panelChk) {
-//				case "Lobby":
+				TCPData data=(TCPData)ois.readObject();
+				
+//				if(lobby_panel!=null) {
 //					lobby_panel.execute(data);				
-//					break;
-//				case "Game":
-//					game_panel.execute(data);				
-//					break;
 //				}
+//				if(game_panel!=null) {
+//					game_panel.execute(data);
+//				}
+				switch (data.panelChk) {
+				case "Lobby":
+					lobby_panel.execute(data);				
+					break;
+				case "Game":
+					game_panel.execute(data);				
+					break;
+				}
 				
 				
 			}

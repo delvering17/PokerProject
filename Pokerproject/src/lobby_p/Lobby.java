@@ -31,7 +31,6 @@ public class Lobby extends JPanel implements NetExecute {
 	JTextArea jta;
 	JTextArea userArea;
 	Receiver ch;
-	Lobby lobby;
 	//들어올 유져 객체
 //	ArrayList<Object> userList = new ArrayList<Object>();
 	Login_frame mainJf;
@@ -40,12 +39,13 @@ public class Lobby extends JPanel implements NetExecute {
 	HashMap<InetAddress, Object> roomChk;
 	ArrayList<RoomBtn> btnlist = new ArrayList<RoomBtn>();
 	public Lobby(Login_frame mainJf,TCPData tcpdata,Receiver ch) {
+		tcpdata.panelChk = "Lobby";
 		this.ch = ch;
 		this.tcpdata = tcpdata;
 		this.mainJf = mainJf;
-		ch.lobby_panel=this;
-		lobby = this;
-		tcpdata.panelChk = "Lobby";
+		this.ch.lobby_panel=this;
+		this.ch.game_panel = null;
+		
 		this.tcpdata.UserPos = -1;
 		tcpdata.msg = "[입장]";
 		
@@ -159,7 +159,7 @@ public class Lobby extends JPanel implements NetExecute {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			try {
-				System.out.println(addr);
+//				System.out.println(addr);
 				if(e.getActionCommand().equals("만들기")) {
 					RoomAction ra = (RoomAction)Class.forName("lobby_i."+cname).newInstance();
 					ra.room(mainJf,ch,lobby,tcpdata,addr);
@@ -189,7 +189,7 @@ public class Lobby extends JPanel implements NetExecute {
 	public void execute(TCPData data) {
 		
 		//전체 기본
-		System.out.println("??");
+//		System.out.println("??");
 		this.tcpdata.playData = data.playData;
 		this.tcpdata.easyStudy = data.easyStudy;
 		this.tcpdata.userName = data.userName;
@@ -218,10 +218,6 @@ public class Lobby extends JPanel implements NetExecute {
 		}
 		repaint();
 		
-//		if(data.msg!=null) {
-//			jta.append(data.name + " : "+ data.msg+"\n");
-//			System.out.println(data.name +" : "+ data.msg);
-//		}
 	}
 	
 
