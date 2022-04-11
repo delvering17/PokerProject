@@ -196,6 +196,7 @@ public class Lobby extends JPanel implements NetExecute {
 		this.tcpdata.playData = data.playData;
 		this.tcpdata.easyStudy = data.easyStudy;
 		this.tcpdata.userName = data.userName;
+		this.tcpdata.test = data.test;
 		userArea.setText("");
 		
 		for (String un : this.tcpdata.userName) {

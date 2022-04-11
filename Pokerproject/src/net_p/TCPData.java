@@ -50,10 +50,15 @@ public class TCPData implements Serializable{
 	
 	public 	ArrayList<Ingame_userProfile_panel> userprofile; //  인게임 프로필 
 	public ArrayList<String> ipjang;
+	public HashMap<Integer, HashMap<Integer, String>> test;
 	
-	
+	public Integer callCount;
 	public TCPData(ProfileDTO datathis) {
-		
+		callCount = 0;
+		test = new HashMap<Integer, HashMap<Integer, String>>();
+		for (int i = 0; i < 9; i++) {
+			test.put(i,new HashMap<Integer, String>());
+		}
 		userName = new HashSet<String>();
 		dealerDeck = new ArrayList<PokerCard>();
 		playerDeck = new HashMap<Integer, ArrayList<PokerCard>>();

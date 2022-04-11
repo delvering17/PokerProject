@@ -15,6 +15,7 @@ class MulServer {
 	HashMap<String,ObjectOutputStream> userList;
 	HashMap<Integer,Integer[]> playData;
 	public int[] easyStudy;
+	public HashMap<Integer, HashMap<Integer, String>> test;
 	public MulServer() {
 		try {
 			ServerSocket server = new ServerSocket(8888);
@@ -27,11 +28,19 @@ class MulServer {
 					playData.get(j)[i] = -1;
 				}
 			}
+			
+			test = new HashMap<Integer, HashMap<Integer, String>>();
+			for (int i = 0; i < 9; i++) {
+				test.put(i,new HashMap<Integer, String>());
+			}
+			
+			
 			System.out.println("나 서버");
 			userList = new HashMap<String,ObjectOutputStream>();
 			Collections.synchronizedMap(userList);
 			Collections.synchronizedMap(playData);
 			Collections.synchronizedSet(userName);
+			Collections.synchronizedMap(test);
 			while(true) {
 				Socket client = server.accept();
 				new Reciver(client).start();
@@ -67,10 +76,12 @@ class MulServer {
 					if(data.DataDestination.equals("first")) {
 						data.playData = playData;
 						data.easyStudy = easyStudy;
-						sendToAll(data);
+						data.test = test;
+						sendTo(data);
 					}else {
 						playData = data.playData;
 						easyStudy = data.easyStudy;
+						test = data.test;
 						sendToAll(data);
 					}
 				}
@@ -106,18 +117,18 @@ class MulServer {
 			}
 		}
 	}
-//	void sendTo(TCPData data) {
-//		for (String name : userList.keySet()) {
-//			if(name==data.name) {
-//				try {
-//					userList.get(name).writeObject(data);
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//			}
-//		}
-//	}
+	void sendTo(TCPData data) {
+		for (String name : userList.keySet()) {
+			if(name==data.name) {
+				try {
+					userList.get(name).writeObject(data);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 }
 public class SeverTestMain {
 

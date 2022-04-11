@@ -47,7 +47,7 @@ public class FindIDPW_panel extends JPanel{
 		
 		
 		// 나가기
-
+		add(new Gen_button_login(login_frame,"취소","FindCancel_in",500,600, 100,50));
 
 		
 		add(name_find);

@@ -92,7 +92,7 @@ class LogIn_in implements Inter_button_login {
 					
 					ProfileDTO datathis = new SignDB().num_profileRead(" profilenum = " +memberNum+ ";");
 					try {
-						Socket client = new Socket("192.168.20.21", 8888);
+						Socket client = new Socket("192.168.20.34", 8888);
 						Receiver ch = new Receiver(login_frame, client);
 						TCPData tcpdata = new TCPData(datathis);
 						ch.start();
