@@ -489,6 +489,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		repaint();
 	
 		switch (data.DataDestination) {
+	
 		case "enter":
 			this.tcpdata.playData = data.playData;
 			break;
@@ -517,6 +518,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					img = new ImageIcon(data.playerDeck.get(1).get(i).imgname);
 					player2cardShow.get(i).setIcon(img);
 				}
+				tcpdata.res = data.res;
 				this.tcpdata.bettingMoney = data.bettingMoney;
 				this.bettingMoney = data.bettingMoney;
 				this.tcpdata.wholeBettingMoney = data.wholeBettingMoney;
@@ -791,60 +793,64 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
     
     void resultWinner(String[] aa) {
     	String [] res = aa;
-		
+		System.out.println(res.toString());
     	
     	ArrayList<String> bb = new ArrayList<String>();
     
-    			bb.add("2탑"	);
-    			bb.add("3탑"	);
-    			bb.add("4탑"	);
-    			bb.add("5탑"	);
-    			bb.add("6탑"	);
-    			bb.add("7탑"	);
-    			bb.add("8탑"	);
-    			bb.add("9탑"	);
-    			bb.add("10탑");
-    			bb.add("11탑");
-    			bb.add("12탑");
-    			bb.add("13탑");
-    			bb.add("14탑");
-    			bb.add("원페어");
-    			bb.add("투페어");
-    			bb.add("트리플");
-    			bb.add("스트레이트"	);
-    			bb.add("백스트레이트");
-    			bb.add("로얄스트레이트");
-    			bb.add("플러쉬");
-    			bb.add("풀하우스");
-    			bb.add("포카드");
-    			bb.add("스트레이트플러쉬");
-    			bb.add("백스트레이트플러쉬");
-    			bb.add("로얄스트레이트플러쉬");
+		bb.add("2탑"	);
+		bb.add("3탑"	);
+		bb.add("4탑"	);
+		bb.add("5탑"	);
+		bb.add("6탑"	);
+		bb.add("7탑"	);
+		bb.add("8탑"	);
+		bb.add("9탑"	);
+		bb.add("10탑");
+		bb.add("11탑");
+		bb.add("12탑");
+		bb.add("13탑");
+		bb.add("14탑");
+		bb.add("원페어");
+		bb.add("투페어");
+		bb.add("트리플");
+		bb.add("스트레이트"	);
+		bb.add("백스트레이트");
+		bb.add("로얄스트레이트");
+		bb.add("플러쉬");
+		bb.add("풀하우스");
+		bb.add("포카드");
+		bb.add("스트레이트플러쉬");
+		bb.add("백스트레이트플러쉬");
+		bb.add("로얄스트레이트플러쉬");
 
 
-    			int[] test = new int[res.length];
-    			for (int i = 0; i < test.length; i++) {
-    				for (int j = 0; j < bb.size(); j++) {
-    					if(bb.get(j)==res[i]) {
-    						test[i]=j; 
-    					}
-    				}
-    			}
+		int[] test = new int[res.length];
+		for (int i = 0; i < test.length; i++) {
+			for (int j = 0; j < bb.size(); j++) {
+				if(bb.get(j).equals(res[i])) {
+					test[i]=j; 
+				}
+			}
+		}
 
-    			int num = -1;
-    			int aaa = -1;
-    			for (int i = 0; i < test.length; i++) {
-    				if(test[i]>aaa) {
-    					aaa=test[i];
-    					num = i;
-    				}
-    			}
-    			
-    
+		int num = -1;
+		int aaa = -1;
+		for (int i = 0; i < test.length; i++) {
+			if(test[i]>aaa) {
+				aaa=test[i];
+				num = i;
+			}
+		}
+		String winner = "";
+		if (res[0].equals(res[1])) {
+			winner = "무승부!";
+		} else {
+			winner = num +"번!";
+			
+		}
     	
-    	
-    	tcpdata.DataDestination = "Chatting";
-		tcpdata.msg = "0번:"+res[0]+" 1번: "+res[1] +" 승: "+num +"번!";	
+    	tcpdata.DataDestination = "res";
+		tcpdata.msg = "0번:"+res[0]+" 1번: "+res[1] +" 승: "+winner;	
 		ch.send(tcpdata);
     }
 	
