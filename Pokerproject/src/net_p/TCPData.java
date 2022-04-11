@@ -53,6 +53,8 @@ public class TCPData implements Serializable{
 	public HashMap<Integer, HashMap<Integer, String>> test;
 	
 	public Integer callCount;
+	
+	public Integer userCount;
 	public TCPData(ProfileDTO datathis) {
 		callCount = 0;
 		test = new HashMap<Integer, HashMap<Integer, String>>();
