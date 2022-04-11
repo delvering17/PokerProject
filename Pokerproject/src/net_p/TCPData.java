@@ -32,6 +32,8 @@ public class TCPData implements Serializable{
 	public String[] res;
 	//
 	public ArrayList<Integer> bettingMoney;
+	public int btMoney;
+	
 	public int panMoney;
 	public int wholeBettingMoney;
 	public String winner;

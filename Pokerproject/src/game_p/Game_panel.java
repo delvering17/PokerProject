@@ -230,7 +230,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
         betbuttonarea.setBounds(740,520,170,220);
         add(betbuttonarea);
        
-        String [] betbt = {"콜","삥","따당","하프","다이","체크","맥스"};
+        //String [] betbt = {"콜","삥","따당","하프","다이","체크","맥스"};
     	bt = new BetBtn("콜",0,0);
     	bt.addActionListener(new ActionListener() {
 			
@@ -238,12 +238,10 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			public void actionPerformed(ActionEvent e) {
 				if(e.getActionCommand().equals("콜")) {
 					tcpdata.DataDestination = "Game";
-					tcpdata.bettingMoney.set(num, panMoney);
-					tcpdata.wholeBettingMoney += panMoney;
+					tcpdata.btMoney = tcpdata.btMoney;
+					tcpdata.wholeBettingMoney += tcpdata.btMoney;
 					tcpdata.msg = "betting_call";
-					System.out.println("버튼 누르기전"+tcpdata.callCount);
 					tcpdata.callCount++;
-					System.out.println("버튼 누를때"+tcpdata.callCount);
 					System.out.println(tcpdata.test.get(tcpdata.UserPos).keySet().size()-1+"leng");
 					tcpdata.userCount = num;
 					
@@ -267,8 +265,8 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					tcpdata.callCount=0;
 					tcpdata.userCount = num;
 					tcpdata.DataDestination = "Game";
-					tcpdata.bettingMoney.set(num, panMoney);
-					tcpdata.wholeBettingMoney += panMoney;
+					tcpdata.btMoney = panMoney;
+					tcpdata.wholeBettingMoney += tcpdata.btMoney;
 					tcpdata.msg = "betting";
 					
 					ch.send(tcpdata);
@@ -281,7 +279,14 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				tcpdata.callCount=0;
+				tcpdata.userCount = num;
+				tcpdata.DataDestination = "Game";
+				tcpdata.btMoney *= 2; 
+				tcpdata.wholeBettingMoney += tcpdata.btMoney;
+				tcpdata.msg = "betting_ddadang";
+				
+				ch.send(tcpdata);
 				
 			}
 		});
@@ -290,7 +295,14 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				tcpdata.callCount=0;
+				tcpdata.userCount = num;
+				tcpdata.DataDestination = "Game";
+				tcpdata.btMoney += tcpdata.wholeBettingMoney/2; 
+				tcpdata.wholeBettingMoney += tcpdata.btMoney;
+				tcpdata.msg = "betting_ddadang";
+				
+				ch.send(tcpdata);
 				
 			}
 		});
@@ -487,6 +499,71 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				}
 				playerturn();
 				break;	
+			case "betting_ddadang" :
+				this.tcpdata.bettingMoney = data.bettingMoney;
+				this.bettingMoney = data.bettingMoney;
+				this.tcpdata.wholeBettingMoney = data.wholeBettingMoney;
+				this.wholeBettingMoney = data.wholeBettingMoney;
+				this.tcpdata.panMoney = data.panMoney;
+				this.panMoney = data.panMoney;
+				betting.setText("전체 베팅금액: "+data.wholeBettingMoney+ ", 현재 판돈: "+ data.panMoney);
+
+				playerturn();
+				
+				
+				break;
+			case "betting_half" :
+				this.tcpdata.bettingMoney = data.bettingMoney;
+				this.bettingMoney = data.bettingMoney;
+				this.tcpdata.wholeBettingMoney = data.wholeBettingMoney;
+				this.wholeBettingMoney = data.wholeBettingMoney;
+				this.tcpdata.panMoney = data.panMoney;
+				this.panMoney = data.panMoney;
+				betting.setText("전체 베팅금액: "+data.wholeBettingMoney+ ", 현재 판돈: "+ data.panMoney);
+
+				playerturn();
+				
+				
+				break;
+			case "betting_chk" :
+				this.tcpdata.bettingMoney = data.bettingMoney;
+				this.bettingMoney = data.bettingMoney;
+				this.tcpdata.wholeBettingMoney = data.wholeBettingMoney;
+				this.wholeBettingMoney = data.wholeBettingMoney;
+				this.tcpdata.panMoney = data.panMoney;
+				this.panMoney = data.panMoney;
+				betting.setText("전체 베팅금액: "+data.wholeBettingMoney+ ", 현재 판돈: "+ data.panMoney);
+
+				playerturn();
+				
+				
+				break;
+			case "betting_quater" :
+				this.tcpdata.bettingMoney = data.bettingMoney;
+				this.bettingMoney = data.bettingMoney;
+				this.tcpdata.wholeBettingMoney = data.wholeBettingMoney;
+				this.wholeBettingMoney = data.wholeBettingMoney;
+				this.tcpdata.panMoney = data.panMoney;
+				this.panMoney = data.panMoney;
+				betting.setText("전체 베팅금액: "+data.wholeBettingMoney+ ", 현재 판돈: "+ data.panMoney);
+
+				playerturn();
+				
+				
+				break;
+			case "betting_max" :
+				this.tcpdata.bettingMoney = data.bettingMoney;
+				this.bettingMoney = data.bettingMoney;
+				this.tcpdata.wholeBettingMoney = data.wholeBettingMoney;
+				this.wholeBettingMoney = data.wholeBettingMoney;
+				this.tcpdata.panMoney = data.panMoney;
+				this.panMoney = data.panMoney;
+				betting.setText("전체 베팅금액: "+data.wholeBettingMoney+ ", 현재 판돈: "+ data.panMoney);
+
+				playerturn();
+				
+				
+				break;
 			default :
 				System.out.println("빠져나감");
 				break;
@@ -504,8 +581,6 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	
 	void oneSplit() {
 		for (Integer i : tcpdata.test.get(tcpdata.UserPos).keySet()) {
-			System.out.println("asda");
-			System.out.println(tcpdata.dealerDeck.size());
 			Random number = new Random();
 			int b = number.nextInt(tcpdata.dealerDeck.size());
 			tcpdata.playerDeck.get(i).add(tcpdata.dealerDeck.get(b));
