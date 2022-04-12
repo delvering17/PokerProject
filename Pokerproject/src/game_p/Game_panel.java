@@ -35,7 +35,10 @@ import net_p.TCPData;
 public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	JButton help ;
 	JButton exit;
+	
 	Jokbo jokbbo;
+	JokBoTEST jk;
+	
 	BetBtn bt ;
 	BetBtn bt1 ;
 	BetBtn bt2 ;
@@ -97,7 +100,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	public ArrayList<Integer> bettingMoney = new ArrayList<Integer>();
 	public int panMoney = 10;
 	public int wholeBettingMoney = 0;
-	public String winner;
+//	public String winner;
 	ImageIcon default_bet = new ImageIcon("img/gamepanel/default.png");
 	public Game_panel(Login_frame login_frame,Receiver ch,TCPData tcpdata,Integer addr) {
 		tcpdata.panelChk = "Game";
@@ -149,6 +152,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			
 		}
 		jokbbo = new Jokbo();
+		jk = new JokBoTEST();
 		setBounds(0, 0, 1200, 800);
 		setBackground(new Color(32,56,48));
 		setLayout(null);
@@ -300,7 +304,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		betbuttonarea.setLayout(null);
         betbuttonarea.setBounds(740,520,170,220);
         add(betbuttonarea);
-       
+        
         //String [] betbt = {"콜","삥","따당","하프","다이","체크","맥스"};
         ImageIcon i0 = new ImageIcon("img/gamepanel/call_bt.gif");
         bt = new BetBtn("",0,0); // 콜
@@ -320,6 +324,12 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					tcpdata.userCount = num;
 					
 					if(tcpdata.callCount == tcpdata.test.get(tcpdata.UserPos).keySet().size()-1&&tcpdata.playerDeck.get(0).size()==7) {
+						for (Integer z : tcpdata.test.get(tcpdata.UserPos).keySet()) {
+							
+							tcpdata.result.put(z, jokbbo.jokbo(tcpdata.playerDeck.get(z)));
+						}
+						
+						tcpdata.winner = jk.resultWinner(tcpdata.result)+"";
 						tcpdata.last = true;
 						ch.send(tcpdata);
 					}else if(tcpdata.callCount == tcpdata.test.get(tcpdata.UserPos).keySet().size()-1){
@@ -576,7 +586,58 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			this.tcpdata.callCount = data.callCount;
 			this.tcpdata.last = data.last;
 		}
+
+		if (data.msg.contains("[입장]") ) {
+			System.out.println("프로필 생성");
+			
+//			for () {
+//				
+//				new Ingame_userProfile_panel(); // playNum, nickname
+//				
+//			}
+			for (Map.Entry<Integer, String> entry : data.test.get(data.UserPos).entrySet()) {
+				switch (entry.getKey()) {
+				
+				case 0:
+					if (Ingame_userProfile_panel_0 == null) {
+						Ingame_userProfile_panel_0 = new Ingame_userProfile_panel(0,entry.getValue());
+						add(Ingame_userProfile_panel_0);
+					}
+					break;
+				case 1:
+					if (Ingame_userProfile_panel_1 == null) {
+						Ingame_userProfile_panel_1 = new Ingame_userProfile_panel(1,entry.getValue());
+						add(Ingame_userProfile_panel_1);
+					}
+					break;
+				case 2:
+					if (Ingame_userProfile_panel_2 == null) {
+						Ingame_userProfile_panel_2 = new Ingame_userProfile_panel(2,entry.getValue());
+						add(Ingame_userProfile_panel_2);
+					}
+					break;
+				case 3:
+					if (Ingame_userProfile_panel_3 == null) {
+						Ingame_userProfile_panel_3 = new Ingame_userProfile_panel(3,entry.getValue());
+						add(Ingame_userProfile_panel_3);
+					}
+					break;
+				case 4:
+					if (Ingame_userProfile_panel_4 == null) {
+						Ingame_userProfile_panel_4 = new Ingame_userProfile_panel(4,entry.getValue());
+						add(Ingame_userProfile_panel_4);
+					}	
+					break;
+				}
+			}
+
+//			if (Ingame_userProfile_panel_0 == null) {
+//				Ingame_userProfile_panel_0 = new Ingame_userProfile_panel(0,);
+//			}
+			
 	
+		}
+		//
 		switch (data.DataDestination) {
 	
 		case "Game":
@@ -651,9 +712,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				playerturn();
 				if(tcpdata.callCount == tcpdata.test.get(tcpdata.UserPos).keySet().size()-1&&tcpdata.playerDeck.get(0).size()==7&&tcpdata.last) {
 					System.out.println("종료입니다.");
-					for (Integer z : data.test.get(tcpdata.UserPos).keySet()) {
-						System.out.println(jokbbo.jokbo(data.playerDeck.get(z)));
-					}
+					System.out.println("집가자 가고싶어요 보내줘요" + data.winner);
 				}else if(data.callCount == data.test.get(tcpdata.UserPos).keySet().size()-1) {
 					bt.setEnabled(false);
 					for (Integer z : data.test.get(tcpdata.UserPos).keySet()) {

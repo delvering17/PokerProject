@@ -60,7 +60,9 @@ public class TCPData implements Serializable{
 	public Integer userCount;
 	
 	public HashMap<Integer, Boolean> roomclose;
+	public HashMap<Integer, String> result;
 	public TCPData(ProfileDTO datathis) {
+		result = new HashMap<Integer, String>();
 		roomclose = new HashMap<Integer, Boolean>();
 		for (int i = 0; i < 9; i++) {
 			roomclose.put(i, false);

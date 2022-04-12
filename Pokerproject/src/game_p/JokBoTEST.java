@@ -2,6 +2,7 @@ package game_p;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class JokBoTEST implements Serializable{
 
@@ -22,8 +23,8 @@ public class JokBoTEST implements Serializable{
 //		reWin = {"풀하우스","원페어"}
 //		resultWinner();
 	}
-   void resultWinner(ArrayList<String> resWin) {
-	   ArrayList<String> res = resWin;
+   int resultWinner(HashMap<Integer,String> resWin) {
+	   HashMap<Integer,String> res = resWin;
     	
     	
 		//System.out.println(res.toString());
@@ -50,7 +51,7 @@ public class JokBoTEST implements Serializable{
 			for (int j = 0; j < bb.size(); j++) {
 				if(bb.get(j).equals(res.get(i).split("_")[0])) {
 					test[i]=j; 
-					System.out.println(j);
+//					System.out.println(j);
 				}
 			}
 		}
@@ -60,7 +61,9 @@ public class JokBoTEST implements Serializable{
 		int win = -1;
 		
 		
-		for (int i = 0; i < test.length; i++) {
+		for (int i : res.keySet()) {
+			
+		
 			if(test[i]>aaa) {
 				aaa=test[i];
 				num = i;
@@ -95,7 +98,8 @@ public class JokBoTEST implements Serializable{
 			
 		}
 		
-		System.out.println(win);
+		return win;
+		
 		
 //    	
 //    	tcpdata.DataDestination = "res";

@@ -28,7 +28,7 @@ public class Ingame_userProfile_panel extends JPanel {
 		this.lose = profileDTO.lose;
 		this.userMoney = profileDTO.money;
 		this.playerNum = playerNum;
-		
+		setLayout(null);
 		nickname_text = new JLabel();
 		nickname_text.setBounds(0,0,200,50); 
 		nickname_text.setText("닉네임 : " + nickname);
