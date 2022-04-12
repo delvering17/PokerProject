@@ -16,8 +16,13 @@ class MulServer {
 	HashMap<Integer,Integer[]> playData;
 	public int[] easyStudy;
 	public HashMap<Integer, HashMap<Integer, String>> test;
+	public HashMap<Integer, Boolean> roomclose;
 	public MulServer() {
 		try {
+			roomclose = new HashMap<Integer, Boolean>();
+			for (int i = 0; i < 9; i++) {
+				roomclose.put(i, false);
+			}
 			ServerSocket server = new ServerSocket(8888);
 			userName = new HashSet<String>();
 			playData = new HashMap<Integer, Integer[]>();

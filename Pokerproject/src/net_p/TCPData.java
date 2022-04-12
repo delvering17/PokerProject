@@ -58,7 +58,13 @@ public class TCPData implements Serializable{
 	public Integer callCount;
 	public boolean last;
 	public Integer userCount;
+	
+	public HashMap<Integer, Boolean> roomclose;
 	public TCPData(ProfileDTO datathis) {
+		roomclose = new HashMap<Integer, Boolean>();
+		for (int i = 0; i < 9; i++) {
+			roomclose.put(i, false);
+		}
 		last = false;
 		prebetMoney = 0;
 		callCount = 0;

@@ -211,6 +211,16 @@ public class Lobby extends JPanel implements NetExecute {
 				roomBtn.setText("만들기");
 			}
 		}
+		
+		for (RoomBtn roomBtn : btnlist) {
+			if(data.roomclose.get(roomBtn.addr)) {
+				roomBtn.setEnabled(false);
+			}else {
+				roomBtn.setEnabled(true);				
+			}
+			
+			
+		}
 		switch (data.DataDestination) {
 		
 		case "Chatting":

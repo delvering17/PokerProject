@@ -1,32 +1,36 @@
 package game_p;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class JokBoTEST {
+public class JokBoTEST implements Serializable{
 
+	private static final long serialVersionUID = 5L;
 
-	ArrayList<String> resWin;
+//	ArrayList<String> resWin;
 	public JokBoTEST() {
-		JokBoTEST aa = new JokBoTEST();
+//		JokBoTEST aa = new JokBoTEST();
 
 		
-		resWin = new ArrayList<String>();
+//		resWin = new ();
 
 		
 //		for (int i = 0 ; i < res[].length ; i++) {
 //			resWin.add(카드 스트링 결과 new Jokbo());
+			
 //		}
-		aa.resultWinner(resWin);
+//		reWin = {"풀하우스","원페어"}
+//		resultWinner();
 	}
    void resultWinner(ArrayList<String> resWin) {
 	   ArrayList<String> res = resWin;
     	
     	
-		System.out.println(res.toString());
+		//System.out.println(res.toString());
     	
     	ArrayList<String> bb = new ArrayList<String>();
     
-		bb.add("탑"	);			
+		bb.add("탑");			
 		bb.add("원페어");	// 같고높은 숫자
 		bb.add("투페어"); // 가장 높은 숫자
 		bb.add("트리플");	 // 같은높은 숫자
