@@ -140,6 +140,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 							tcpdata.dealerDeck.add(new PokerCard(i,j));
 						}
 					}
+					tcpdata.roomclose.replace(tcpdata.UserPos, true);
 					GameProcess();
 					game_panel.remove(GameStart);
 					repaint();
