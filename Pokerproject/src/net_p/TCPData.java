@@ -53,11 +53,14 @@ public class TCPData implements Serializable{
 	public 	ArrayList<Ingame_userProfile_panel> userprofile; //  인게임 프로필 
 	public ArrayList<String> ipjang;
 	public HashMap<Integer, HashMap<Integer, String>> test;
+	public Integer prebetMoney;
 	
 	public Integer callCount;
-	
+	public boolean last;
 	public Integer userCount;
 	public TCPData(ProfileDTO datathis) {
+		last = false;
+		prebetMoney = 0;
 		callCount = 0;
 		test = new HashMap<Integer, HashMap<Integer, String>>();
 		for (int i = 0; i < 9; i++) {

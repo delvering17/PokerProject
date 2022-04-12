@@ -17,7 +17,7 @@ import net_p.TCPData;
 public class Login_panel extends JPanel implements NetExecute{
 	Login_frame login_frame;
 	Gen_textfiled id_login ;
-	Textfiled_password pw_login;
+	Login_Textfiled_password pw_login;
 	public Login_panel(Login_frame login_frame) {
 		
 		setBounds(0,0,1200,800);
@@ -28,7 +28,7 @@ public class Login_panel extends JPanel implements NetExecute{
 		add(new Gen_label("비밀번호",350,450,80,40));
 		
 		id_login = new Gen_textfiled(login_frame,"아이디","Login_textfiled_id",400,400, 200,50);
-		pw_login = new Textfiled_password(login_frame,"비밀번호",400,450, 200,50); 
+		pw_login = new Login_Textfiled_password(login_frame,"비밀번호",400,450, 200,50); 
 		add(id_login);
 		add(pw_login);
 		

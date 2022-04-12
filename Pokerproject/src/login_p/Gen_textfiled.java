@@ -49,6 +49,26 @@ class Login_textfiled_id implements Inter_textfield_signin  {
 
 
 }
+class Login_Textfiled_password extends JPasswordField implements ActionListener  {
+	
+	
+	Login_frame login_frame;
+	public Login_Textfiled_password (Login_frame login_frame,String name , int dis_x, int dis_y, int size_x, int size_y) {
+	
+		
+		this.login_frame = login_frame;
+		setBounds(dis_x, dis_y, size_x, size_y);
+		
+		addActionListener(this);
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		new LogIn_in().go(login_frame);
+		
+	}
+
+}
 
 class Textfiled_password extends JPasswordField implements ActionListener  {
 	
