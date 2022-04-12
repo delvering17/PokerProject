@@ -411,15 +411,14 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                tcpdata.callCount=0;
+              
+                
+                
                 tcpdata.userCount = num;
                 tcpdata.DataDestination = "Game";
-                tcpdata.btMoney = tcpdata.wholeBettingMoney/4; 
-                tcpdata.prebetMoney = tcpdata.btMoney;
-                tcpdata.wholeBettingMoney += tcpdata.btMoney;
-                tcpdata.money -= tcpdata.btMoney;
                 tcpdata.msg = "betting_die";
 
+                ch.send(tcpdata);
             }
         });
         ImageIcon i5 = new ImageIcon("img/gamepanel/quarter_bt.gif");
@@ -429,15 +428,18 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                tcpdata.callCount=0;
-                tcpdata.userCount = num;
-                tcpdata.DataDestination = "Game";
-                tcpdata.btMoney = (int)tcpdata.money; 
-                tcpdata.prebetMoney = tcpdata.btMoney;
-                tcpdata.wholeBettingMoney += tcpdata.btMoney;
-                tcpdata.money -= tcpdata.btMoney;
-                tcpdata.msg = "betting_quarter";
+            
+        	  tcpdata.callCount=0;
+              tcpdata.userCount = num;
+              tcpdata.DataDestination = "Game";
+              tcpdata.btMoney = tcpdata.wholeBettingMoney/4; 
+              tcpdata.prebetMoney = tcpdata.btMoney;
+              tcpdata.wholeBettingMoney += tcpdata.btMoney;
+              tcpdata.money -= tcpdata.btMoney;
+              
+              tcpdata.msg = "betting_quarter";
 
+              ch.send(tcpdata);
             }
         });
         ImageIcon i6 = new ImageIcon("img/gamepanel/max_bt.gif");
@@ -447,8 +449,17 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				tcpdata.callCount = 0 ;
+				tcpdata.userCount = num;
+				tcpdata.DataDestination = "Game";
+				tcpdata.btMoney = (int)tcpdata.money;
+				tcpdata.prebetMoney = tcpdata.btMoney;
+				tcpdata.wholeBettingMoney += tcpdata.btMoney ;
+				tcpdata.money -= tcpdata.btMoney;
 				
+			      tcpdata.msg = "betting_max";
+				
+				ch.send(tcpdata);
 			}
 		});
     	
@@ -713,6 +724,45 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				if(tcpdata.callCount == tcpdata.test.get(tcpdata.UserPos).keySet().size()-1&&tcpdata.playerDeck.get(0).size()==7&&tcpdata.last) {
 					System.out.println("종료입니다.");
 					System.out.println("집가자 가고싶어요 보내줘요" + data.winner);
+					try {
+						this.tcpdata.last = false;
+						this.tcpdata.callCount = 0;
+						for (Integer z : data.test.get(tcpdata.UserPos).keySet()) {
+							for (int i = 0; i < 7; i++) {
+								
+								ttt.get(z).get(i).setIcon(null);
+							}
+						}
+						repaint();
+						Thread.sleep(3000);
+						if(num==0) {
+							JButton GameStart = new JButton("게임 시작");
+							GameStart.setBounds(500, 280, 200, 80);
+							add(GameStart);
+							GameStart.addActionListener(new ActionListener() {
+								//게임 시작 버튼
+								@Override
+								public void actionPerformed(ActionEvent e) {
+									betting_Button_true();
+									tcpdata.DataDestination = "Game";
+									tcpdata.userCount = num;
+									for (int i = 2; i < 15; i++) {
+										for (int j = 1; j < 5; j++) {
+											tcpdata.dealerDeck.add(new PokerCard(i,j));
+										}
+									}
+									tcpdata.roomclose.replace(tcpdata.UserPos, true);
+									GameProcess();
+									game_panel.remove(GameStart);
+									repaint();
+								}
+							});
+							
+						}
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}else if(data.callCount == data.test.get(tcpdata.UserPos).keySet().size()-1) {
 					bt.setEnabled(false);
 					for (Integer z : data.test.get(tcpdata.UserPos).keySet()) {
@@ -908,24 +958,24 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				p5_turn.setIcon(img);	
 			}
 			break;
-//		case "max":
-//			img = new ImageIcon("img/gamepanel/max.png");
-//			if (go == 0) {
-//				p1_turn.setIcon(img);	
-//			}
-//			if (go == 1) {
-//				p2_turn.setIcon(img);	
-//			}
-//			if (go == 2) {
-//				p3_turn.setIcon(img);	
-//			}
-//			if (go == 3) {
-//				p4_turn.setIcon(img);	
-//			}
-//			if (go == 4) {
-//				p5_turn.setIcon(img);	
-//			}
-//			break;
+		case "max":
+			img = new ImageIcon("img/gamepanel/max.png");
+			if (go == 0) {
+				p1_turn.setIcon(img);	
+			}
+			if (go == 1) {
+				p2_turn.setIcon(img);	
+			}
+			if (go == 2) {
+				p3_turn.setIcon(img);	
+			}
+			if (go == 3) {
+				p4_turn.setIcon(img);	
+			}
+			if (go == 4) {
+				p5_turn.setIcon(img);	
+			}
+			break;
 		}
 	
 	}
