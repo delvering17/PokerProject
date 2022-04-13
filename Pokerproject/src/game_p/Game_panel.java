@@ -372,8 +372,8 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					tcpdata.callCount=0;
 					tcpdata.userCount = num;
 					tcpdata.DataDestination = "Game";
-					tcpdata.prebetMoney = tcpdata.btMoney;
-					tcpdata.btMoney = panMoney;
+					tcpdata.btMoney = panMoney;				
+					tcpdata.prebetMoney = tcpdata.btMoney; 
 					tcpdata.wholeBettingMoney += tcpdata.btMoney;
 					tcpdata.money -= tcpdata.btMoney;
 					tcpdata.msg = "betting_bbing";
@@ -699,25 +699,32 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				switch(go) {
 				case 0:
 					p1_bet_jokbo.setText("베팅 : "+ data.btMoney);
+					betting_profileReset (data, 0);
 					whatBetting(data.msg.split("_")[1],go);
 					break;
 				case 1:
 					p2_bet_jokbo.setText("베팅 : "+ data.btMoney);
+					betting_profileReset (data, 1);
 					whatBetting(data.msg.split("_")[1],go);
 					break;
 				case 2:
 					p3_bet_jokbo.setText("베팅 : "+ data.btMoney);
+					betting_profileReset (data, 2);
 					whatBetting(data.msg.split("_")[1],go);
 					break;
 				case 3:
 					p4_bet_jokbo.setText("베팅 : "+ data.btMoney);
+					betting_profileReset (data, 3);
 					whatBetting(data.msg.split("_")[1],go);
 					break;
 				case 4:
 					p5_bet_jokbo.setText("베팅 : "+ data.btMoney);
+					betting_profileReset (data, 4);
 					whatBetting(data.msg.split("_")[1],go);
 					break;
 				}
+				
+			
 				
 			}
 			
@@ -764,83 +771,32 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					System.out.println("집가자 가고싶어요 보내줘요" + data.winner);
 					
 					// DB 입력 
-					System.out.println("나는 = " +  num);
-					
+				
 					
 					
 					//
 					// 승패 입력
 					if (num == Integer.parseInt(data.winner)) {
 						System.out.println("승자");
-//						this.tcpdata.win ++;
-//						this.tcpdata.totalGame ++;
-//						this.tcpdata.money += data.wholeBettingMoney;
+						this.tcpdata.win ++;
+						this.tcpdata.totalGame ++;
+						this.tcpdata.money += data.wholeBettingMoney;
+						
 					} else {
 						System.out.println("패자");
-//						this.tcpdata.lose ++;
-//						this.tcpdata.totalGame ++;
+						this.tcpdata.lose ++;
+						this.tcpdata.totalGame ++;
+					
 					}
 					// DB와 게임 시작 시 프로필 리셋 
 					
-					System.out.println("나는 = " +  num);
+					// 베팅 초기화  
+				
 					
-//					gameRes_DBInsert(this.tcpdata); DB 입력  
 					
-					for (Map.Entry<Integer, String> entry : data.test.get(data.UserPos).entrySet()) {
-						switch (entry.getKey()) {
-						
-						case 0:
-							if (Ingame_userProfile_panel_0 == null) {
-								Ingame_userProfile_panel_0 = new Ingame_userProfile_panel(0,entry.getValue());
-								add(Ingame_userProfile_panel_0);
-							} else if (Ingame_userProfile_panel_0 != null) {
-								remove(Ingame_userProfile_panel_0);
-								Ingame_userProfile_panel_0 = new Ingame_userProfile_panel(0,entry.getValue());
-								add(Ingame_userProfile_panel_0);
-							}
-							break;
-						case 1:
-							if (Ingame_userProfile_panel_1 == null) {
-								Ingame_userProfile_panel_1 = new Ingame_userProfile_panel(1,entry.getValue());
-								add(Ingame_userProfile_panel_1);
-							} else if (Ingame_userProfile_panel_1 != null) {
-								remove(Ingame_userProfile_panel_1);
-								Ingame_userProfile_panel_1 = new Ingame_userProfile_panel(1,entry.getValue());
-								add(Ingame_userProfile_panel_1);
-							}
-							break;
-						case 2:
-							if (Ingame_userProfile_panel_2 == null) {
-								Ingame_userProfile_panel_2 = new Ingame_userProfile_panel(2,entry.getValue());
-								add(Ingame_userProfile_panel_2);
-							} else if (Ingame_userProfile_panel_2 != null) {
-								remove(Ingame_userProfile_panel_2);
-								Ingame_userProfile_panel_2 = new Ingame_userProfile_panel(2,entry.getValue());
-								add(Ingame_userProfile_panel_2);
-							}
-							break;
-						case 3:
-							if (Ingame_userProfile_panel_3 == null) {
-								Ingame_userProfile_panel_3 = new Ingame_userProfile_panel(3,entry.getValue());
-								add(Ingame_userProfile_panel_3);
-							} else if (Ingame_userProfile_panel_3 != null) {
-								remove(Ingame_userProfile_panel_3);
-								Ingame_userProfile_panel_3 = new Ingame_userProfile_panel(3,entry.getValue());
-								add(Ingame_userProfile_panel_3);
-							}
-							break;
-						case 4:
-							if (Ingame_userProfile_panel_4 == null) {
-								Ingame_userProfile_panel_4 = new Ingame_userProfile_panel(4,entry.getValue());
-								add(Ingame_userProfile_panel_4);
-							} else if (Ingame_userProfile_panel_4 != null) {
-								remove(Ingame_userProfile_panel_4);
-								Ingame_userProfile_panel_4 = new Ingame_userProfile_panel(4,entry.getValue());
-								add(Ingame_userProfile_panel_4);
-							}	
-							break;
-						}
-					}
+					gameRes_DBInsert(this.tcpdata); 
+					
+					
 					
 					try {
 						this.tcpdata.last = false;
@@ -852,13 +808,59 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 							}
 						}
 						betting_Button_false ();
+						//
 						
+						//
 						turnNickname.setText("승: "+data.winner+"번 / "
 	                            +jokbbo.jokbo(data.playerDeck.get(Integer.parseInt(data.winner))));
 						repaint();
 						
 						Thread.sleep(3000);
 						
+						for (Map.Entry<Integer, String> entry : data.test.get(data.UserPos).entrySet()) {
+							switch (entry.getKey()) {
+							
+							case 0:
+							
+									remove(Ingame_userProfile_panel_0);
+					
+									Ingame_userProfile_panel_0 = new Ingame_userProfile_panel(0,entry.getValue());
+									System.out.println(entry.getValue()+"," + Ingame_userProfile_panel_0.userMoney);
+									add(Ingame_userProfile_panel_0);
+								
+								break;
+							case 1:
+								
+									remove(Ingame_userProfile_panel_1);
+									Ingame_userProfile_panel_1 = new Ingame_userProfile_panel(1,entry.getValue());
+									System.out.println(entry.getValue()+"," + Ingame_userProfile_panel_1.userMoney);
+									add(Ingame_userProfile_panel_1);
+								
+								break;
+							case 2:
+							
+									remove(Ingame_userProfile_panel_2);
+									Ingame_userProfile_panel_2 = new Ingame_userProfile_panel(2,entry.getValue());
+									System.out.println(entry.getValue()+"," + Ingame_userProfile_panel_2.userMoney);
+									add(Ingame_userProfile_panel_2);
+								
+								break;
+							case 3:
+							
+									remove(Ingame_userProfile_panel_3);
+									Ingame_userProfile_panel_3 = new Ingame_userProfile_panel(3,entry.getValue());
+									add(Ingame_userProfile_panel_3);
+								
+								break;
+							case 4:
+							
+									remove(Ingame_userProfile_panel_4);
+									Ingame_userProfile_panel_4 = new Ingame_userProfile_panel(4,entry.getValue());
+									add(Ingame_userProfile_panel_4);
+									
+								break;
+							}
+						}
 						turnNickname.setText("차례 : ");
 						
 						p1_turn.setIcon(default_bet);
@@ -1233,43 +1235,40 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
     // 베팅한 사람의 프로필 리셋
     void betting_profileReset (TCPData data, int num) {
     	
-		for (Map.Entry<Integer, String> entry : data.test.get(data.UserPos).entrySet()) {
-			switch (entry.getKey()) {
+		
+			System.out.println("이사람");
+			switch (num) {
 			
 			case 0: // 실험  지우지 않고  settext만 해도 바뀌는지 
-					Ingame_userProfile_panel_0.userMoney = data.money;
-					Ingame_userProfile_panel_0.userMoney_text.setText("보유머니 : " + data.money);
-					repaint();
+				Ingame_userProfile_panel_0.userMoney = data.money;
+				Ingame_userProfile_panel_0.userMoney_text.setText("보유머니 : " + data.money);
+					// 같은 걸로 바뀜 datamoney
 
 				break;
 			case 1:// 아니면 지우고 나서 해야 바뀌는지 
-					remove(Ingame_userProfile_panel_1);
-					Ingame_userProfile_panel_1 = new Ingame_userProfile_panel(1,entry.getValue());
-					Ingame_userProfile_panel_1.userMoney = data.money;
-					Ingame_userProfile_panel_1.userMoney_text.setText("보유머니 : " + data.money);
-					add(Ingame_userProfile_panel_1);
+				Ingame_userProfile_panel_1.userMoney = data.money;
+				Ingame_userProfile_panel_1.userMoney_text.setText("보유머니 : " + data.money);
 				
 				break;
 			case 2:
 				
-//					Ingame_userProfile_panel_2 = new Ingame_userProfile_panel(2,entry.getValue());
-//					add(Ingame_userProfile_panel_2);
+				Ingame_userProfile_panel_2.userMoney = data.money;
+				Ingame_userProfile_panel_2.userMoney_text.setText("보유머니 : " + data.money);
 			
 				break;
 			case 3:
 
-//					Ingame_userProfile_panel_3 = new Ingame_userProfile_panel(3,entry.getValue());
-//					add(Ingame_userProfile_panel_3);
+				Ingame_userProfile_panel_3.userMoney = data.money;
+				Ingame_userProfile_panel_3.userMoney_text.setText("보유머니 : " + data.money);
 			
 				break;
 			case 4:
-//
-//					Ingame_userProfile_panel_4 = new Ingame_userProfile_panel(4,entry.getValue());
-//					add(Ingame_userProfile_panel_4);
+				Ingame_userProfile_panel_4.userMoney = data.money;
+				Ingame_userProfile_panel_4.userMoney_text.setText("보유머니 : " + data.money);
 			
 				break;
 			}
-		}
+		
 
 		
     }

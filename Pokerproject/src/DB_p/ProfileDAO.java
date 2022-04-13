@@ -187,8 +187,11 @@ public class ProfileDAO {
 	public int profileModify(TCPData tcpdata) {
 		int res = 0 ;
 	
-		sql = "update profile set money = "+ tcpdata.money +
-		" where nickname = '" +tcpdata.name +"' ;";
+		sql = "update profile set money = "+ tcpdata.money + 
+							", totalgame = " + tcpdata.totalGame + 
+							", win = " + tcpdata.win + 
+							", lose = "+ tcpdata.lose +
+							" where nickname = '" +tcpdata.name +"' ;";
 		
 		try {
 			res = stmt.executeUpdate(sql);
