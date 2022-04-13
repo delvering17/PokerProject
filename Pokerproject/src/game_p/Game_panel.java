@@ -681,25 +681,32 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				switch(go) {
 				case 0:
 					p1_bet_jokbo.setText("베팅 : "+ data.btMoney);
+					betting_profileReset (data, 0);
 					whatBetting(data.msg.split("_")[1],go);
 					break;
 				case 1:
 					p2_bet_jokbo.setText("베팅 : "+ data.btMoney);
+					betting_profileReset (data, 1);
 					whatBetting(data.msg.split("_")[1],go);
 					break;
 				case 2:
 					p3_bet_jokbo.setText("베팅 : "+ data.btMoney);
+					betting_profileReset (data, 2);
 					whatBetting(data.msg.split("_")[1],go);
 					break;
 				case 3:
 					p4_bet_jokbo.setText("베팅 : "+ data.btMoney);
+					betting_profileReset (data, 3);
 					whatBetting(data.msg.split("_")[1],go);
 					break;
 				case 4:
 					p5_bet_jokbo.setText("베팅 : "+ data.btMoney);
+					betting_profileReset (data, 4);
 					whatBetting(data.msg.split("_")[1],go);
 					break;
 				}
+				
+			
 				
 			}
 			
@@ -746,27 +753,24 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					System.out.println("집가자 가고싶어요 보내줘요" + data.winner);
 					
 					// DB 입력 
-					System.out.println("나는 = " +  num);
-					
-					
-					
+
 					//
 					// 승패 입력
 					if (num == Integer.parseInt(data.winner)) {
 						System.out.println("승자");
-//						this.tcpdata.win ++;
-//						this.tcpdata.totalGame ++;
-//						this.tcpdata.money += data.wholeBettingMoney;
+						this.tcpdata.win ++;
+						this.tcpdata.totalGame ++;
+						this.tcpdata.money += data.wholeBettingMoney;
 					} else {
 						System.out.println("패자");
-//						this.tcpdata.lose ++;
-//						this.tcpdata.totalGame ++;
+						this.tcpdata.lose ++;
+						this.tcpdata.totalGame ++;
 					}
 					// DB와 게임 시작 시 프로필 리셋 
 					
-					System.out.println("나는 = " +  num);
 					
-//					gameRes_DBInsert(this.tcpdata); DB 입력  
+					
+					gameRes_DBInsert(this.tcpdata); 
 					
 					for (Map.Entry<Integer, String> entry : data.test.get(data.UserPos).entrySet()) {
 						switch (entry.getKey()) {
@@ -1205,43 +1209,40 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
     // 베팅한 사람의 프로필 리셋
     void betting_profileReset (TCPData data, int num) {
     	
-		for (Map.Entry<Integer, String> entry : data.test.get(data.UserPos).entrySet()) {
-			switch (entry.getKey()) {
+		
+			System.out.println("이사람");
+			switch (num) {
 			
 			case 0: // 실험  지우지 않고  settext만 해도 바뀌는지 
-					Ingame_userProfile_panel_0.userMoney = data.money;
-					Ingame_userProfile_panel_0.userMoney_text.setText("보유머니 : " + data.money);
-					repaint();
+				Ingame_userProfile_panel_0.userMoney = data.money;
+				Ingame_userProfile_panel_0.userMoney_text.setText("보유머니 : " + data.money);
+					// 같은 걸로 바뀜 datamoney
 
 				break;
 			case 1:// 아니면 지우고 나서 해야 바뀌는지 
-					remove(Ingame_userProfile_panel_1);
-					Ingame_userProfile_panel_1 = new Ingame_userProfile_panel(1,entry.getValue());
-					Ingame_userProfile_panel_1.userMoney = data.money;
-					Ingame_userProfile_panel_1.userMoney_text.setText("보유머니 : " + data.money);
-					add(Ingame_userProfile_panel_1);
+				Ingame_userProfile_panel_1.userMoney = data.money;
+				Ingame_userProfile_panel_1.userMoney_text.setText("보유머니 : " + data.money);
 				
 				break;
 			case 2:
 				
-//					Ingame_userProfile_panel_2 = new Ingame_userProfile_panel(2,entry.getValue());
-//					add(Ingame_userProfile_panel_2);
+				Ingame_userProfile_panel_2.userMoney = data.money;
+				Ingame_userProfile_panel_2.userMoney_text.setText("보유머니 : " + data.money);
 			
 				break;
 			case 3:
 
-//					Ingame_userProfile_panel_3 = new Ingame_userProfile_panel(3,entry.getValue());
-//					add(Ingame_userProfile_panel_3);
+				Ingame_userProfile_panel_3.userMoney = data.money;
+				Ingame_userProfile_panel_3.userMoney_text.setText("보유머니 : " + data.money);
 			
 				break;
 			case 4:
-//
-//					Ingame_userProfile_panel_4 = new Ingame_userProfile_panel(4,entry.getValue());
-//					add(Ingame_userProfile_panel_4);
+				Ingame_userProfile_panel_4.userMoney = data.money;
+				Ingame_userProfile_panel_4.userMoney_text.setText("보유머니 : " + data.money);
 			
 				break;
 			}
-		}
+		
 
 		
     }
