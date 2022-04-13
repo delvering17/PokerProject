@@ -330,7 +330,11 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			public void actionPerformed(ActionEvent e) {
 			
 					tcpdata.DataDestination = "Game";
-					tcpdata.btMoney = tcpdata.prebetMoney;
+					if(tcpdata.prebetMoney*2>tcpdata.money){
+						tcpdata.btMoney = (int)tcpdata.money;
+					}else {
+						tcpdata.btMoney = tcpdata.prebetMoney;						
+					}
 					tcpdata.prebetMoney = tcpdata.btMoney;
 					tcpdata.wholeBettingMoney += tcpdata.btMoney;
 					tcpdata.money -= tcpdata.btMoney;
@@ -389,7 +393,13 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				tcpdata.callCount=0;
 				tcpdata.userCount = num;
 				tcpdata.DataDestination = "Game";
-				tcpdata.btMoney = tcpdata.prebetMoney*2; 
+				
+				
+				if(tcpdata.prebetMoney*2>tcpdata.money){
+					tcpdata.btMoney = (int)tcpdata.money;
+				}else {
+					tcpdata.btMoney = tcpdata.prebetMoney*2;
+				}
 				tcpdata.prebetMoney = tcpdata.btMoney;
 				tcpdata.wholeBettingMoney += tcpdata.btMoney;
 				tcpdata.money -= tcpdata.btMoney;
@@ -409,7 +419,11 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				tcpdata.callCount=0;
 				tcpdata.userCount = num;
 				tcpdata.DataDestination = "Game";
-				tcpdata.btMoney = tcpdata.wholeBettingMoney/2; 
+				if(tcpdata.prebetMoney*2>tcpdata.money){
+					tcpdata.btMoney = (int)tcpdata.money;
+				}else {
+					tcpdata.btMoney = tcpdata.wholeBettingMoney/2; 
+				}
 				tcpdata.prebetMoney = tcpdata.btMoney;
 				tcpdata.wholeBettingMoney += tcpdata.btMoney;
 				tcpdata.money -= tcpdata.btMoney;
@@ -447,7 +461,11 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
         	  tcpdata.callCount=0;
               tcpdata.userCount = num;
               tcpdata.DataDestination = "Game";
-              tcpdata.btMoney = tcpdata.wholeBettingMoney/4; 
+              if(tcpdata.prebetMoney*2>tcpdata.money){
+					tcpdata.btMoney = (int)tcpdata.money;
+			  }else {
+				tcpdata.btMoney = tcpdata.wholeBettingMoney/4; 					
+			  }
               tcpdata.prebetMoney = tcpdata.btMoney;
               tcpdata.wholeBettingMoney += tcpdata.btMoney;
               tcpdata.money -= tcpdata.btMoney;
@@ -464,7 +482,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				tcpdata.callCount = 0 ;
+				tcpdata.callCount = 0;
 				tcpdata.userCount = num;
 				tcpdata.DataDestination = "Game";
 				tcpdata.btMoney = (int)tcpdata.money;
@@ -472,7 +490,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				tcpdata.wholeBettingMoney += tcpdata.btMoney ;
 				tcpdata.money -= tcpdata.btMoney;
 				
-			      tcpdata.msg = "betting_max";
+			    tcpdata.msg = "betting_max";
 				
 				ch.send(tcpdata);
 			}
@@ -885,6 +903,8 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 						e.printStackTrace();
 					}
 				} else if(tcpdata.callCount == tcpdata.test.get(tcpdata.UserPos).keySet().size()-1&&tcpdata.playerDeck.get(0).size()==7) {
+					tcpdata.callCount=0;
+					playerturn();
 					for (Integer z : data.test.get(tcpdata.UserPos).keySet()) {
 						if(z.equals(num)) {
 							ttt.get(z).get(tcpdata.playerDeck.get(z).size()-1).setIcon(data.playerDeck.get(z).get(tcpdata.playerDeck.get(z).size()-1).img);
@@ -893,7 +913,9 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 						}
 					}
 				}else if(data.callCount == data.test.get(tcpdata.UserPos).keySet().size()-1) {
+					tcpdata.callCount=0;
 					bt.setEnabled(false);
+					playerturn();
 					for (Integer z : data.test.get(tcpdata.UserPos).keySet()) {
 						ttt.get(z).get(tcpdata.playerDeck.get(z).size()-1).setIcon(data.playerDeck.get(z).get(tcpdata.playerDeck.get(z).size()-1).img);
 					}
@@ -934,7 +956,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				
 				break;
 
-			case "betting_quater" :
+			case "betting_quarter" :
 				this.tcpdata.bettingMoney = data.bettingMoney;
 				this.bettingMoney = data.bettingMoney;
 				this.tcpdata.wholeBettingMoney = data.wholeBettingMoney;
@@ -1172,7 +1194,12 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	}
 	void playerturn() {
         if (this.num == next(tcpdata.userCount)) {
-            betting_Button_true();
+        	if((int)tcpdata.money <= 0) {
+        		betting_Button_false();
+        		bt.setEnabled(true);
+        	}else {
+        		betting_Button_true();        		        		
+        	}
         } else {
             betting_Button_false();
         }
