@@ -167,7 +167,6 @@ public class Lobby extends JPanel implements NetExecute {
 					RoomAction ra = (RoomAction)Class.forName("lobby_i."+cname).newInstance();
 					ra.room(mainJf,ch,lobby,tcpdata,addr);
 				}else {
-					ch.send(tcpdata);
 					mainJf.remove(lobby);
 					Game_panel game_panel = new Game_panel(mainJf,ch,tcpdata,addr);
 					mainJf.add(game_panel);
