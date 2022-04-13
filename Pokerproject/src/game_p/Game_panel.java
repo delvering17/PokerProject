@@ -446,7 +446,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
                 tcpdata.userCount = num;
                 tcpdata.DataDestination = "Game";
                 tcpdata.msg = "betting_die";
-
+                tcpdata.test.get(tcpdata.UserPos).replace(num, null);
                 ch.send(tcpdata);
             }
         });
@@ -904,20 +904,33 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					}
 				} else if(tcpdata.callCount == tcpdata.test.get(tcpdata.UserPos).keySet().size()-1&&tcpdata.playerDeck.get(0).size()==7) {
 					tcpdata.callCount=0;
-					playerturn();
+					if((int)tcpdata.money <= 0) {
+						playerturn();						
+					}else {
+						playerturn();
+						bt.setEnabled(false);
+					}
 					for (Integer z : data.test.get(tcpdata.UserPos).keySet()) {
-						if(z.equals(num)) {
-							ttt.get(z).get(tcpdata.playerDeck.get(z).size()-1).setIcon(data.playerDeck.get(z).get(tcpdata.playerDeck.get(z).size()-1).img);
-						}else {
-							ttt.get(z).get(tcpdata.playerDeck.get(z).size()-1).setIcon(cdback);							
+						if(tcpdata.test.get(tcpdata.UserPos).get(z) != null) {
+							if(z.equals(num)) {
+								ttt.get(z).get(tcpdata.playerDeck.get(z).size()-1).setIcon(data.playerDeck.get(z).get(tcpdata.playerDeck.get(z).size()-1).img);
+							}else {
+								ttt.get(z).get(tcpdata.playerDeck.get(z).size()-1).setIcon(cdback);							
+							}
 						}
 					}
 				}else if(data.callCount == data.test.get(tcpdata.UserPos).keySet().size()-1) {
 					tcpdata.callCount=0;
-					bt.setEnabled(false);
-					playerturn();
+					if((int)tcpdata.money <= 0) {
+						playerturn();						
+					}else {
+						playerturn();
+						bt.setEnabled(false);
+					}
 					for (Integer z : data.test.get(tcpdata.UserPos).keySet()) {
-						ttt.get(z).get(tcpdata.playerDeck.get(z).size()-1).setIcon(data.playerDeck.get(z).get(tcpdata.playerDeck.get(z).size()-1).img);
+						if(tcpdata.test.get(tcpdata.UserPos).get(z) != null) {
+							ttt.get(z).get(tcpdata.playerDeck.get(z).size()-1).setIcon(data.playerDeck.get(z).get(tcpdata.playerDeck.get(z).size()-1).img);
+						}
 					}
 					
 					p1_turn.setIcon(default_bet);
@@ -982,8 +995,8 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				
 				
 				break;
-			default :
-				
+			case "betting_die":
+				playerturn();
 				break;
 			} 
 			
@@ -1134,10 +1147,12 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	
 	void oneSplit() {
 		for (Integer i : tcpdata.test.get(tcpdata.UserPos).keySet()) {
-			Random number = new Random();
-			int b = number.nextInt(tcpdata.dealerDeck.size());
-			tcpdata.playerDeck.get(i).add(tcpdata.dealerDeck.get(b));
-			tcpdata.dealerDeck.remove(b);
+			if(tcpdata.test.get(tcpdata.UserPos).get(i) != null) {
+				Random number = new Random();
+				int b = number.nextInt(tcpdata.dealerDeck.size());
+				tcpdata.playerDeck.get(i).add(tcpdata.dealerDeck.get(b));
+				tcpdata.dealerDeck.remove(b);
+			}
 		}
 		
 		ch.send(tcpdata);
@@ -1182,13 +1197,17 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	int next(int a) {
 		int testnum = 0;
 		for (Integer integer : tcpdata.test.get(tcpdata.UserPos).keySet()) {
-			if(testnum<integer) {
-				testnum=integer;
+			if(tcpdata.test.get(tcpdata.UserPos).get(integer) != null) {
+				if(testnum<integer) {
+					testnum=integer;
+				}
 			}
 		}
 		for (Integer integer : tcpdata.test.get(tcpdata.UserPos).keySet()) {
-			if((a+1)%(testnum+1) == integer) {
-				return (a+1)%(testnum+1);
+			if(tcpdata.test.get(tcpdata.UserPos).get(integer) != null) {
+				if((a+1)%(testnum+1) == integer) {
+					return (a+1)%(testnum+1);
+				}
 			}
 		}
 		return next(a+1);
@@ -1199,7 +1218,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
         		betting_Button_false();
         		bt.setEnabled(true);
         	}else {
-        		betting_Button_true();        		        		
+        		betting_Button_true();     
         	}
         } else {
             betting_Button_false();
