@@ -753,7 +753,9 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					System.out.println("집가자 가고싶어요 보내줘요" + data.winner);
 					
 					// DB 입력 
-
+				
+					
+					
 					//
 					// 승패 입력
 					if (num == Integer.parseInt(data.winner)) {
@@ -768,65 +770,13 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					}
 					// DB와 게임 시작 시 프로필 리셋 
 					
+					// 베팅 초기화  
+				
 					
 					
 					gameRes_DBInsert(this.tcpdata); 
 					
-					for (Map.Entry<Integer, String> entry : data.test.get(data.UserPos).entrySet()) {
-						switch (entry.getKey()) {
-						
-						case 0:
-							if (Ingame_userProfile_panel_0 == null) {
-								Ingame_userProfile_panel_0 = new Ingame_userProfile_panel(0,entry.getValue());
-								add(Ingame_userProfile_panel_0);
-							} else if (Ingame_userProfile_panel_0 != null) {
-								remove(Ingame_userProfile_panel_0);
-								Ingame_userProfile_panel_0 = new Ingame_userProfile_panel(0,entry.getValue());
-								add(Ingame_userProfile_panel_0);
-							}
-							break;
-						case 1:
-							if (Ingame_userProfile_panel_1 == null) {
-								Ingame_userProfile_panel_1 = new Ingame_userProfile_panel(1,entry.getValue());
-								add(Ingame_userProfile_panel_1);
-							} else if (Ingame_userProfile_panel_1 != null) {
-								remove(Ingame_userProfile_panel_1);
-								Ingame_userProfile_panel_1 = new Ingame_userProfile_panel(1,entry.getValue());
-								add(Ingame_userProfile_panel_1);
-							}
-							break;
-						case 2:
-							if (Ingame_userProfile_panel_2 == null) {
-								Ingame_userProfile_panel_2 = new Ingame_userProfile_panel(2,entry.getValue());
-								add(Ingame_userProfile_panel_2);
-							} else if (Ingame_userProfile_panel_2 != null) {
-								remove(Ingame_userProfile_panel_2);
-								Ingame_userProfile_panel_2 = new Ingame_userProfile_panel(2,entry.getValue());
-								add(Ingame_userProfile_panel_2);
-							}
-							break;
-						case 3:
-							if (Ingame_userProfile_panel_3 == null) {
-								Ingame_userProfile_panel_3 = new Ingame_userProfile_panel(3,entry.getValue());
-								add(Ingame_userProfile_panel_3);
-							} else if (Ingame_userProfile_panel_3 != null) {
-								remove(Ingame_userProfile_panel_3);
-								Ingame_userProfile_panel_3 = new Ingame_userProfile_panel(3,entry.getValue());
-								add(Ingame_userProfile_panel_3);
-							}
-							break;
-						case 4:
-							if (Ingame_userProfile_panel_4 == null) {
-								Ingame_userProfile_panel_4 = new Ingame_userProfile_panel(4,entry.getValue());
-								add(Ingame_userProfile_panel_4);
-							} else if (Ingame_userProfile_panel_4 != null) {
-								remove(Ingame_userProfile_panel_4);
-								Ingame_userProfile_panel_4 = new Ingame_userProfile_panel(4,entry.getValue());
-								add(Ingame_userProfile_panel_4);
-							}	
-							break;
-						}
-					}
+					
 					
 					try {
 						this.tcpdata.last = false;
@@ -838,7 +788,63 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 							}
 						}
 						betting_Button_false ();
-						
+						//
+						for (Map.Entry<Integer, String> entry : data.test.get(data.UserPos).entrySet()) {
+							switch (entry.getKey()) {
+							
+							case 0:
+								if (Ingame_userProfile_panel_0 == null) {
+									Ingame_userProfile_panel_0 = new Ingame_userProfile_panel(0,entry.getValue());
+									add(Ingame_userProfile_panel_0);
+								} else if (Ingame_userProfile_panel_0 != null) {
+									remove(Ingame_userProfile_panel_0);
+									Ingame_userProfile_panel_0 = new Ingame_userProfile_panel(0,entry.getValue());
+									add(Ingame_userProfile_panel_0);
+								}
+								break;
+							case 1:
+								if (Ingame_userProfile_panel_1 == null) {
+									Ingame_userProfile_panel_1 = new Ingame_userProfile_panel(1,entry.getValue());
+									add(Ingame_userProfile_panel_1);
+								} else if (Ingame_userProfile_panel_1 != null) {
+									remove(Ingame_userProfile_panel_1);
+									Ingame_userProfile_panel_1 = new Ingame_userProfile_panel(1,entry.getValue());
+									add(Ingame_userProfile_panel_1);
+								}
+								break;
+							case 2:
+								if (Ingame_userProfile_panel_2 == null) {
+									Ingame_userProfile_panel_2 = new Ingame_userProfile_panel(2,entry.getValue());
+									add(Ingame_userProfile_panel_2);
+								} else if (Ingame_userProfile_panel_2 != null) {
+									remove(Ingame_userProfile_panel_2);
+									Ingame_userProfile_panel_2 = new Ingame_userProfile_panel(2,entry.getValue());
+									add(Ingame_userProfile_panel_2);
+								}
+								break;
+							case 3:
+								if (Ingame_userProfile_panel_3 == null) {
+									Ingame_userProfile_panel_3 = new Ingame_userProfile_panel(3,entry.getValue());
+									add(Ingame_userProfile_panel_3);
+								} else if (Ingame_userProfile_panel_3 != null) {
+									remove(Ingame_userProfile_panel_3);
+									Ingame_userProfile_panel_3 = new Ingame_userProfile_panel(3,entry.getValue());
+									add(Ingame_userProfile_panel_3);
+								}
+								break;
+							case 4:
+								if (Ingame_userProfile_panel_4 == null) {
+									Ingame_userProfile_panel_4 = new Ingame_userProfile_panel(4,entry.getValue());
+									add(Ingame_userProfile_panel_4);
+								} else if (Ingame_userProfile_panel_4 != null) {
+									remove(Ingame_userProfile_panel_4);
+									Ingame_userProfile_panel_4 = new Ingame_userProfile_panel(4,entry.getValue());
+									add(Ingame_userProfile_panel_4);
+								}	
+								break;
+							}
+						}
+						//
 						turnNickname.setText("승: "+data.winner+"번 / "
 	                            +jokbbo.jokbo(data.playerDeck.get(Integer.parseInt(data.winner))));
 						repaint();
