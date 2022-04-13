@@ -793,54 +793,43 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 							switch (entry.getKey()) {
 							
 							case 0:
-								if (Ingame_userProfile_panel_0 == null) {
-									Ingame_userProfile_panel_0 = new Ingame_userProfile_panel(0,entry.getValue());
-									add(Ingame_userProfile_panel_0);
-								} else if (Ingame_userProfile_panel_0 != null) {
+							
 									remove(Ingame_userProfile_panel_0);
+					
 									Ingame_userProfile_panel_0 = new Ingame_userProfile_panel(0,entry.getValue());
+									System.out.println(entry.getValue()+"," + Ingame_userProfile_panel_0.userMoney);
 									add(Ingame_userProfile_panel_0);
-								}
+								
 								break;
 							case 1:
-								if (Ingame_userProfile_panel_1 == null) {
-									Ingame_userProfile_panel_1 = new Ingame_userProfile_panel(1,entry.getValue());
-									add(Ingame_userProfile_panel_1);
-								} else if (Ingame_userProfile_panel_1 != null) {
+								
 									remove(Ingame_userProfile_panel_1);
 									Ingame_userProfile_panel_1 = new Ingame_userProfile_panel(1,entry.getValue());
+									System.out.println(entry.getValue()+"," + Ingame_userProfile_panel_1.userMoney);
 									add(Ingame_userProfile_panel_1);
-								}
+								
 								break;
 							case 2:
-								if (Ingame_userProfile_panel_2 == null) {
-									Ingame_userProfile_panel_2 = new Ingame_userProfile_panel(2,entry.getValue());
-									add(Ingame_userProfile_panel_2);
-								} else if (Ingame_userProfile_panel_2 != null) {
+							
 									remove(Ingame_userProfile_panel_2);
 									Ingame_userProfile_panel_2 = new Ingame_userProfile_panel(2,entry.getValue());
+									System.out.println(entry.getValue()+"," + Ingame_userProfile_panel_2.userMoney);
 									add(Ingame_userProfile_panel_2);
-								}
+								
 								break;
 							case 3:
-								if (Ingame_userProfile_panel_3 == null) {
-									Ingame_userProfile_panel_3 = new Ingame_userProfile_panel(3,entry.getValue());
-									add(Ingame_userProfile_panel_3);
-								} else if (Ingame_userProfile_panel_3 != null) {
+							
 									remove(Ingame_userProfile_panel_3);
 									Ingame_userProfile_panel_3 = new Ingame_userProfile_panel(3,entry.getValue());
 									add(Ingame_userProfile_panel_3);
-								}
+								
 								break;
 							case 4:
-								if (Ingame_userProfile_panel_4 == null) {
-									Ingame_userProfile_panel_4 = new Ingame_userProfile_panel(4,entry.getValue());
-									add(Ingame_userProfile_panel_4);
-								} else if (Ingame_userProfile_panel_4 != null) {
+							
 									remove(Ingame_userProfile_panel_4);
 									Ingame_userProfile_panel_4 = new Ingame_userProfile_panel(4,entry.getValue());
 									add(Ingame_userProfile_panel_4);
-								}	
+									
 								break;
 							}
 						}
