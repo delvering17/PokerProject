@@ -1,5 +1,7 @@
 package DB_p;
 
+import net_p.TCPData;
+
 public class SignDB {
 
 	public SignDB() {
@@ -89,5 +91,10 @@ public class SignDB {
 
 		return new ProfileDAO().profileReadCheck(id);
 		
+	}
+	
+	public void resInsert(TCPData tcpdata) {
+		
+		new ProfileDAO().profileModify(tcpdata);
 	}
 }

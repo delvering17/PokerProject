@@ -7,6 +7,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import net_p.TCPData;
+
+
+
 public class ProfileDAO {
 
 	Connection con = null;
@@ -179,6 +183,25 @@ public class ProfileDAO {
 		return res;
 	}
 	
+	
+	public int profileModify(TCPData tcpdata) {
+		int res = 0 ;
+	
+		sql = "update profile set money = "+ tcpdata.money +
+		" where nickname = '" +tcpdata.name +"' ;";
+		
+		try {
+			res = stmt.executeUpdate(sql);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		
+		return res;
+		
+	}
 	void close() { 
 		
 		if (rs != null) try { rs.close(); } catch (SQLException e) {}
