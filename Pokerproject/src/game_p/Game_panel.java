@@ -368,8 +368,8 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					tcpdata.callCount=0;
 					tcpdata.userCount = num;
 					tcpdata.DataDestination = "Game";
-					tcpdata.prebetMoney = tcpdata.btMoney;
-					tcpdata.btMoney = panMoney;
+					tcpdata.btMoney = panMoney;				
+					tcpdata.prebetMoney = tcpdata.btMoney; 
 					tcpdata.wholeBettingMoney += tcpdata.btMoney;
 					tcpdata.money -= tcpdata.btMoney;
 					tcpdata.msg = "betting_bbing";
