@@ -763,10 +763,12 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 						this.tcpdata.win ++;
 						this.tcpdata.totalGame ++;
 						this.tcpdata.money += data.wholeBettingMoney;
+						
 					} else {
 						System.out.println("패자");
 						this.tcpdata.lose ++;
 						this.tcpdata.totalGame ++;
+					
 					}
 					// DB와 게임 시작 시 프로필 리셋 
 					
@@ -789,6 +791,14 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 						}
 						betting_Button_false ();
 						//
+						
+						//
+						turnNickname.setText("승: "+data.winner+"번 / "
+	                            +jokbbo.jokbo(data.playerDeck.get(Integer.parseInt(data.winner))));
+						repaint();
+						
+						Thread.sleep(3000);
+						
 						for (Map.Entry<Integer, String> entry : data.test.get(data.UserPos).entrySet()) {
 							switch (entry.getKey()) {
 							
@@ -833,13 +843,6 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 								break;
 							}
 						}
-						//
-						turnNickname.setText("승: "+data.winner+"번 / "
-	                            +jokbbo.jokbo(data.playerDeck.get(Integer.parseInt(data.winner))));
-						repaint();
-						
-						Thread.sleep(3000);
-						
 						turnNickname.setText("차례 : ");
 						
 						p1_turn.setIcon(default_bet);
