@@ -61,7 +61,9 @@ public class TCPData implements Serializable{
 	
 	public HashMap<Integer, Boolean> roomclose;
 	public HashMap<Integer, String> result;
+	public ArrayList<Integer> userNumber;
 	public TCPData(ProfileDTO datathis) {
+		userNumber = new ArrayList<Integer>();
 		result = new HashMap<Integer, String>();
 		roomclose = new HashMap<Integer, Boolean>();
 		for (int i = 0; i < 9; i++) {

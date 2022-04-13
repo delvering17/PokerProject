@@ -98,11 +98,14 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	ArrayList<String> ipjang = new ArrayList<String>();
 	
 	public ArrayList<Integer> bettingMoney = new ArrayList<Integer>();
-	public int panMoney = 10;
-	public int wholeBettingMoney = 0;
+	public int panMoney;
+	public int wholeBettingMoney;
 //	public String winner;
 	ImageIcon default_bet = new ImageIcon("img/gamepanel/default.png");
+	ImageIcon cdback  = new ImageIcon("img/card/CardBackimg.png");
 	public Game_panel(Login_frame login_frame,Receiver ch,TCPData tcpdata,Integer addr) {
+		wholeBettingMoney=0;
+		panMoney = 10;
 		tcpdata.panelChk = "Game";
 		this.ch = ch;
 		this.ch.game_panel = this;
@@ -123,6 +126,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			}
 			num++;
 		}
+		tcpdata.userNumber.add(num);
 		tcpdata.msg = addr+"번방,"+num+"번 플레이어 "+"[입장]";
 		
 		tcpdata.test.get(tcpdata.UserPos).put(num, tcpdata.name);
@@ -596,6 +600,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			this.tcpdata.userCount = data.userCount;
 			this.tcpdata.callCount = data.callCount;
 			this.tcpdata.last = data.last;
+			this.tcpdata.userNumber = data.userNumber;
 		}
 
 		if (data.msg.contains("[입장]") ) {
@@ -692,9 +697,13 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			case "카드 나와라":
 				//확인필요
 				for (Integer z : data.test.get(tcpdata.UserPos).keySet()) {
-					for (int i = 2 ; i >= 0 ; i--) {
-						ttt.get(z).get(i).setIcon(data.playerDeck.get(z).get(i).img);
-					}					
+					for (Integer i = 2; i >= 0; i--) {
+						if((!z.equals(num))&& i<2) {
+							ttt.get(z).get(i).setIcon(cdback);														
+						}else {
+							ttt.get(z).get(i).setIcon(data.playerDeck.get(z).get(i).img);							
+						}
+					}
 				}
 				bt.setEnabled(false);
 
@@ -727,7 +736,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					try {
 						this.tcpdata.last = false;
 						this.tcpdata.callCount = 0;
-						for (Integer z : data.test.get(tcpdata.UserPos).keySet()) {
+						for (Integer z : tcpdata.test.get(tcpdata.UserPos).keySet()) {
 							for (int i = 0; i < 7; i++) {
 								
 								ttt.get(z).get(i).setIcon(null);
@@ -735,6 +744,17 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 						}
 						repaint();
 						Thread.sleep(3000);
+						p1_turn.setIcon(default_bet);
+						p2_turn.setIcon(default_bet);
+						p3_turn.setIcon(default_bet);
+						p4_turn.setIcon(default_bet);
+						p5_turn.setIcon(default_bet);
+						p1_bet_jokbo.setText("베팅 : "+ 0);
+						p2_bet_jokbo.setText("베팅 : "+ 0);
+						p3_bet_jokbo.setText("베팅 : "+ 0);
+						p4_bet_jokbo.setText("베팅 : "+ 0);
+						p5_bet_jokbo.setText("베팅 : "+ 0);
+						repaint();
 						if(num==0) {
 							JButton GameStart = new JButton("게임 시작");
 							GameStart.setBounds(500, 280, 200, 80);
@@ -762,6 +782,14 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+					}
+				}else if(tcpdata.callCount == tcpdata.test.get(tcpdata.UserPos).keySet().size()-1&&tcpdata.playerDeck.get(0).size()==7) {
+					for (Integer z : data.test.get(tcpdata.UserPos).keySet()) {
+						if(z.equals(num)) {
+							ttt.get(z).get(tcpdata.playerDeck.get(z).size()-1).setIcon(data.playerDeck.get(z).get(tcpdata.playerDeck.get(z).size()-1).img);
+						}else {
+							ttt.get(z).get(tcpdata.playerDeck.get(z).size()-1).setIcon(cdback);							
+						}
 					}
 				}else if(data.callCount == data.test.get(tcpdata.UserPos).keySet().size()-1) {
 					bt.setEnabled(false);
