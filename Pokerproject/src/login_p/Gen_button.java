@@ -25,6 +25,7 @@ import DB_p.SignDB;
 import lobby_p.Lobby;
 import net_p.Receiver;
 import net_p.TCPData;
+import net_p.TestData;
 
 
 
@@ -96,14 +97,20 @@ class LogIn_in implements Inter_button_login {
 						Receiver ch = new Receiver(login_frame, client);
 						TCPData tcpdata = new TCPData(datathis);
 						ch.start();
-						tcpdata.DataDestination = "first";
+						
 						login_frame.remove(login_frame.login_panel);
 						//클라이언트를 서버에 보내기 시작
+						
+						
+						
 						Lobby lobby_panel = new Lobby(login_frame,tcpdata,ch);
 						login_frame.add(lobby_panel) ;
 						login_frame.userDTO = datathis;
 						login_frame.lobby_panel = lobby_panel;
 						login_frame.repaint();
+						tcpdata.DataDestination = "testMove";
+						tcpdata.oData = new TestData(-1,-1,datathis.nickname,null);
+						ch.send(tcpdata);
 					}catch (Exception e) {
 						e.printStackTrace();
 					}

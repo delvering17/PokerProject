@@ -131,7 +131,7 @@ public class Lobby extends JPanel implements NetExecute {
 		
 		userProfile.setBounds(820,530,350, 220);
 		add(userProfile);
-		ch.send(tcpdata);
+//		ch.send(tcpdata);
 		roomList.getVerticalScrollBar().setValue(1);
 		repaint();
 	}
@@ -227,6 +227,10 @@ public class Lobby extends JPanel implements NetExecute {
 				jta.append(data.name + " : "+ data.msg+"\n");
 				jta.setCaretPosition(jta.getDocument().getLength());
 			}
+			break;
+		case "testMove":
+			//인원 변경시에 대한 화면 변경 처리
+			System.out.println("로비 testMove:"+data.oData);
 			break;
 		}
 		repaint();

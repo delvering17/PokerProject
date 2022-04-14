@@ -10,13 +10,21 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import net_p.TCPData;
+import net_p.TestData;
 class MulServer {
 	HashSet<String> userName;
 	HashMap<String,ObjectOutputStream> userList;
 	HashMap<Integer,Integer[]> playData;
 	public int[] easyStudy;
-	public HashMap<Integer, HashMap<Integer, String>> test;
+	public HashMap<Integer, HashMap<String, Integer>> test;
 	public HashMap<Integer, Boolean> roomclose;
+	
+	void testMove(TestData td) {
+		test.get(td.pre).remove( td.nickName);
+		test.get(td.pos).put( td.nickName, td.playerNum);
+	}
+	
+	
 	public MulServer() {
 		try {
 			roomclose = new HashMap<Integer, Boolean>();
@@ -34,9 +42,9 @@ class MulServer {
 				}
 			}
 			
-			test = new HashMap<Integer, HashMap<Integer, String>>();
-			for (int i = 0; i < 9; i++) {
-				test.put(i,new HashMap<Integer, String>());
+			test = new HashMap<Integer, HashMap<String, Integer >>();
+			for (int i = -1; i < 9; i++) {
+				test.put(i,new HashMap<String, Integer >());
 			}
 			
 			
@@ -79,11 +87,19 @@ class MulServer {
 					data.userName = userName;
 					System.out.println(data.name +" : "+ data.msg);
 					if(data.DataDestination.equals("first")) {
-						data.playData = playData;
-						data.easyStudy = easyStudy;
-						data.test = test;
-						sendTo(data);
-					}else {
+//						data.playData = playData;
+//						data.easyStudy = easyStudy;
+//						data.test = test;
+//						
+//						sendTo(data);
+					}else if(data.DataDestination.equals("testMove")) {
+						TestData td = (TestData)data.oData;
+						testMove(td);
+						data.oData = test; 
+						sendToAll(data);
+					}
+					
+					else {
 						playData = data.playData;
 						easyStudy = data.easyStudy;
 						test = data.test;

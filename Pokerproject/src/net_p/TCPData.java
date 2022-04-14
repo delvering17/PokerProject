@@ -30,6 +30,8 @@ public class TCPData implements Serializable{
 	public String DataDestination;	//Chatting , GameData 등등		--> 익스큐트에서 걸러짐 ,서버에서 확인
 	public String panelChk;
 	public String[] res;
+	
+	public Object oData;
 	//
 	public ArrayList<Integer> bettingMoney;
 	public int btMoney;
@@ -52,7 +54,7 @@ public class TCPData implements Serializable{
 	
 	public 	ArrayList<Ingame_userProfile_panel> userprofile; //  인게임 프로필 
 	public ArrayList<String> ipjang;
-	public HashMap<Integer, HashMap<Integer, String>> test;
+	public HashMap<Integer, HashMap<String, Integer>> test;
 	public Integer prebetMoney;
 	
 	public Integer callCount;
@@ -72,9 +74,9 @@ public class TCPData implements Serializable{
 		last = false;
 		prebetMoney = 0;
 		callCount = 0;
-		test = new HashMap<Integer, HashMap<Integer, String>>();
+		test = new HashMap<Integer, HashMap< String, Integer>>();
 		for (int i = 0; i < 9; i++) {
-			test.put(i,new HashMap<Integer, String>());
+			test.put(i,new HashMap<String, Integer>());
 		}
 		userName = new HashSet<String>();
 		dealerDeck = new ArrayList<PokerCard>();
