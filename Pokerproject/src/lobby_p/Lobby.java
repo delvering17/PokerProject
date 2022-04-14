@@ -46,11 +46,10 @@ public class Lobby extends JPanel implements NetExecute {
 		this.ch = ch;
 		this.tcpdata = tcpdata;
 		this.mainJf = mainJf;
-		this.ch.lobby_panel=this;
-		this.ch.game_panel = null;
+		ch.lobby_panel=this;
+		ch.game_panel = null;
 		
 		this.tcpdata.UserPos = -1;
-		tcpdata.msg = "[입장]";
 		
 		setBounds(0, 0, 1200, 800);
 		setBackground(Color.black);
@@ -131,8 +130,9 @@ public class Lobby extends JPanel implements NetExecute {
 		
 		userProfile.setBounds(820,530,350, 220);
 		add(userProfile);
-		ch.send(tcpdata);
+		tcpdata.msg = "[입장]";
 		roomList.getVerticalScrollBar().setValue(1);
+		ch.send(tcpdata);
 		repaint();
 	}
 	
@@ -196,6 +196,10 @@ public class Lobby extends JPanel implements NetExecute {
 		this.tcpdata.easyStudy = data.easyStudy;
 		this.tcpdata.userName = data.userName;
 		this.tcpdata.test = data.test;
+		this.tcpdata.userprofile = data.userprofile;
+		for (int i : tcpdata.userprofile.get(0).keySet()) {
+			System.out.println(i+" ---------------");
+		} 
 		userArea.setText("");
 		
 		for (String un : this.tcpdata.userName) {

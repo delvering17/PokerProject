@@ -27,13 +27,11 @@ public class Login_frame extends JFrame{
 	public ArrayList <Game_panel> game_panelarr= new ArrayList<Game_panel>();
 	Login_frame login_frame;
 	public JTextArea jta;
-	
 	public Login_frame() {
 		
 		login_frame=this;
 		setBounds(50,50,1200,800);
 		setLayout(null);
-		
 		login_panel = new Login_panel(this);
 		add(login_panel);
 		setResizable(false);

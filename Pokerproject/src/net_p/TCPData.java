@@ -38,7 +38,7 @@ public class TCPData implements Serializable{
 	public int wholeBettingMoney;
 	public String winner;
 	//
-	
+	public Ingame_userProfile_panel ppp;
 	//전체 기본
 	public int[] easyStudy; 
 	public HashMap<Integer,Integer[]> playData;
@@ -50,7 +50,7 @@ public class TCPData implements Serializable{
 	public ArrayList<PokerCard> dealerDeck;
 	public HashMap<Integer, ArrayList<PokerCard>> playerDeck;
 	
-	public 	ArrayList<Ingame_userProfile_panel> userprofile; //  인게임 프로필 
+	public HashMap<Integer,HashMap<Integer, Ingame_userProfile_panel>> userprofile; //  인게임 프로필 
 	public ArrayList<String> ipjang;
 	public HashMap<Integer, HashMap<Integer, String>> test;
 	public Integer prebetMoney;
@@ -62,6 +62,7 @@ public class TCPData implements Serializable{
 	public HashMap<Integer, Boolean> roomclose;
 	public HashMap<Integer, String> result;
 	public ArrayList<Integer> userNumber;
+	
 	public TCPData(ProfileDTO datathis) {
 		userNumber = new ArrayList<Integer>();
 		result = new HashMap<Integer, String>();
@@ -79,7 +80,10 @@ public class TCPData implements Serializable{
 		userName = new HashSet<String>();
 		dealerDeck = new ArrayList<PokerCard>();
 		playerDeck = new HashMap<Integer, ArrayList<PokerCard>>();
-		userprofile = new ArrayList<Ingame_userProfile_panel>();
+		userprofile = new HashMap<Integer,HashMap<Integer, Ingame_userProfile_panel>>();
+		for (int i = 0; i < 9; i++) {
+			userprofile.put(i, new HashMap<Integer, Ingame_userProfile_panel>());
+		}
 		ipjang = new ArrayList<String>();
 		bettingMoney = new ArrayList<Integer>();
 		

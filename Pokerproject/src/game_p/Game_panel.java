@@ -10,10 +10,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.regex.Pattern;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -93,7 +95,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	ArrayList<ArrayList<PlayerCard_Label>> ttt;
 	Integer num;
 	Receiver ch;
-	
+	ArrayList<Ingame_userProfile_panel> profile_test;
 	Ingame_userProfile_panel Ingame_userProfile_panel_0;
 	Ingame_userProfile_panel Ingame_userProfile_panel_1;
 	Ingame_userProfile_panel Ingame_userProfile_panel_2;
@@ -109,15 +111,18 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	ImageIcon default_bet = new ImageIcon("img/gamepanel/default.png");
 	ImageIcon cdback  = new ImageIcon("img/card/CardBackimg.png");
 	public Game_panel(Login_frame login_frame,Receiver ch,TCPData tcpdata,Integer addr) {
+		profile_test = new ArrayList<Ingame_userProfile_panel>();
 		wholeBettingMoney=0;
 		panMoney = 10;
 		tcpdata.panelChk = "Game";
 		this.ch = ch;
-		this.ch.game_panel = this;
-		this.ch.lobby_panel = null;
 		this.tcpdata = tcpdata;
 		this.login_frame = login_frame;
 		game_panel =this;
+		
+		this.ch.lobby_panel=null;
+		this.ch.game_panel = this;
+		
 		tcpdata.easyStudy[addr]++;
 		tcpdata.UserPos = addr;
 		tcpdata.DataDestination = "Chatting";
@@ -132,7 +137,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			num++;
 		}
 		tcpdata.userNumber.add(num);
-		tcpdata.msg = addr+"번방,"+num+"번 플레이어 "+"[입장]";
+		tcpdata.msg = "[입장]";
 		
 		tcpdata.test.get(tcpdata.UserPos).put(num, tcpdata.name);
 		
@@ -171,6 +176,8 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		help.setBackground(Color.white);
 		help.addActionListener(this);
 		add(help);
+		Ingame_userProfile_panel pppx =new Ingame_userProfile_panel(num,tcpdata.name);
+		tcpdata.userprofile.get(tcpdata.UserPos).put(num,pppx);
 		
 		exit = new JButton("exit");
 		exit.setBounds(1110,0,70,30);
@@ -181,10 +188,28 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == exit) {
+					tcpdata.userprofile.get(tcpdata.UserPos).remove(num);
+					System.out.println(num);
+					
+					tcpdata.test.get(tcpdata.UserPos).remove(num); 
 					tcpdata.easyStudy[tcpdata.UserPos]--;
 					tcpdata.playData.get(tcpdata.UserPos)[num]=-1;
-					tcpdata.test.get(tcpdata.UserPos).remove(num); 
+					tcpdata.ppp = pppx;
+					
+					
+					tcpdata.playerDeck = new HashMap<Integer, ArrayList<PokerCard>>();;// 혹시몰라 밖이야
+					tcpdata.dealerDeck = new ArrayList<PokerCard>();
+					tcpdata.prebetMoney = 0;
+					tcpdata.userCount = 0;
+					tcpdata.callCount = 0;
+					tcpdata.last = false;
+					tcpdata.userNumber = new ArrayList<Integer>();
+					
+
+					ch.game_panel = null;
+					Lobby aa = new Lobby(login_frame,tcpdata,ch);
 					login_frame.add(new Lobby(login_frame,tcpdata,ch));
+					ch.lobby_panel=aa;
 					login_frame.remove(game_panel);
 					login_frame.repaint();
 				}
@@ -442,11 +467,11 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
             public void actionPerformed(ActionEvent e) {
               
                 
-                
+                tcpdata.callCount=0;
                 tcpdata.userCount = num;
                 tcpdata.DataDestination = "Game";
                 tcpdata.msg = "betting_die";
-                tcpdata.test.get(tcpdata.UserPos).replace(num, null);
+                tcpdata.test.get(tcpdata.UserPos).replace(num, "ㄱ"+tcpdata.name);
                 ch.send(tcpdata);
             }
         });
@@ -587,6 +612,43 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		ttt.add(player3cardShow);
 		ttt.add(player4cardShow);
 		ttt.add(player5cardShow);
+//		
+//		for (Map.Entry<Integer, String> entry : tcpdata.test.get(tcpdata.UserPos).entrySet()) {
+//			switch (entry.getKey()) {
+//			
+//			case 0:
+////				if (Ingame_userProfile_panel_0 == null) {
+//					Ingame_userProfile_panel_0 = new Ingame_userProfile_panel(0,entry.getValue());
+//					tcpdata.userprofile.get(tcpdata.UserPos).put(num,Ingame_userProfile_panel_0);
+////				}
+//				break;
+//			case 1:
+////				if (Ingame_userProfile_panel_1 == null) {
+//					Ingame_userProfile_panel_1 = new Ingame_userProfile_panel(1,entry.getValue());
+//					tcpdata.userprofile.get(tcpdata.UserPos).put(num,Ingame_userProfile_panel_1);
+////				}
+//				break;
+//			case 2:
+////				if (Ingame_userProfile_panel_2 == null) {
+//					Ingame_userProfile_panel_2 = new Ingame_userProfile_panel(2,entry.getValue());
+//					tcpdata.userprofile.get(tcpdata.UserPos).put(num,Ingame_userProfile_panel_2);
+////				}
+//				break;
+//			case 3:
+////				if (Ingame_userProfile_panel_3 == null) {
+//					Ingame_userProfile_panel_3 = new Ingame_userProfile_panel(3,entry.getValue());
+//					tcpdata.userprofile.get(tcpdata.UserPos).put(num,Ingame_userProfile_panel_3);
+////				}
+//				break;
+//			case 4:
+////				if (Ingame_userProfile_panel_4 == null) {
+//					Ingame_userProfile_panel_4 = new Ingame_userProfile_panel(4,entry.getValue());
+//					tcpdata.userprofile.get(tcpdata.UserPos).put(num,Ingame_userProfile_panel_4);
+////				}	
+//				break;
+//			}
+//		}
+		
 		ch.send(tcpdata);
 		
    }
@@ -618,70 +680,89 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	@Override
 	public void execute(TCPData data) {
 		this.tcpdata.playData = data.playData;
-		this.tcpdata.playerDeck = data.playerDeck;
 		this.tcpdata.easyStudy = data.easyStudy;
 		this.tcpdata.userName = data.userName;
 		this.tcpdata.test = data.test;
+		this.tcpdata.userprofile = data.userprofile;
 		if(data.UserPos==this.tcpdata.UserPos) {
-			this.tcpdata.dealerDeck = data.dealerDeck;
+			this.tcpdata.playerDeck = data.playerDeck;// 혹시몰라 밖이야
 			cht.append(data.name+" : "+data.msg+"\n");
+			this.tcpdata.dealerDeck = data.dealerDeck;
 			this.tcpdata.prebetMoney = data.prebetMoney;
 			this.tcpdata.userCount = data.userCount;
 			this.tcpdata.callCount = data.callCount;
 			this.tcpdata.last = data.last;
 			this.tcpdata.userNumber = data.userNumber;
 		}
-
-		if (data.msg.contains("[입장]") ) {
-			System.out.println("프로필 생성");
+		//remove(data.ppp);
+//		for (Integer i : data.userprofile.get(data.UserPos).keySet()) {
+//			System.out.println(i);
+//			add(data.userprofile.get(data.UserPos).remove(i));
+//		}
+		System.out.println("afswefwe");
+		
+		for (int i : data.userprofile.get(data.UserPos).keySet()) {
+			System.out.println(i);
+			add(data.userprofile.get(data.UserPos).get(i));
+		}
+		System.out.println("sefwesfwewe");
 			
-//			for () {
+			
+			
+			
+//			for (Integer integer : data.test.get(data.UserPos).keySet()) {
 //				
-//				new Ingame_userProfile_panel(); // playNum, nickname
-//				
+//				profile_test.add(new Ingame_userProfile_panel(integer,data.test.get(data.UserPos).get(integer)));
 //			}
-			for (Map.Entry<Integer, String> entry : data.test.get(data.UserPos).entrySet()) {
-				switch (entry.getKey()) {
-				
-				case 0:
-					if (Ingame_userProfile_panel_0 == null) {
-						Ingame_userProfile_panel_0 = new Ingame_userProfile_panel(0,entry.getValue());
-						add(Ingame_userProfile_panel_0);
-					}
-					break;
-				case 1:
-					if (Ingame_userProfile_panel_1 == null) {
-						Ingame_userProfile_panel_1 = new Ingame_userProfile_panel(1,entry.getValue());
-						add(Ingame_userProfile_panel_1);
-					}
-					break;
-				case 2:
-					if (Ingame_userProfile_panel_2 == null) {
-						Ingame_userProfile_panel_2 = new Ingame_userProfile_panel(2,entry.getValue());
-						add(Ingame_userProfile_panel_2);
-					}
-					break;
-				case 3:
-					if (Ingame_userProfile_panel_3 == null) {
-						Ingame_userProfile_panel_3 = new Ingame_userProfile_panel(3,entry.getValue());
-						add(Ingame_userProfile_panel_3);
-					}
-					break;
-				case 4:
-					if (Ingame_userProfile_panel_4 == null) {
-						Ingame_userProfile_panel_4 = new Ingame_userProfile_panel(4,entry.getValue());
-						add(Ingame_userProfile_panel_4);
-					}	
-					break;
-				}
-			}
-
+			
+//			for (Map.Entry<Integer, String> entry : data.test.get(data.UserPos).entrySet()) {
+//				switch (entry.getKey()) {
+//				
+//				case 0:
+////					if (Ingame_userProfile_panel_0 == null) {
+//						Ingame_userProfile_panel_0 = new Ingame_userProfile_panel(0,entry.getValue());
+//						profile_test.add(Ingame_userProfile_panel_0);
+//						add(Ingame_userProfile_panel_0);
+////					}
+//					break;
+//				case 1:
+////					if (Ingame_userProfile_panel_1 == null) {
+//						Ingame_userProfile_panel_1 = new Ingame_userProfile_panel(1,entry.getValue());
+//						profile_test.add(Ingame_userProfile_panel_1);
+//						add(Ingame_userProfile_panel_1);
+////					}
+//					break;
+//				case 2:
+////					if (Ingame_userProfile_panel_2 == null) {
+//						Ingame_userProfile_panel_2 = new Ingame_userProfile_panel(2,entry.getValue());
+//						profile_test.add(Ingame_userProfile_panel_2);
+//						add(Ingame_userProfile_panel_2);
+////					}
+//					break;
+//				case 3:
+////					if (Ingame_userProfile_panel_3 == null) {
+//						Ingame_userProfile_panel_3 = new Ingame_userProfile_panel(3,entry.getValue());
+//						profile_test.add(Ingame_userProfile_panel_3);
+//						add(Ingame_userProfile_panel_3);
+////					}
+//					break;
+//				case 4:
+////					if (Ingame_userProfile_panel_4 == null) {
+//						Ingame_userProfile_panel_4 = new Ingame_userProfile_panel(4,entry.getValue());
+//						profile_test.add(Ingame_userProfile_panel_4);
+//						add(Ingame_userProfile_panel_4);
+////					}	
+//					break;
+//				}
+//			}
+			
+			
 //			if (Ingame_userProfile_panel_0 == null) {
 //				Ingame_userProfile_panel_0 = new Ingame_userProfile_panel(0,);
 //			}
 			
 	
-		}
+		
 		//
 		switch (data.DataDestination) {
 	
@@ -808,13 +889,22 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 							}
 						}
 						betting_Button_false ();
-						//
 						
-						//
 						turnNickname.setText("승: "+data.winner+"번 / "
 	                            +jokbbo.jokbo(data.playerDeck.get(Integer.parseInt(data.winner))));
 						repaint();
+						//
+						for (Integer i : data.test.get(data.UserPos).keySet()) {
+							System.out.println(data.test.get(data.UserPos).get(i));
+							System.out.println();
+							if(Pattern.matches("ㄱ.*", data.test.get(data.UserPos).get(i))) {
+								System.out.println(i);
+								String[] xxx = data.test.get(data.UserPos).get(i).split("ㄱ");
+								data.test.get(data.UserPos).replace(i, xxx[1]);
+							}
+						}
 						
+						//ch.send(tcpdata);
 						Thread.sleep(3000);
 						
 						for (Map.Entry<Integer, String> entry : data.test.get(data.UserPos).entrySet()) {
@@ -898,12 +988,14 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 							});
 							
 						}
+						
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				} else if(tcpdata.callCount == tcpdata.test.get(tcpdata.UserPos).keySet().size()-1&&tcpdata.playerDeck.get(0).size()==7) {
 					tcpdata.callCount=0;
+					tcpdata.last = true;
 					if((int)tcpdata.money <= 0) {
 						playerturn();						
 					}else {
@@ -1144,10 +1236,18 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		}
 	
 	}
-	
+	int person() {
+		int a = 0;
+		for (Integer integer : tcpdata.test.get(tcpdata.UserPos).keySet()) {
+			if(!Pattern.matches("ㄱ.*",tcpdata.test.get(tcpdata.UserPos).get(integer))) {
+				a++;
+			}
+		}
+		return a-1;
+	}
 	void oneSplit() {
 		for (Integer i : tcpdata.test.get(tcpdata.UserPos).keySet()) {
-			if(tcpdata.test.get(tcpdata.UserPos).get(i) != null) {
+			if(!Pattern.matches("ㄱ.*",tcpdata.test.get(tcpdata.UserPos).get(i))) {
 				Random number = new Random();
 				int b = number.nextInt(tcpdata.dealerDeck.size());
 				tcpdata.playerDeck.get(i).add(tcpdata.dealerDeck.get(b));
@@ -1190,21 +1290,19 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		// 카드  7장 나눠주기
 		split();
 		// 0번째 턴
-		
-		
 	}
 	
 	int next(int a) {
 		int testnum = 0;
 		for (Integer integer : tcpdata.test.get(tcpdata.UserPos).keySet()) {
-			if(tcpdata.test.get(tcpdata.UserPos).get(integer) != null) {
+			if(!Pattern.matches("ㄱ.*",tcpdata.test.get(tcpdata.UserPos).get(integer))) {
 				if(testnum<integer) {
 					testnum=integer;
 				}
 			}
 		}
 		for (Integer integer : tcpdata.test.get(tcpdata.UserPos).keySet()) {
-			if(tcpdata.test.get(tcpdata.UserPos).get(integer) != null) {
+			if(!Pattern.matches("ㄱ.*",tcpdata.test.get(tcpdata.UserPos).get(integer))) {
 				if((a+1)%(testnum+1) == integer) {
 					return (a+1)%(testnum+1);
 				}
@@ -1255,7 +1353,6 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
     void betting_profileReset (TCPData data, int num) {
     	
 		
-			System.out.println("이사람");
 			switch (num) {
 			
 			case 0: // 실험  지우지 않고  settext만 해도 바뀌는지 

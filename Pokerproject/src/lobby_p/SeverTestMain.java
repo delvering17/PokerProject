@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import game_p.Ingame_userProfile_panel;
 import net_p.TCPData;
 class MulServer {
 	HashSet<String> userName;
@@ -17,8 +18,13 @@ class MulServer {
 	public int[] easyStudy;
 	public HashMap<Integer, HashMap<Integer, String>> test;
 	public HashMap<Integer, Boolean> roomclose;
+	public HashMap<Integer,HashMap<Integer, Ingame_userProfile_panel>> userprofile; //  인게임 프로필 
 	public MulServer() {
 		try {
+			userprofile = new HashMap<Integer,HashMap<Integer, Ingame_userProfile_panel>>();
+			for (int i = 0; i < 9; i++) {
+				userprofile.put(i, new HashMap<Integer, Ingame_userProfile_panel>());
+			}
 			roomclose = new HashMap<Integer, Boolean>();
 			for (int i = 0; i < 9; i++) {
 				roomclose.put(i, false);
@@ -46,6 +52,7 @@ class MulServer {
 			Collections.synchronizedMap(playData);
 			Collections.synchronizedSet(userName);
 			Collections.synchronizedMap(test);
+			Collections.synchronizedMap(userprofile);
 			while(true) {
 				Socket client = server.accept();
 				new Reciver(client).start();
@@ -82,11 +89,13 @@ class MulServer {
 						data.playData = playData;
 						data.easyStudy = easyStudy;
 						data.test = test;
+						data.userprofile = userprofile;
 						sendTo(data);
 					}else {
 						playData = data.playData;
 						easyStudy = data.easyStudy;
 						test = data.test;
+						userprofile = data.userprofile;
 						sendToAll(data);
 					}
 				}
