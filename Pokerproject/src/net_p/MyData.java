@@ -22,4 +22,4 @@ public class MyData  implements Serializable{
 		this.lose = profiledto.lose;
 		this.money = (int)profiledto.money;
 	}
-}
+} 
