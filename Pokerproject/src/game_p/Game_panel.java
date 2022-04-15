@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
@@ -28,6 +29,7 @@ import javax.swing.JTextField;
 import DB_p.SignDB;
 import lobby_p.Lobby;
 import login_p.Login_frame;
+import net_p.GameData;
 import net_p.MsgData;
 import net_p.MyData;
 import net_p.NetExecute;
@@ -68,7 +70,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	
 	JTextField chf;
 	JTextArea cht;
-	TCPData tcpdata;
+	//TCPData tcpData;
 
 	JLabel p1_turn;
 	JLabel p1_bet_jokbo;
@@ -83,6 +85,8 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	
 	JLabel turnNickname;
 	
+	HashMap<String, Integer> game_users, real_users ;
+	
 	ArrayList<Ingame_userProfile_panel> userprofile = new ArrayList<Ingame_userProfile_panel>();
 	Login_frame login_frame;
 	Game_panel game_panel;
@@ -94,7 +98,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	ArrayList<PlayerCard_Label> player4cardShow;
 	ArrayList<PlayerCard_Label> player5cardShow;
 	ArrayList<ArrayList<PlayerCard_Label>> ttt;
-	Integer num;
+	
 	Receiver ch;
 	
 	Ingame_userProfile_panel Ingame_userProfile_panel_0;
@@ -106,63 +110,51 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	ArrayList<String> ipjang = new ArrayList<String>();
 	
 	public ArrayList<Integer> bettingMoney = new ArrayList<Integer>();
-	public int panMoney;
-	public int wholeBettingMoney;
+//	public int panMoney;
+//	public int wholeBettingMoney;
 //	public String winner;
 	ImageIcon default_bet = new ImageIcon("img/gamepanel/default.png");
 	ImageIcon cdback  = new ImageIcon("img/card/CardBackimg.png");
-	public Game_panel(Login_frame login_frame,Receiver ch,TCPData tcpdata,MyData myData,Integer addr) {
-		wholeBettingMoney=0;
-		panMoney = 10;
-		tcpdata.panelChk = "Game";
+	GameData me;
+	TCPData tcpData = new TCPData();
+	
+	MyData myData;
+	public Game_panel(Login_frame login_frame,Receiver ch,MyData myData,Integer addr) {
+		me = new GameData();
+		this.myData = myData;
+		myData.pos = addr;
+		tcpData.UserPos = myData.pos;
+		
+//		wholeBettingMoney=0;
+//		panMoney = 10;
+		
 		this.ch = ch;
 		this.ch.game_panel = this;
 		this.ch.lobby_panel = null;
-		this.tcpdata = tcpdata;
+		//this.tcpData = tcpData;
+		
 		this.login_frame = login_frame;
 		game_panel =this;
-		tcpdata.easyStudy[addr]++;
-		tcpdata.UserPos = addr;
-		//tcpdata.DataDestination = "Chatting";
+		//tcpData.easyStudy[addr]++;
+		//tcpData.UserPos = addr;
+		//tcpData.DataDestination = "Chatting";
 		
-		num=0;
+//		num=0;
+//		//유저 넘버 구하는애..
+//		while(true) {
+//			if(ƒplayData.get(tcpData.UserPos)[num] == -1) {
+//				tcpData.playData.get(tcpData.UserPos)[num] = 1;
+//				break;
+//			}
+//			num++;
+//		}
+//		
+//		tcpData.userNumber.add(num);
+//		tcpData.msg = addr+"번방,"+num+"번 플레이어 "+"[입장]";
 		
-		while(true) {
-			if(tcpdata.playData.get(tcpdata.UserPos)[num] == -1) {
-				tcpdata.playData.get(tcpdata.UserPos)[num] = 1;
-				break;
-			}
-			num++;
-		}
-		tcpdata.userNumber.add(num);
-//		tcpdata.msg = addr+"번방,"+num+"번 플레이어 "+"[입장]";
+		//tcpData.test.get(tcpData.UserPos).put(tcpData.name, num );
 		
-		//tcpdata.test.get(tcpdata.UserPos).put(tcpdata.name, num );
 		
-		if(num==0) {
-			JButton GameStart = new JButton("게임 시작");
-			GameStart.setBounds(500, 280, 200, 80);
-			add(GameStart);
-			GameStart.addActionListener(new ActionListener() {
-				//게임 시작 버튼
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					betting_Button_true();
-					tcpdata.DataDestination = "Game";
-					tcpdata.userCount = num;
-					for (int i = 2; i < 15; i++) {
-						for (int j = 1; j < 5; j++) {
-							tcpdata.dealerDeck.add(new PokerCard(i,j));
-						}
-					}
-					tcpdata.roomclose.replace(tcpdata.UserPos, true);
-					GameProcess();
-					game_panel.remove(GameStart);
-					repaint();
-				}
-			});
-			
-		}
 		jokbbo = new Jokbo();
 		jk = new JokBoTEST();
 		setBounds(0, 0, 1200, 800);
@@ -184,16 +176,21 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == exit) {
-					tcpdata.easyStudy[tcpdata.UserPos]--;
-					tcpdata.playData.get(tcpdata.UserPos)[num]=-1;
-//					tcpdata.test.get(tcpdata.UserPos).remove(num); 
-
-					login_frame.add(new Lobby(login_frame,tcpdata,ch,myData));
-					login_frame.remove(game_panel);
-					login_frame.repaint();
-					tcpdata.DataDestination = "testMove";
-					tcpdata.oData = new UserData(addr,-1,tcpdata.name,null);
-					ch.send(tcpdata);
+					
+					
+					tcpData.DataDestination = "testMove";
+					tcpData.oData = new UserData(addr,-1,myData.nickName,null);
+					ch.send(tcpData);
+//					tcpData.easyStudy[tcpData.UserPos]--;
+//					tcpData.playData.get(tcpData.UserPos)[num]=-1;
+////					tcpData.test.get(tcpData.UserPos).remove(num); 
+//
+//					login_frame.add(new Lobby(login_frame,tcpData,ch,myData));
+//					login_frame.remove(game_panel);
+//					login_frame.repaint();
+//					tcpData.DataDestination = "testMove";
+//					tcpData.oData = new UserData(addr,-1,tcpData.name,null);
+//					ch.send(tcpData);
 				}
 			}
 		});
@@ -335,34 +332,35 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-			
-					tcpdata.DataDestination = "Game";
-					if(tcpdata.prebetMoney*2>tcpdata.money){
-						tcpdata.btMoney = (int)tcpdata.money;
-					}else {
-						tcpdata.btMoney = tcpdata.prebetMoney;						
-					}
-					tcpdata.prebetMoney = tcpdata.btMoney;
-					tcpdata.wholeBettingMoney += tcpdata.btMoney;
-					tcpdata.money -= tcpdata.btMoney;
-					tcpdata.msg = "betting_call";
-					tcpdata.callCount++;
-					tcpdata.userCount = num;
 					
-					if(tcpdata.callCount == tcpdata.test.get(tcpdata.UserPos).keySet().size()-1&&tcpdata.playerDeck.get(0).size()==7) {
-						for (String z : tcpdata.test.get(tcpdata.UserPos).keySet()) {
+					tcpData.DataDestination = "Game";
+					if(me.prebetMoney*2>me.money){
+						me.btMoney = (int)me.money;
+					}else {
+						me.btMoney = me.prebetMoney;						
+					}
+					me.prebetMoney = me.btMoney;
+					me.wholeBettingMoney += me.btMoney;
+					me.money -= me.btMoney;
+					me.msg = "betting_call";
+					//me.callCount = me.playerNum;
+					me.callCount++;
+					me.userCount = me.callCount;
+					
+					if(me.callCount == game_users.size()-1 && me.playerDeck.get(0).size()==7) {
+						for (String z : game_users.keySet()) {
 							
-							//tcpdata.result.put(z, jokbbo.jokbo(tcpdata.playerDeck.get(z)));
+							//tcpData.result.put(z, jokbbo.jokbo(tcpData.playerDeck.get(z)));
 						}
 						
-						tcpdata.winner = jk.resultWinner(tcpdata.result)+"";
-						tcpdata.last = true;
-						ch.send(tcpdata);
-					}else if(tcpdata.callCount == tcpdata.test.get(tcpdata.UserPos).keySet().size()-1){
+						me.winner = jk.resultWinner(me.result)+"";
+						me.last = true;
+						ch.send(tcpData);
+					}else if(me.callCount == game_users.size()-1){
 						
 						oneSplit();
 					}else{
-						ch.send(tcpdata);
+						ch.send(tcpData);
 					}
 				
 				
@@ -376,16 +374,16 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 		
-					tcpdata.callCount=0;
-					tcpdata.userCount = num;
-					tcpdata.DataDestination = "Game";
-					tcpdata.btMoney = panMoney;				
-					tcpdata.prebetMoney = tcpdata.btMoney; 
-					tcpdata.wholeBettingMoney += tcpdata.btMoney;
-					tcpdata.money -= tcpdata.btMoney;
-					tcpdata.msg = "betting_bbing";
+				me.callCount=0;
+				me.userCount = me.playerNum;
+				tcpData.DataDestination = "Game";
+				me.btMoney = me.panMoney;				
+				me.prebetMoney = me.btMoney; 
+				me.wholeBettingMoney += me.btMoney;
+				me.money -= me.btMoney;
+				me.msg = "betting_bbing";
 					
-					ch.send(tcpdata);
+					ch.send(tcpData);
 				
 				
 			}
@@ -397,22 +395,22 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				tcpdata.callCount=0;
-				tcpdata.userCount = num;
-				tcpdata.DataDestination = "Game";
+				me.callCount=0;
+				me.userCount = me.playerNum;
+				tcpData.DataDestination = "Game";
 				
 				
-				if(tcpdata.prebetMoney*2>tcpdata.money){
-					tcpdata.btMoney = (int)tcpdata.money;
+				if(me.prebetMoney*2>me.money){
+					me.btMoney = (int)me.money;
 				}else {
-					tcpdata.btMoney = tcpdata.prebetMoney*2;
+					me.btMoney = me.prebetMoney*2;
 				}
-				tcpdata.prebetMoney = tcpdata.btMoney;
-				tcpdata.wholeBettingMoney += tcpdata.btMoney;
-				tcpdata.money -= tcpdata.btMoney;
-				tcpdata.msg = "betting_ddadang";
+				me.prebetMoney = me.btMoney;
+				me.wholeBettingMoney += me.btMoney;
+				me.money -= me.btMoney;
+				me.msg = "betting_ddadang";
 				
-				ch.send(tcpdata);
+				ch.send(tcpData);
 				
 			}
 		});
@@ -423,20 +421,20 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				tcpdata.callCount=0;
-				tcpdata.userCount = num;
-				tcpdata.DataDestination = "Game";
-				if(tcpdata.prebetMoney*2>tcpdata.money){
-					tcpdata.btMoney = (int)tcpdata.money;
+				me.callCount=0;
+				me.userCount = me.playerNum;
+				tcpData.DataDestination = "Game";
+				if(me.prebetMoney*2>me.money){
+					me.btMoney = (int)me.money;
 				}else {
-					tcpdata.btMoney = tcpdata.wholeBettingMoney/2; 
+					me.btMoney = me.wholeBettingMoney/2; 
 				}
-				tcpdata.prebetMoney = tcpdata.btMoney;
-				tcpdata.wholeBettingMoney += tcpdata.btMoney;
-				tcpdata.money -= tcpdata.btMoney;
-				tcpdata.msg = "betting_half";
+				me.prebetMoney = me.btMoney;
+				me.wholeBettingMoney += me.btMoney;
+				me.money -= me.btMoney;
+				me.msg = "betting_half";
 				
-				ch.send(tcpdata);
+				ch.send(tcpData);
 				
 			}
 		});
@@ -450,11 +448,12 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
               
                 
                 
-                tcpdata.userCount = num;
-                tcpdata.DataDestination = "Game";
-                tcpdata.msg = "betting_die";
-                tcpdata.test.get(tcpdata.UserPos).replace(null,num );
-                ch.send(tcpdata);
+            	me.userCount = me.playerNum;
+				tcpData.DataDestination = "Game";
+            	me.msg = "betting_die";
+            	game_users.replace(myData.nickName,null);
+            	tcpData.oData = game_users;
+                ch.send(tcpData);
             }
         });
         ImageIcon i5 = new ImageIcon("img/gamepanel/quarter_bt.gif");
@@ -465,21 +464,21 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
             @Override
             public void actionPerformed(ActionEvent e) {
             
-        	  tcpdata.callCount=0;
-              tcpdata.userCount = num;
-              tcpdata.DataDestination = "Game";
-              if(tcpdata.prebetMoney*2>tcpdata.money){
-					tcpdata.btMoney = (int)tcpdata.money;
+            	me.callCount=0;
+            	me.userCount = me.playerNum;
+				tcpData.DataDestination = "Game";
+              if(me.prebetMoney*2>me.money){
+            	  me.btMoney = (int)me.money;
 			  }else {
-				tcpdata.btMoney = tcpdata.wholeBettingMoney/4; 					
+				  me.btMoney = me.wholeBettingMoney/4; 					
 			  }
-              tcpdata.prebetMoney = tcpdata.btMoney;
-              tcpdata.wholeBettingMoney += tcpdata.btMoney;
-              tcpdata.money -= tcpdata.btMoney;
+              me.prebetMoney = me.btMoney;
+              me.wholeBettingMoney += me.btMoney;
+              me.money -= me.btMoney;
               
-              tcpdata.msg = "betting_quarter";
+              me.msg = "betting_quarter";
 
-              ch.send(tcpdata);
+              ch.send(tcpData);
             }
         });
         ImageIcon i6 = new ImageIcon("img/gamepanel/max_bt.gif");
@@ -489,17 +488,17 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				tcpdata.callCount = 0;
-				tcpdata.userCount = num;
-				tcpdata.DataDestination = "Game";
-				tcpdata.btMoney = (int)tcpdata.money;
-				tcpdata.prebetMoney = tcpdata.btMoney;
-				tcpdata.wholeBettingMoney += tcpdata.btMoney ;
-				tcpdata.money -= tcpdata.btMoney;
+				me.callCount = 0;
+				me.userCount = me.playerNum;
+				tcpData.DataDestination = "Game";
+				me.btMoney = (int)me.money;
+				me.prebetMoney = me.btMoney;
+				me.wholeBettingMoney += me.btMoney ;
+				me.money -= me.btMoney;
 				
-			    tcpdata.msg = "betting_max";
+				me.msg = "betting_max";
 				
-				ch.send(tcpdata);
+				ch.send(tcpData);
 			}
 		});
     	
@@ -577,9 +576,9 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					tcpdata.DataDestination = "Chatting";
-					tcpdata.oData = new MsgData(myData.nickName,chf.getText());
-					ch.send(tcpdata);
+					tcpData.DataDestination = "Chatting";
+					tcpData.oData = new MsgData(myData.nickName,chf.getText());
+					ch.send(tcpData);
 					chf.setText("");
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -594,10 +593,12 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		ttt.add(player3cardShow);
 		ttt.add(player4cardShow);
 		ttt.add(player5cardShow);
-		tcpdata.DataDestination = "testMove";
-		tcpdata.oData = new UserData(-1,tcpdata.UserPos,tcpdata.name,num);
 		
-		ch.send(tcpdata);
+		
+		tcpData.DataDestination = "testMove";
+		tcpData.oData = new UserData(-1,tcpData.UserPos,tcpData.name, null);
+		
+		ch.send(tcpData);
 		
    }
 
@@ -626,104 +627,140 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 
 	//큐트시작
 	@Override
-	public void execute(TCPData data) {
-		this.tcpdata.playData = data.playData;
-		this.tcpdata.playerDeck = data.playerDeck;
-		this.tcpdata.easyStudy = data.easyStudy;
-		this.tcpdata.userName = data.userName;
-		this.tcpdata.test = data.test;
-		if(data.UserPos==this.tcpdata.UserPos) {
-			this.tcpdata.dealerDeck = data.dealerDeck;
-			cht.append(data.name+" : "+data.msg+"\n");
-			this.tcpdata.prebetMoney = data.prebetMoney;
-			this.tcpdata.userCount = data.userCount;
-			this.tcpdata.callCount = data.callCount;
-			this.tcpdata.last = data.last;
-			this.tcpdata.userNumber = data.userNumber;
-		}
+	public void execute(TCPData tdata) {
+//		this.tcpData.playData = data.playData;
+//		this.tcpData.playerDeck = data.playerDeck;
+//		this.tcpData.easyStudy = data.easyStudy;
+//		this.tcpData.userName = data.userName;
+//		this.tcpData.test = data.test;
+//		if(data.UserPos==this.tcpData.UserPos) {
+//			this.tcpData.dealerDeck = data.dealerDeck;
+//			cht.append(data.name+" : "+data.msg+"\n");
+//			this.tcpData.prebetMoney = data.prebetMoney;
+//			this.tcpData.userCount = data.userCount;
+//			this.tcpData.callCount = data.callCount;
+//			this.tcpData.last = data.last;
+//			this.tcpData.userNumber = data.userNumber;
+//		}
 		
 		
-		switch (data.DataDestination) {
+//		switch (data.DataDestination) {
+//		
+//		
+//		case "testMove":
+//			//인원 변경시에 대한 화면 변경 처리
+//			System.out.println(tcpData.UserPos+" testMove:"+data.oData);
+//			break;
+//		case "Chatting" :
+//			MsgData msg = (MsgData)data.oData;
+//			if(data.UserPos==this.tcpData.UserPos) {
+//				cht.append(msg.nickName + " : "+ msg.msg+"\n");
+//				cht.setCaretPosition(cht.getDocument().getLength());
+//			}
+//		
+//			break;
+//		}
+//
+//		if (data.msg.contains("[입장]") ) {
+//			System.out.println("프로필 생성");
+//			
+////			for () {
+////				
+////				new Ingame_userProfile_panel(); // playNum, nickname
+////				
+////			}
+//			for (Map.Entry<String, Integer > entry : data.test.get(data.UserPos).entrySet()) {
+//				switch (entry.getValue()) {
+//				
+//				case 0:
+//					if (Ingame_userProfile_panel_0 == null) {
+//						Ingame_userProfile_panel_0 = new Ingame_userProfile_panel(0,entry.getKey());
+//						add(Ingame_userProfile_panel_0);
+//					}
+//					break;
+//				case 1:
+//					if (Ingame_userProfile_panel_1 == null) {
+//						Ingame_userProfile_panel_1 = new Ingame_userProfile_panel(1,entry.getKey());
+//						add(Ingame_userProfile_panel_1);
+//					}
+//					break;
+//				case 2:
+//					if (Ingame_userProfile_panel_2 == null) {
+//						Ingame_userProfile_panel_2 = new Ingame_userProfile_panel(2,entry.getKey());
+//						add(Ingame_userProfile_panel_2);
+//					}
+//					break;
+//				case 3:
+//					if (Ingame_userProfile_panel_3 == null) {
+//						Ingame_userProfile_panel_3 = new Ingame_userProfile_panel(3,entry.getKey());
+//						add(Ingame_userProfile_panel_3);
+//					}
+//					break;
+//				case 4:
+//					if (Ingame_userProfile_panel_4 == null) {
+//						Ingame_userProfile_panel_4 = new Ingame_userProfile_panel(4,entry.getKey());
+//						add(Ingame_userProfile_panel_4);
+//					}	
+//					break;
+//				}
+//			}
+//
+////			if (Ingame_userProfile_panel_0 == null) {
+////				Ingame_userProfile_panel_0 = new Ingame_userProfile_panel(0,);
+////			}
+//			
+//	
+//		}
+		//
+		switch (tdata.DataDestination) {
 		
 		
 		case "testMove":
-			//인원 변경시에 대한 화면 변경 처리
-			System.out.println(tcpdata.UserPos+" testMove:"+data.oData);
-			break;
-		case "Chatting" :
-			MsgData msg = (MsgData)data.oData;
-			if(data.UserPos==this.tcpdata.UserPos) {
-				cht.append(msg.nickName + " : "+ msg.msg+"\n");
-				cht.setCaretPosition(cht.getDocument().getLength());
-			}
-		
-			break;
-		}
-
-		if (data.msg.contains("[입장]") ) {
-			System.out.println("프로필 생성");
+			real_users = ((HashMap<Integer, HashMap<String, Integer>>)tdata.oData).get(myData.pos);
+			me.playerNum = real_users.get(me.nickName);
 			
-//			for () {
-//				
-//				new Ingame_userProfile_panel(); // playNum, nickname
-//				
-//			}
-			for (Map.Entry<String, Integer > entry : data.test.get(data.UserPos).entrySet()) {
-				switch (entry.getValue()) {
+			if(me.playerNum ==0) {
+				JButton GameStart = new JButton("게임 시작");
+				GameStart.setBounds(500, 280, 200, 80);
+				add(GameStart);
+				GameStart.addActionListener(new ActionListener() {
+					//게임 시작 버튼
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						
+						game_users = (HashMap<String, Integer>) real_users.clone();
+						betting_Button_true();
+						//tcpData.DataDestination = "Game";
+						//tcpData.userCount = num;
+						me.userCount = me.playerNum;
+						for (int i = 2; i < 15; i++) {
+							for (int j = 1; j < 5; j++) {
+								me.dealerDeck.add(new PokerCard(i,j));
+							}
+						}
+						me.roomclose.replace(myData.pos, true);
+						GameProcess();
+						game_panel.remove(GameStart);
+						repaint();
+					}
+				});
 				
-				case 0:
-					if (Ingame_userProfile_panel_0 == null) {
-						Ingame_userProfile_panel_0 = new Ingame_userProfile_panel(0,entry.getKey());
-						add(Ingame_userProfile_panel_0);
-					}
-					break;
-				case 1:
-					if (Ingame_userProfile_panel_1 == null) {
-						Ingame_userProfile_panel_1 = new Ingame_userProfile_panel(1,entry.getKey());
-						add(Ingame_userProfile_panel_1);
-					}
-					break;
-				case 2:
-					if (Ingame_userProfile_panel_2 == null) {
-						Ingame_userProfile_panel_2 = new Ingame_userProfile_panel(2,entry.getKey());
-						add(Ingame_userProfile_panel_2);
-					}
-					break;
-				case 3:
-					if (Ingame_userProfile_panel_3 == null) {
-						Ingame_userProfile_panel_3 = new Ingame_userProfile_panel(3,entry.getKey());
-						add(Ingame_userProfile_panel_3);
-					}
-					break;
-				case 4:
-					if (Ingame_userProfile_panel_4 == null) {
-						Ingame_userProfile_panel_4 = new Ingame_userProfile_panel(4,entry.getKey());
-						add(Ingame_userProfile_panel_4);
-					}	
-					break;
-				}
 			}
-
-//			if (Ingame_userProfile_panel_0 == null) {
-//				Ingame_userProfile_panel_0 = new Ingame_userProfile_panel(0,);
-//			}
 			
-	
-		}
-		//
-		switch (data.DataDestination) {
+			break;
 	
 		case "Game":
+			GameData data = (GameData)tdata.oData;
 			
 			int go = 0;
 			if (data.msg.contains("betting")) {
 				
 				
-				for (Map.Entry< String, Integer> entry : data.test.get(data.UserPos).entrySet()) {
-					if (data.name.equals(entry.getValue())) {
-						go = entry.getValue();
-					}
-				}
+//				for (Map.Entry< String, Integer> entry : tdata.test.get(data.UserPos).entrySet()) {
+//					if (data.name.equals(entry.getValue())) {
+//						go = entry.getValue();
+//					}
+//				}
 				switch(go) {
 				case 0:
 					p1_bet_jokbo.setText("베팅 : "+ data.btMoney);
@@ -760,9 +797,9 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			
 			case "카드 나와라":
 				//확인필요
-				for (Map.Entry<String, Integer>z : data.test.get(tcpdata.UserPos).entrySet()) {
+				for (Map.Entry<String, Integer>z : tdata.test.get(tcpData.UserPos).entrySet()) {
 					for (Integer i = 2; i >= 0; i--) {
-						if((!z.getValue().equals(num))&& i<2) {
+						if((!z.getValue().equals(me.playerNum))&& i<2) {
 							ttt.get(z.getValue()).get(i).setIcon(cdback);														
 						}else {
 							ttt.get(z.getValue()).get(i).setIcon(data.playerDeck.get(z).get(i).img);							
@@ -773,28 +810,28 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 
 				break;
 			case "betting_bbing" :
-				this.tcpdata.bettingMoney = data.bettingMoney;
-				this.bettingMoney = data.bettingMoney;
-				this.tcpdata.wholeBettingMoney = data.wholeBettingMoney;
-				this.wholeBettingMoney = data.wholeBettingMoney;
-				this.tcpdata.panMoney = data.panMoney;
-				this.panMoney = data.panMoney;
+				me.bettingMoney = data.bettingMoney;
+				me.bettingMoney = data.bettingMoney;
+				me.wholeBettingMoney = data.wholeBettingMoney;
+				me.wholeBettingMoney = data.wholeBettingMoney;
+				me.panMoney = data.panMoney;
+				//me.panMoney = data.panMoney;
 				betting.setText("전체 베팅금액: "+data.wholeBettingMoney+ ", 현재 판돈: "+ data.panMoney);
 				cht.append("전체 베팅금액: "+data.wholeBettingMoney+ ", 배팅 머니: "+ data.btMoney);
 				playerturn();
 				
 				break;
 			case "betting_call":
-				this.tcpdata.bettingMoney = data.bettingMoney;
-				this.bettingMoney = data.bettingMoney;
-				this.tcpdata.wholeBettingMoney = data.wholeBettingMoney;
-				this.wholeBettingMoney = data.wholeBettingMoney;
-				this.tcpdata.panMoney = data.panMoney;
-				this.panMoney = data.panMoney;
+				me.bettingMoney = data.bettingMoney;
+				me.bettingMoney = data.bettingMoney;
+				me.wholeBettingMoney = data.wholeBettingMoney;
+				me.wholeBettingMoney = data.wholeBettingMoney;
+				me.panMoney = data.panMoney;
+				me.panMoney = data.panMoney;
 				betting.setText("전체 베팅금액: "+data.wholeBettingMoney+ ", 현재 판돈: "+ data.panMoney);
 				cht.append("전체 베팅금액 : "+data.wholeBettingMoney+ ", 배팅 머니 : "+ data.btMoney+", 내 머니 : "+data.money);
 				playerturn();
-				if(tcpdata.callCount == tcpdata.test.get(tcpdata.UserPos).keySet().size()-1&&tcpdata.playerDeck.get(0).size()==7&&tcpdata.last) {
+				if(me.callCount == tcpData.test.get(tcpData.UserPos).keySet().size()-1&&tcpData.playerDeck.get(0).size()==7&&tcpData.last) {
 					System.out.println("종료입니다.");
 					System.out.println("집가자 가고싶어요 보내줘요" + data.winner);
 					
@@ -806,14 +843,14 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					// 승패 입력
 					if (num == Integer.parseInt(data.winner)) {
 						System.out.println("승자");
-						this.tcpdata.win ++;
-						this.tcpdata.totalGame ++;
-						this.tcpdata.money += data.wholeBettingMoney;
+						this.tcpData.win ++;
+						this.tcpData.totalGame ++;
+						this.tcpData.money += data.wholeBettingMoney;
 						
 					} else {
 						System.out.println("패자");
-						this.tcpdata.lose ++;
-						this.tcpdata.totalGame ++;
+						this.tcpData.lose ++;
+						this.tcpData.totalGame ++;
 					
 					}
 					// DB와 게임 시작 시 프로필 리셋 
@@ -822,14 +859,14 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				
 					
 					
-					gameRes_DBInsert(this.tcpdata); 
+					gameRes_DBInsert(this.tcpData); 
 					
 					
 					
 					try {
-						this.tcpdata.last = false;
-						this.tcpdata.callCount = 0;
-						for (Map.Entry<String, Integer> z : tcpdata.test.get(tcpdata.UserPos).entrySet()) {
+						this.tcpData.last = false;
+						this.tcpData.callCount = 0;
+						for (Map.Entry<String, Integer> z : tcpData.test.get(tcpData.UserPos).entrySet()) {
 							for (int i = 0; i < 7; i++) {
 								
 								ttt.get(z.getValue()).get(i).setIcon(null);
@@ -911,14 +948,14 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 								@Override
 								public void actionPerformed(ActionEvent e) {
 									betting_Button_true();
-									tcpdata.DataDestination = "Game";
-									tcpdata.userCount = num;
+									tcpData.DataDestination = "Game";
+									tcpData.userCount = num;
 									for (int i = 2; i < 15; i++) {
 										for (int j = 1; j < 5; j++) {
-											tcpdata.dealerDeck.add(new PokerCard(i,j));
+											tcpData.dealerDeck.add(new PokerCard(i,j));
 										}
 									}
-									tcpdata.roomclose.replace(tcpdata.UserPos, true);
+									tcpData.roomclose.replace(tcpData.UserPos, true);
 									GameProcess();
 									game_panel.remove(GameStart);
 									repaint();
@@ -930,9 +967,9 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				} else if(tcpdata.callCount == tcpdata.test.get(tcpdata.UserPos).keySet().size()-1&&tcpdata.playerDeck.get(0).size()==7) {
-					tcpdata.callCount=0;
-					if((int)tcpdata.money <= 0) {
+				} else if(tcpData.callCount == tcpData.test.get(tcpData.UserPos).keySet().size()-1&&tcpData.playerDeck.get(0).size()==7) {
+					tcpData.callCount=0;
+					if((int)tcpData.money <= 0) {
 						playerturn();						
 					}else {
 						playerturn();
@@ -940,17 +977,17 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					}
 					
 					for (Map.Entry<String, Integer > z : data.test.get(data.UserPos).entrySet()) {
-						if(tcpdata.test.get(tcpdata.UserPos).get(z.getValue()) != null) {
+						if(tcpData.test.get(tcpData.UserPos).get(z.getValue()) != null) {
 							if(z.getValue().equals(num)) {
-								ttt.get(z.getValue()).get(tcpdata.playerDeck.get(z.getValue()).size()-1).setIcon(data.playerDeck.get(z.getValue()).get(tcpdata.playerDeck.get(z.getValue()).size()-1).img);
+								ttt.get(z.getValue()).get(tcpData.playerDeck.get(z.getValue()).size()-1).setIcon(data.playerDeck.get(z.getValue()).get(tcpData.playerDeck.get(z.getValue()).size()-1).img);
 							}else {
-								ttt.get(z.getValue()).get(tcpdata.playerDeck.get(z.getValue()).size()-1).setIcon(cdback);							
+								ttt.get(z.getValue()).get(tcpData.playerDeck.get(z.getValue()).size()-1).setIcon(cdback);							
 							}
 						}
 					}
-				}else if(data.callCount == data.test.get(tcpdata.UserPos).keySet().size()-1) {
-					tcpdata.callCount=0;
-					if((int)tcpdata.money <= 0) {
+				}else if(data.callCount == data.test.get(tcpData.UserPos).keySet().size()-1) {
+					tcpData.callCount=0;
+					if((int)tcpData.money <= 0) {
 						playerturn();						
 					}else {
 						playerturn();
@@ -958,8 +995,8 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					}
 					for (Map.Entry<String, Integer > me : data.test.get(data.UserPos).entrySet()) {
 						Integer z = me.getValue();
-						if(tcpdata.test.get(tcpdata.UserPos).get(z) != null) {
-							ttt.get(z).get(tcpdata.playerDeck.get(z).size()-1).setIcon(data.playerDeck.get(z).get(tcpdata.playerDeck.get(z).size()-1).img);
+						if(tcpData.test.get(tcpData.UserPos).get(z) != null) {
+							ttt.get(z).get(tcpData.playerDeck.get(z).size()-1).setIcon(data.playerDeck.get(z).get(tcpData.playerDeck.get(z).size()-1).img);
 						}
 					}
 					
@@ -973,11 +1010,11 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 
 				break;	
 			case "betting_ddadang" :
-				this.tcpdata.bettingMoney = data.bettingMoney;
+				this.tcpData.bettingMoney = data.bettingMoney;
 				this.bettingMoney = data.bettingMoney;
-				this.tcpdata.wholeBettingMoney = data.wholeBettingMoney;
+				this.tcpData.wholeBettingMoney = data.wholeBettingMoney;
 				this.wholeBettingMoney = data.wholeBettingMoney;
-				this.tcpdata.panMoney = data.panMoney;
+				this.tcpData.panMoney = data.panMoney;
 				this.panMoney = data.panMoney;
 				betting.setText("전체 베팅금액: "+data.wholeBettingMoney+ ", 현재 판돈: "+ data.panMoney);
 				cht.append("전체 베팅금액 : "+data.wholeBettingMoney+ ", 배팅 머니 : "+ data.btMoney+", 내 머니 : "+data.money);
@@ -986,11 +1023,11 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				
 				break;
 			case "betting_half" :
-				this.tcpdata.bettingMoney = data.bettingMoney;
+				this.tcpData.bettingMoney = data.bettingMoney;
 				this.bettingMoney = data.bettingMoney;
-				this.tcpdata.wholeBettingMoney = data.wholeBettingMoney;
+				this.tcpData.wholeBettingMoney = data.wholeBettingMoney;
 				this.wholeBettingMoney = data.wholeBettingMoney;
-				this.tcpdata.panMoney = data.panMoney;
+				this.tcpData.panMoney = data.panMoney;
 				this.panMoney = data.panMoney;
 				betting.setText("전체 베팅금액: "+data.wholeBettingMoney+ ", 현재 판돈: "+ data.panMoney);
 				cht.append("전체 베팅금액 : "+data.wholeBettingMoney+ ", 배팅 머니 : "+ data.btMoney+", 내 머니 : "+data.money);
@@ -1000,11 +1037,11 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				break;
 
 			case "betting_quarter" :
-				this.tcpdata.bettingMoney = data.bettingMoney;
+				this.tcpData.bettingMoney = data.bettingMoney;
 				this.bettingMoney = data.bettingMoney;
-				this.tcpdata.wholeBettingMoney = data.wholeBettingMoney;
+				this.tcpData.wholeBettingMoney = data.wholeBettingMoney;
 				this.wholeBettingMoney = data.wholeBettingMoney;
-				this.tcpdata.panMoney = data.panMoney;
+				this.tcpData.panMoney = data.panMoney;
 				this.panMoney = data.panMoney;
 				betting.setText("전체 베팅금액: "+data.wholeBettingMoney+ ", 현재 판돈: "+ data.panMoney);
 				cht.append("전체 베팅금액 : "+data.wholeBettingMoney+ ", 배팅 머니 : "+ data.btMoney+", 내 머니 : "+data.money);
@@ -1013,11 +1050,11 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				
 				break;
 			case "betting_max" :
-				this.tcpdata.bettingMoney = data.bettingMoney;
+				this.tcpData.bettingMoney = data.bettingMoney;
 				this.bettingMoney = data.bettingMoney;
-				this.tcpdata.wholeBettingMoney = data.wholeBettingMoney;
+				this.tcpData.wholeBettingMoney = data.wholeBettingMoney;
 				this.wholeBettingMoney = data.wholeBettingMoney;
-				this.tcpdata.panMoney = data.panMoney;
+				this.tcpData.panMoney = data.panMoney;
 				this.panMoney = data.panMoney;
 				betting.setText("전체 베팅금액: "+data.wholeBettingMoney+ ", 현재 판돈: "+ data.panMoney);
 				cht.append("전체 베팅금액 : "+data.wholeBettingMoney+ ", 배팅 머니 : "+ data.btMoney+", 내 머니 : "+data.money);
@@ -1176,48 +1213,50 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	}
 	
 	void oneSplit() {
-		for (Map.Entry<String, Integer > me : tcpdata.test.get(tcpdata.UserPos).entrySet()) {
+		for (Map.Entry<String, Integer > me : tcpData.test.get(tcpData.UserPos).entrySet()) {
 			Integer i = me.getValue();
 		
-			if(tcpdata.test.get(tcpdata.UserPos).get(i) != null) {
+			if(tcpData.test.get(tcpData.UserPos).get(i) != null) {
 				Random number = new Random();
-				int b = number.nextInt(tcpdata.dealerDeck.size());
-				tcpdata.playerDeck.get(i).add(tcpdata.dealerDeck.get(b));
-				tcpdata.dealerDeck.remove(b);
+				int b = number.nextInt(tcpData.dealerDeck.size());
+				tcpData.playerDeck.get(i).add(tcpData.dealerDeck.get(b));
+				tcpData.dealerDeck.remove(b);
 			}
 		}
 		
-		ch.send(tcpdata);
+		ch.send(tcpData);
 	}
 	void split() {
 		
 		
-		tcpdata.wholeBettingMoney = tcpdata.test.get(tcpdata.UserPos).size()*panMoney; 
-		tcpdata.panMoney = panMoney;
-		for (int i = 0 ; i < tcpdata.test.get(tcpdata.UserPos).size() ; i++) {
-			tcpdata.bettingMoney.add(0);			
+		me.wholeBettingMoney = tcpData.test.get(tcpData.UserPos).size()*panMoney; 
+		me.panMoney = panMoney;
+		for (int i = 0 ; i < tcpData.test.get(tcpData.UserPos).size() ; i++) {
+			tcpData.bettingMoney.add(0);			
 		}
 		
-		for (Map.Entry<String, Integer > me : tcpdata.test.get(tcpdata.UserPos).entrySet()) {
+		for (Map.Entry<String, Integer > me : tcpData.test.get(tcpData.UserPos).entrySet()) {
 			Integer i = me.getValue();
-			tcpdata.playerDeck.put(i,new ArrayList<PokerCard>());
+			tcpData.playerDeck.put(i,new ArrayList<PokerCard>());
 		}
 		
 		
-		for (Map.Entry<String, Integer > me : tcpdata.test.get(tcpdata.UserPos).entrySet()) {
+		for (Map.Entry<String, Integer > me : tcpData.test.get(tcpData.UserPos).entrySet()) {
 			Integer i = me.getValue();
 			for (int j = 0 ; j < 3 ;  j++) {
 				Random number = new Random();
-				int a = number.nextInt(tcpdata.dealerDeck.size());
-				tcpdata.playerDeck.get(i).add(tcpdata.dealerDeck.get(a));
-				tcpdata.dealerDeck.remove(a);			
+				int a = number.nextInt(tcpData.dealerDeck.size());
+				tcpData.playerDeck.get(i).add(tcpData.dealerDeck.get(a));
+				tcpData.dealerDeck.remove(a);			
 			}
 		}
 		
 		
-		tcpdata.DataDestination = "Game";
-		tcpdata.msg = "카드 나와라";
-		ch.send(tcpdata);
+		tcpData.DataDestination = "Game";
+		me.msg = "카드 나와라";
+		me.game_users = game_users;
+		tcpData.oData = me;
+		ch.send(tcpData);
 	}
 	
 	void GameProcess() {
@@ -1230,17 +1269,17 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	
 	int next(int a) {
 		int testnum = 0;
-		for (Map.Entry<String, Integer > me : tcpdata.test.get(tcpdata.UserPos).entrySet()) {
+		for (Map.Entry<String, Integer > me : tcpData.test.get(tcpData.UserPos).entrySet()) {
 			Integer integer = me.getValue();
-			if(tcpdata.test.get(tcpdata.UserPos).get(integer) != null) {
+			if(tcpData.test.get(tcpData.UserPos).get(integer) != null) {
 				if(testnum<integer) {
 					testnum=integer;
 				}
 			}
 		}
-		for (Map.Entry<String, Integer > me : tcpdata.test.get(tcpdata.UserPos).entrySet()) {
+		for (Map.Entry<String, Integer > me : tcpData.test.get(tcpData.UserPos).entrySet()) {
 			Integer integer = me.getValue();
-			if(tcpdata.test.get(tcpdata.UserPos).get(integer) != null) {
+			if(tcpData.test.get(tcpData.UserPos).get(integer) != null) {
 				if((a+1)%(testnum+1) == integer) {
 					return (a+1)%(testnum+1);
 				}
@@ -1249,8 +1288,8 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		return next(a+1);
 	}
 	void playerturn() {
-        if (this.num == next(tcpdata.userCount)) {
-        	if((int)tcpdata.money <= 0) {
+        if (me.playerNum == next(tcpData.userCount)) {
+        	if((int)tcpData.money <= 0) {
         		betting_Button_false();
         		bt.setEnabled(true);
         	}else {
@@ -1283,12 +1322,12 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
     }
     
     
-    void gameRes_DBInsert (TCPData data){
-    	new SignDB().resInsert(data);
+    void gameRes_DBInsert (GameData data){
+    	new SignDB().resInsert(myData);
     }
     //
     // 베팅한 사람의 프로필 리셋
-    void betting_profileReset (TCPData data, int num) {
+    void betting_profileReset (GameData data, int num) {
     	
 		
 			System.out.println("이사람");

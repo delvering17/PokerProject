@@ -94,11 +94,11 @@ class LogIn_in implements Inter_button_login {
 					
 					ProfileDTO datathis = new SignDB().num_profileRead(" profilenum = " +memberNum+ ";");
 					try {
-						Socket client = new Socket("192.168.20.34", 8888);
+						Socket client = new Socket("192.168.20.21", 8888);
 						Receiver ch = new Receiver(login_frame, client);
-						TCPData tcpdata = new TCPData(datathis);
+						TCPData tcpdata = new TCPData();
 						ch.start();
-						MyData myData = new MyData(datathis,tcpdata);
+						MyData myData = new MyData(datathis);
 						login_frame.remove(login_frame.login_panel);
 						//클라이언트를 서버에 보내기 시작
 						

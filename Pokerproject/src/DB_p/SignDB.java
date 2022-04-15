@@ -1,5 +1,6 @@
 package DB_p;
 
+import net_p.MyData;
 import net_p.TCPData;
 
 public class SignDB {
@@ -93,8 +94,8 @@ public class SignDB {
 		
 	}
 	
-	public void resInsert(TCPData tcpdata) {
+	public void resInsert(MyData myData) {
 		
-		new ProfileDAO().profileModify(tcpdata);
+		new ProfileDAO().profileModify(myData);
 	}
 }

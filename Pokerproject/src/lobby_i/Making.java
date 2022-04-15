@@ -34,8 +34,8 @@ public class Making implements RoomAction {
 	TCPData tcpdata;
 	Lobby lobby;
 	@Override
-	public void room(Login_frame mainJf,Receiver ch,Lobby lobby, TCPData tcpdata,MyData myData,Integer addr) {
-		this.tcpdata = tcpdata;
+	public void room(Login_frame mainJf,Receiver ch,Lobby lobby, MyData myData,Integer addr) {
+		
 		this.lobby = lobby;
 		String[] beting = {"1원","10원","100원","1000원"};
 		JFrame jf = new JFrame();
@@ -86,7 +86,7 @@ public class Making implements RoomAction {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				mainJf.remove(lobby);
-				Game_panel game_panel = new Game_panel(mainJf,ch,tcpdata,myData,addr);
+				Game_panel game_panel = new Game_panel(mainJf,ch,myData,addr);
 				mainJf.add(game_panel);
 				jf.setVisible(false);
 				mainJf.repaint();

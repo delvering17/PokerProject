@@ -20,5 +20,5 @@ import net_p.TCPData;
 public interface RoomAction {
 
 
-	void room(Login_frame mainJf, Receiver ch,Lobby lobby, TCPData data,MyData myData,Integer addr);
+	void room(Login_frame mainJf, Receiver ch,Lobby lobby, MyData myData,Integer addr);
 }

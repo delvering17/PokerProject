@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -27,6 +28,7 @@ import net_p.MyData;
 import net_p.NetExecute;
 import net_p.Receiver;
 import net_p.TCPData;
+import net_p.UserData;
 
 public class Lobby extends JPanel implements NetExecute {
 	JTextField jtf;
@@ -36,21 +38,21 @@ public class Lobby extends JPanel implements NetExecute {
 	//들어올 유져 객체
 //	ArrayList<Object> userList = new ArrayList<Object>();
 	Login_frame mainJf;
-	TCPData tcpdata;
+//	TCPData tcpdata;
 	MyData myData;
 	//방 체크할 리스트
 	HashMap<InetAddress, Object> roomChk;
 	ArrayList<RoomBtn> btnlist = new ArrayList<RoomBtn>();
-	public Lobby(Login_frame mainJf,TCPData tcpdata,Receiver ch,MyData myData) {
+	public Lobby(Login_frame mainJf,TCPData tcpdata,Receiver ch, MyData myData) {
 		this.myData= myData; 
 		this.ch = ch;
-		this.tcpdata = tcpdata;
+//		this.tcpdata = tcpdata;
 		this.mainJf = mainJf;
 		this.ch.lobby_panel=this;
 		this.ch.game_panel = null;
 		
-		this.tcpdata.UserPos = -1;
-		tcpdata.msg = "[입장]";
+//		this.tcpdata.UserPos = -1;
+		//tcpdata.msg = "[입장]";
 		
 		setBounds(0, 0, 1200, 800);
 		setBackground(Color.black);
@@ -124,7 +126,7 @@ public class Lobby extends JPanel implements NetExecute {
 		userProfile.add(profile);
 		profile.setEditable(false);
 		
-		profile.setText("닉네임 : "+tcpdata.name+"\n\n"+"성별 : "+tcpdata.gender+"\n\n"+"보유머니 : "+tcpdata.money+"\n\n"+"승 : "+tcpdata.win+" 패 : "+tcpdata.lose);
+		profile.setText("닉네임 : "+tcpdata.name+"\n\n"+"성별 : "+tcpdata.gender+"\n\n"+"보유머니 : "+myData.money+"\n\n"+"승 : "+myData.win+" 패 : "+myData.lose);
 		
 		userProfile.setBounds(820,530,350, 220);
 		add(userProfile);
@@ -161,10 +163,10 @@ public class Lobby extends JPanel implements NetExecute {
 //				System.out.println(addr);
 				if(e.getActionCommand().equals("만들기")) {
 					RoomAction ra = (RoomAction)Class.forName("lobby_i."+cname).newInstance();
-					ra.room(mainJf,ch,lobby,tcpdata,myData,addr);
+					ra.room(mainJf,ch,lobby,myData,addr);
 				}else {
 					mainJf.remove(lobby);
-					Game_panel game_panel = new Game_panel(mainJf,ch,tcpdata,myData,addr);
+					Game_panel game_panel = new Game_panel(mainJf,ch,myData,addr);
 					mainJf.add(game_panel);
 					mainJf.game_panelarr.add(game_panel);
 					mainJf.repaint();
@@ -188,39 +190,18 @@ public class Lobby extends JPanel implements NetExecute {
 		
 		//전체 기본
 //		System.out.println("??");
-		this.tcpdata.playData = data.playData;
-		this.tcpdata.easyStudy = data.easyStudy;
-		this.tcpdata.userName = data.userName;
-		this.tcpdata.test = data.test;
+//		this.tcpdata.playData = data.playData;
+//		this.tcpdata.easyStudy = data.easyStudy;
+//		this.tcpdata.userName = data.userName;
+//		this.tcpdata.test = data.test;
 		userArea.setText("");
 		
-		for (String un : this.tcpdata.userName) {
-			userArea.append(un+"\n");
-		}
-		for (RoomBtn roomBtn : btnlist) {
-			if(data.easyStudy[roomBtn.addr]>0) {
-				roomBtn.setText("입장");
-				if(data.easyStudy[roomBtn.addr]==5) roomBtn.setEnabled(false);
-				else roomBtn.setEnabled(true);
-			}else {
-				roomBtn.setText("만들기");
-			}
-		}
 		
-		for (RoomBtn roomBtn : btnlist) {
-			if(data.roomclose.get(roomBtn.addr)) {
-				roomBtn.setEnabled(false);
-			}else {
-				roomBtn.setEnabled(true);				
-			}
-			
-			
-		}
 		switch (data.DataDestination) {
 		
 		case "Chatting":
 			MsgData msg = (MsgData)data.oData;
-			if(data.UserPos==this.tcpdata.UserPos) {
+			if(data.UserPos==myData.pos) {
 				jta.append(msg.nickName + " : "+ msg.msg+"\n");
 				jta.setCaretPosition(jta.getDocument().getLength());
 			}
@@ -228,6 +209,39 @@ public class Lobby extends JPanel implements NetExecute {
 		case "testMove":
 			//인원 변경시에 대한 화면 변경 처리
 			System.out.println("로비 testMove:"+data.oData);
+			
+			HashMap<Integer, HashMap<String, Integer>> test = (HashMap<Integer, HashMap<String, Integer>>)data.oData;
+			
+			for (String un :test.get(-1).keySet()) {
+				userArea.append(un+"\n");
+			}
+			
+			for (Map.Entry<Integer, HashMap<String, Integer>> hm : test.entrySet()) {
+				if (hm.getValue().size() == 5) {
+					
+				}
+			}
+			
+			
+//			for (RoomBtn roomBtn : btnlist) {
+//				if(data.easyStudy[roomBtn.addr]>0) {
+//					roomBtn.setText("입장");
+//					if(data.easyStudy[roomBtn.addr]==5) roomBtn.setEnabled(false);
+//					else roomBtn.setEnabled(true);
+//				}else {
+//					roomBtn.setText("만들기");
+//				}
+//			}
+//			
+//			for (RoomBtn roomBtn : btnlist) {
+//				if(data.roomclose.get(roomBtn.addr)) {
+//					roomBtn.setEnabled(false);
+//				}else {
+//					roomBtn.setEnabled(true);				
+//				}
+//				
+//				
+//			}
 			break;
 		}
 		repaint();

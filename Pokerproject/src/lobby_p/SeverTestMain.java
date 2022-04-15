@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import net_p.TCPData;
 import net_p.UserData;
@@ -20,8 +21,22 @@ class MulServer {
 	public HashMap<Integer, Boolean> roomclose;
 	
 	void testMove(UserData td) {
+		
+		int no  = test.get(td.pre).get(td.nickName);
+		
 		test.get(td.pre).remove(td.nickName);
-		test.get(td.pos).put(td.nickName, td.playerNum);
+		
+		for(Map.Entry<String, Integer> me: test.get(td.pre).entrySet()) {
+			
+			if(me.getValue() > no) {
+				
+				test.get(td.pre).put(me.getKey(), me.getValue()-1);
+			}
+			
+		}
+
+		no = test.get(td.pos).size();
+		test.get(td.pos).put(td.nickName, no);
 	}
 	
 	
@@ -84,7 +99,7 @@ class MulServer {
 					data = (TCPData)ois.readObject();
 					userName.add(data.name);
 					userList.put(data.name,oos);
-					data.userName = userName;
+//					data.userName = userName;
 					if(data.DataDestination.equals("first")) {
 //						data.playData = playData;
 //						data.easyStudy = easyStudy;
@@ -99,9 +114,9 @@ class MulServer {
 					}
 					
 					else {
-						playData = data.playData;
-						easyStudy = data.easyStudy;
-						test = data.test;
+//						playData = data.playData;
+//						easyStudy = data.easyStudy;
+//						test = data.test;
 						sendToAll(data);
 					}
 				}

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import net_p.MyData;
 import net_p.TCPData;
 
 
@@ -184,14 +185,14 @@ public class ProfileDAO {
 	}
 	
 	
-	public int profileModify(TCPData tcpdata) {
+	public int profileModify(MyData myData) {
 		int res = 0 ;
 	
-		sql = "update profile set money = "+ tcpdata.money + 
-							", totalgame = " + tcpdata.totalGame + 
-							", win = " + tcpdata.win + 
-							", lose = "+ tcpdata.lose +
-							" where nickname = '" +tcpdata.name +"' ;";
+		sql = "update profile set money = "+ myData.money + 
+							", totalgame = " + myData.totalGame + 
+							", win = " + myData.win + 
+							", lose = "+ myData.lose +
+							" where nickname = '" +myData.nickName +"' ;";
 		
 		try {
 			res = stmt.executeUpdate(sql);
