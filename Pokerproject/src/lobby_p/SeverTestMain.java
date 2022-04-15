@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import net_p.TCPData;
-import net_p.TestData;
+import net_p.UserData;
 class MulServer {
 	HashSet<String> userName;
 	HashMap<String,ObjectOutputStream> userList;
@@ -19,9 +19,14 @@ class MulServer {
 	public HashMap<Integer, HashMap<String, Integer>> test;
 	public HashMap<Integer, Boolean> roomclose;
 	
-	void testMove(TestData td) {
-		test.get(td.pre).remove( td.nickName);
-		test.get(td.pos).put( td.nickName, td.playerNum);
+	void testMove(UserData td) {
+		test.get(td.pre).remove(td.nickName);
+		System.out.println(test.get(td.pre).remove(td.nickName));
+		System.out.println(test.get(td.pre).remove("ada"));
+		test.get(td.pos).put(td.nickName, td.playerNum);
+		
+		System.out.println(td);
+		System.out.println(td.pre+","+td.pos+","+td.nickName);
 	}
 	
 	
@@ -93,7 +98,7 @@ class MulServer {
 //						
 //						sendTo(data);
 					}else if(data.DataDestination.equals("testMove")) {
-						TestData td = (TestData)data.oData;
+						UserData td = (UserData)data.oData;
 						testMove(td);
 						data.oData = test; 
 						sendToAll(data);
@@ -143,6 +148,8 @@ class MulServer {
 			if(name==data.name) {
 				try {
 					userList.get(name).writeObject(data);
+					userList.get(name).flush();
+					userList.get(name).reset();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

@@ -25,7 +25,7 @@ import DB_p.SignDB;
 import lobby_p.Lobby;
 import net_p.Receiver;
 import net_p.TCPData;
-import net_p.TestData;
+import net_p.UserData;
 
 
 
@@ -109,7 +109,7 @@ class LogIn_in implements Inter_button_login {
 						login_frame.lobby_panel = lobby_panel;
 						login_frame.repaint();
 						tcpdata.DataDestination = "testMove";
-						tcpdata.oData = new TestData(-1,-1,datathis.nickname,null);
+						tcpdata.oData = new UserData(-1,-1,datathis.nickname,null);
 						ch.send(tcpdata);
 					}catch (Exception e) {
 						e.printStackTrace();

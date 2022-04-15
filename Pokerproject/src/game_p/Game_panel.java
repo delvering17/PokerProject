@@ -31,7 +31,7 @@ import login_p.Login_frame;
 import net_p.NetExecute;
 import net_p.Receiver;
 import net_p.TCPData;
-import net_p.TestData;
+import net_p.UserData;
 
 
 
@@ -184,12 +184,13 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				if (e.getSource() == exit) {
 					tcpdata.easyStudy[tcpdata.UserPos]--;
 					tcpdata.playData.get(tcpdata.UserPos)[num]=-1;
-					tcpdata.test.get(tcpdata.UserPos).remove(num); 
+//					tcpdata.test.get(tcpdata.UserPos).remove(num); 
+
 					login_frame.add(new Lobby(login_frame,tcpdata,ch));
 					login_frame.remove(game_panel);
 					login_frame.repaint();
 					tcpdata.DataDestination = "testMove";
-					tcpdata.oData = new TestData(num,-1,tcpdata.name,null);
+					tcpdata.oData = new UserData(addr,-1,tcpdata.name,null);
 					ch.send(tcpdata);
 				}
 			}
@@ -592,7 +593,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		ttt.add(player4cardShow);
 		ttt.add(player5cardShow);
 		tcpdata.DataDestination = "testMove";
-		tcpdata.oData = new TestData(-1,tcpdata.UserPos,tcpdata.name,num);
+		tcpdata.oData = new UserData(-1,tcpdata.UserPos,tcpdata.name,num);
 		
 		ch.send(tcpdata);
 		

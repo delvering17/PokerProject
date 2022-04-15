@@ -23,7 +23,6 @@ public class Receiver extends Thread {
 	public ObjectInputStream ois;
 	public ObjectOutputStream oos;
 	
-	
 	public void send(TCPData data) {
 		try {
 			oos.writeObject(data);
