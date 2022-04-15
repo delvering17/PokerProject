@@ -21,12 +21,7 @@ class MulServer {
 	
 	void testMove(UserData td) {
 		test.get(td.pre).remove(td.nickName);
-		System.out.println(test.get(td.pre).remove(td.nickName));
-		System.out.println(test.get(td.pre).remove("ada"));
 		test.get(td.pos).put(td.nickName, td.playerNum);
-		
-		System.out.println(td);
-		System.out.println(td.pre+","+td.pos+","+td.nickName);
 	}
 	
 	
@@ -90,7 +85,6 @@ class MulServer {
 					userName.add(data.name);
 					userList.put(data.name,oos);
 					data.userName = userName;
-					System.out.println(data.name +" : "+ data.msg);
 					if(data.DataDestination.equals("first")) {
 //						data.playData = playData;
 //						data.easyStudy = easyStudy;

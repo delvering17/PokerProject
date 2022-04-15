@@ -29,7 +29,6 @@ public class TCPData implements Serializable{
 	public String msg;
 	public String DataDestination;	//Chatting , GameData 등등		--> 익스큐트에서 걸러짐 ,서버에서 확인
 	public String panelChk;
-	public String[] res;
 	
 	public Object oData;
 	//
@@ -105,12 +104,12 @@ public class TCPData implements Serializable{
 		
 		
 		UserPos = -1;
-		playData = new HashMap<Integer,Integer[]>();
-		for (int j = 0; j < 9; j++) {
-			playData.put(j,new Integer[5]);
-			for (int i = 0; i < playData.get(j).length; i++) {
-				playData.get(j)[i] = -1;
-			}
-		}
+//		playData = new HashMap<Integer,Integer[]>();
+//		for (int j = 0; j < 9; j++) {
+//			playData.put(j,new Integer[5]);
+//			for (int i = 0; i < playData.get(j).length; i++) {
+//				playData.get(j)[i] = -1;
+//			}
+//		}
 	}
 }

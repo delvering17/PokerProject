@@ -28,6 +28,8 @@ import javax.swing.JTextField;
 import DB_p.SignDB;
 import lobby_p.Lobby;
 import login_p.Login_frame;
+import net_p.MsgData;
+import net_p.MyData;
 import net_p.NetExecute;
 import net_p.Receiver;
 import net_p.TCPData;
@@ -109,7 +111,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 //	public String winner;
 	ImageIcon default_bet = new ImageIcon("img/gamepanel/default.png");
 	ImageIcon cdback  = new ImageIcon("img/card/CardBackimg.png");
-	public Game_panel(Login_frame login_frame,Receiver ch,TCPData tcpdata,Integer addr) {
+	public Game_panel(Login_frame login_frame,Receiver ch,TCPData tcpdata,MyData myData,Integer addr) {
 		wholeBettingMoney=0;
 		panMoney = 10;
 		tcpdata.panelChk = "Game";
@@ -121,7 +123,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		game_panel =this;
 		tcpdata.easyStudy[addr]++;
 		tcpdata.UserPos = addr;
-		tcpdata.DataDestination = "Chatting";
+		//tcpdata.DataDestination = "Chatting";
 		
 		num=0;
 		
@@ -133,7 +135,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			num++;
 		}
 		tcpdata.userNumber.add(num);
-		tcpdata.msg = addr+"번방,"+num+"번 플레이어 "+"[입장]";
+//		tcpdata.msg = addr+"번방,"+num+"번 플레이어 "+"[입장]";
 		
 		//tcpdata.test.get(tcpdata.UserPos).put(tcpdata.name, num );
 		
@@ -186,7 +188,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					tcpdata.playData.get(tcpdata.UserPos)[num]=-1;
 //					tcpdata.test.get(tcpdata.UserPos).remove(num); 
 
-					login_frame.add(new Lobby(login_frame,tcpdata,ch));
+					login_frame.add(new Lobby(login_frame,tcpdata,ch,myData));
 					login_frame.remove(game_panel);
 					login_frame.repaint();
 					tcpdata.DataDestination = "testMove";
@@ -576,7 +578,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					tcpdata.DataDestination = "Chatting";
-					tcpdata.msg = chf.getText();
+					tcpdata.oData = new MsgData(myData.nickName,chf.getText());
 					ch.send(tcpdata);
 					chf.setText("");
 				} catch (Exception e1) {
@@ -647,6 +649,14 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		case "testMove":
 			//인원 변경시에 대한 화면 변경 처리
 			System.out.println(tcpdata.UserPos+" testMove:"+data.oData);
+			break;
+		case "Chatting" :
+			MsgData msg = (MsgData)data.oData;
+			if(data.UserPos==this.tcpdata.UserPos) {
+				cht.append(msg.nickName + " : "+ msg.msg+"\n");
+				cht.setCaretPosition(cht.getDocument().getLength());
+			}
+		
 			break;
 		}
 

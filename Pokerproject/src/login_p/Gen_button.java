@@ -23,6 +23,7 @@ import DB_p.ProfileDAO;
 import DB_p.ProfileDTO;
 import DB_p.SignDB;
 import lobby_p.Lobby;
+import net_p.MyData;
 import net_p.Receiver;
 import net_p.TCPData;
 import net_p.UserData;
@@ -97,13 +98,13 @@ class LogIn_in implements Inter_button_login {
 						Receiver ch = new Receiver(login_frame, client);
 						TCPData tcpdata = new TCPData(datathis);
 						ch.start();
-						
+						MyData myData = new MyData(datathis,tcpdata);
 						login_frame.remove(login_frame.login_panel);
 						//클라이언트를 서버에 보내기 시작
 						
 						
 						
-						Lobby lobby_panel = new Lobby(login_frame,tcpdata,ch);
+						Lobby lobby_panel = new Lobby(login_frame,tcpdata,ch,myData);
 						login_frame.add(lobby_panel) ;
 						login_frame.userDTO = datathis;
 						login_frame.lobby_panel = lobby_panel;

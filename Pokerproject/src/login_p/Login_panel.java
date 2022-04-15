@@ -14,7 +14,7 @@ import net_p.TCPData;
 // 
 
 
-public class Login_panel extends JPanel implements NetExecute{
+public class Login_panel extends JPanel{
 	Login_frame login_frame;
 	Gen_textfiled id_login ;
 	Login_Textfiled_password pw_login;
@@ -41,29 +41,6 @@ public class Login_panel extends JPanel implements NetExecute{
 	//게임 0% 일요일 
 		
 	}
-	@Override
-	public void execute(TCPData data) {
-		
-//		TCPData dto = data;
-		
-//		System.out.println(data.name);
-//		
-//		switch (data.DataDestination) {
-//		case "Chatting":
-//			jta.append(data.name + " : "+ data.msg+"\n");
-//			break;
-//
-//		case "Room":
-//			
-//			break;
-//		}
-		
-		if(data.msg!=null) {
-			System.out.println(data.name +" : "+ data.msg);
-		}	
-	}
-	
-	
 	
 }
 

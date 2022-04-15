@@ -22,6 +22,8 @@ import javax.swing.border.LineBorder;
 import game_p.Game_panel;
 import lobby_i.RoomAction;
 import login_p.Login_frame;
+import net_p.MsgData;
+import net_p.MyData;
 import net_p.NetExecute;
 import net_p.Receiver;
 import net_p.TCPData;
@@ -35,14 +37,12 @@ public class Lobby extends JPanel implements NetExecute {
 //	ArrayList<Object> userList = new ArrayList<Object>();
 	Login_frame mainJf;
 	TCPData tcpdata;
+	MyData myData;
 	//방 체크할 리스트
 	HashMap<InetAddress, Object> roomChk;
 	ArrayList<RoomBtn> btnlist = new ArrayList<RoomBtn>();
-	public Lobby(Login_frame mainJf,TCPData tcpdata,Receiver ch) {
-//		if(tcpdata.DataDestination.equals(`)) {
-//			
-//		}
-		tcpdata.panelChk = "Lobby";
+	public Lobby(Login_frame mainJf,TCPData tcpdata,Receiver ch,MyData myData) {
+		this.myData= myData; 
 		this.ch = ch;
 		this.tcpdata = tcpdata;
 		this.mainJf = mainJf;
@@ -102,7 +102,7 @@ public class Lobby extends JPanel implements NetExecute {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				tcpdata.msg = jtf.getText();
+				tcpdata.oData = new MsgData(myData.nickName, jtf.getText()) ;
 				tcpdata.DataDestination = "Chatting";
 				ch.send(tcpdata);
 				jta.setCaretPosition(jta.getDocument().getLength());
@@ -117,9 +117,6 @@ public class Lobby extends JPanel implements NetExecute {
 		userArea.setEditable(false);
 		userP.add(userList);
 		add(userP);
-		//아직 모름 일딴 TCP 데이터 정지
-//		UserProfile_panel profilePanel = new UserProfile_panel(tcpdata);
-//		add(profilePanel);
 		
 		JTextArea profile = new JTextArea();
 		profile.setBounds(10, 10, 330, 200);
@@ -131,7 +128,6 @@ public class Lobby extends JPanel implements NetExecute {
 		
 		userProfile.setBounds(820,530,350, 220);
 		add(userProfile);
-//		ch.send(tcpdata);
 		roomList.getVerticalScrollBar().setValue(1);
 		repaint();
 	}
@@ -165,10 +161,10 @@ public class Lobby extends JPanel implements NetExecute {
 //				System.out.println(addr);
 				if(e.getActionCommand().equals("만들기")) {
 					RoomAction ra = (RoomAction)Class.forName("lobby_i."+cname).newInstance();
-					ra.room(mainJf,ch,lobby,tcpdata,addr);
+					ra.room(mainJf,ch,lobby,tcpdata,myData,addr);
 				}else {
 					mainJf.remove(lobby);
-					Game_panel game_panel = new Game_panel(mainJf,ch,tcpdata,addr);
+					Game_panel game_panel = new Game_panel(mainJf,ch,tcpdata,myData,addr);
 					mainJf.add(game_panel);
 					mainJf.game_panelarr.add(game_panel);
 					mainJf.repaint();
@@ -223,8 +219,9 @@ public class Lobby extends JPanel implements NetExecute {
 		switch (data.DataDestination) {
 		
 		case "Chatting":
+			MsgData msg = (MsgData)data.oData;
 			if(data.UserPos==this.tcpdata.UserPos) {
-				jta.append(data.name + " : "+ data.msg+"\n");
+				jta.append(msg.nickName + " : "+ msg.msg+"\n");
 				jta.setCaretPosition(jta.getDocument().getLength());
 			}
 			break;
