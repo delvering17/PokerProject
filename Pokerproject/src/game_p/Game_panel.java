@@ -1281,7 +1281,6 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		tcpdata.DataDestination = "카드 나와라";
 		
 		me.prebetMoney = 1;
-		me.game_users = game_users;
 		tcpdata.oData = me;
 	
 		
