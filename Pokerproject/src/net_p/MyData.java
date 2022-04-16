@@ -11,6 +11,7 @@ public class MyData  implements Serializable{
 	public String nickName;
 	public int totalGame,win,lose,money;
 	public Integer [] easyStudy;
+	public int playerNum;
 	
 	public MyData(ProfileDTO profiledto) {
 		this.pos = -1;

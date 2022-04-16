@@ -195,7 +195,7 @@ public class Lobby extends JPanel implements NetExecute {
 
 	@Override
 	public void execute(TCPData data) {
-		System.out.println("들어오냐");
+		System.out.println("로비 들어오냐");
 		//전체 기본
 //		System.out.println("??");
 //		this.tcpdata.playData = data.playData;
