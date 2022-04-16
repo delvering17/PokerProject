@@ -326,9 +326,9 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					me.wholeBettingMoney += me.btMoney;
 					me.money -= me.btMoney;
 				
-					//me.callCount = me.playerNum;
+//					me.callCount = me.playerNum;
 					me.callCount++;
-					me.userCount = me.callCount;
+					me.userCount = myData.playerNum;
 					
 					if(me.callCount == game_users.size()-1 && me.playerDeck.get(me.playerNum).size()==7) {
 						for (Integer cd : game_users.values()) {
@@ -367,7 +367,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				TCPData tcpdata = new TCPData();
 				
 				me.callCount=0;
-				me.userCount = me.playerNum;
+				me.userCount = myData.playerNum;
 				me.btMoney = me.panMoney;				
 				me.prebetMoney = me.btMoney; 
 				me.wholeBettingMoney += me.btMoney;
@@ -390,9 +390,8 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			public void actionPerformed(ActionEvent e) {
 				TCPData tcpdata = new TCPData();
 				me.callCount=0;
-				me.userCount = me.playerNum;
-				
-				
+				me.userCount = myData.playerNum;
+
 				
 				if(me.prebetMoney*2>myData.money){
 					me.btMoney = myData.money;
@@ -419,7 +418,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			public void actionPerformed(ActionEvent e) {
 				TCPData tcpdata = new TCPData();
 				me.callCount=0;
-				me.userCount = me.playerNum;
+				me.userCount = myData.playerNum;
 		
 				if(me.prebetMoney*2>myData.money){
 					me.btMoney = myData.money;
@@ -448,7 +447,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
         		TCPData tcpdata = new TCPData();
                 
                 
-            	me.userCount = me.playerNum;
+            	me.userCount = myData.playerNum;
 
             	me.game_users.replace(myData.nickName,null);
         
@@ -467,7 +466,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
             public void actionPerformed(ActionEvent e) {
             	TCPData tcpdata = new TCPData();
             	me.callCount=0;
-            	me.userCount = me.playerNum;
+            	me.userCount = myData.playerNum;
 		
 				if(me.prebetMoney*2>myData.money){
 					me.btMoney = myData.money;
@@ -494,9 +493,9 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			public void actionPerformed(ActionEvent e) {
 				TCPData tcpdata = new TCPData();
 				me.callCount = 0;
-				me.userCount = me.playerNum;
+				me.userCount = myData.playerNum;
 		
-				me.btMoney = (int)me.money;
+				me.btMoney = myData.money;
 				me.prebetMoney = me.btMoney;
 				me.wholeBettingMoney += me.btMoney ;
 				myData.money -= me.btMoney;
@@ -1280,9 +1279,11 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		TCPData tcpdata = new TCPData();
 		tcpdata.name = myData.nickName;
 		tcpdata.DataDestination = "카드 나와라";
-		tcpdata.oData = me;
 		
+		me.prebetMoney = 1;
 		me.game_users = game_users;
+		tcpdata.oData = me;
+	
 		
 		ch.send(tcpdata);
 	}
@@ -1325,8 +1326,12 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		}
 		return next(a+1);
 	}
+	
 	void playerturn() {
+
+		System.out.println(myData.playerNum +","+me.userCount);
         if (myData.playerNum == next(me.userCount)) {
+        	System.out.println("내 차례");
         	if(myData.money <= 0) {
         		betting_Button_false();
         		bt.setEnabled(true);
@@ -1334,6 +1339,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
         		betting_Button_true();     
         	}
         } else {
+        	System.out.println(" 차례");
             betting_Button_false();
         }
     }
