@@ -24,8 +24,12 @@ class MulServer {
 	void testMove(UserData td) {
 		Integer no  = test.get(td.pre).get(td.nickName);
 		
+		test.get(td.pre).remove(td.nickName);
+		
+		
 		if (no != null) {
-			test.get(td.pre).remove(td.nickName);
+		
+			
 			for(Map.Entry<String, Integer> me: test.get(td.pre).entrySet()) {
 				
 				if(me.getValue() > no) {
@@ -38,7 +42,6 @@ class MulServer {
 		
 
 		
-		
 		System.out.println(td.nickName+ "가 "+ td.pre+ "에서 " + td.pos+ "로 이동 ");
 		
 		no = test.get(td.pos).size();
@@ -46,6 +49,13 @@ class MulServer {
 			test.get(td.pos).put(td.nickName, null);
 		} else {
 			test.get(td.pos).put(td.nickName, no);
+		}
+		
+		for (String un :test.get(-1).keySet()) {
+			System.out.println("로비: "+un);
+		}
+		for (String un :test.get(0).keySet()) {
+			System.out.println("0번방: "+un);
 		}
 	}
 	
