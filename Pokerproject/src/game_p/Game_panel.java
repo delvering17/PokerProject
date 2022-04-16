@@ -600,7 +600,6 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		tcpdata.name = myData.nickName;
 		tcpdata.DataDestination = "testMove";
 		tcpdata.oData = new UserData(-1,addr,myData.nickName, null);
-		
 		ch.send(tcpdata);
 		
    }

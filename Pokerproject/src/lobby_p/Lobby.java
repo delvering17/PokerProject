@@ -43,6 +43,8 @@ public class Lobby extends JPanel implements NetExecute {
 	//방 체크할 리스트
 	HashMap<InetAddress, Object> roomChk;
 	ArrayList<RoomBtn> btnlist = new ArrayList<RoomBtn>();
+//	HashMap<Integer, HashMap<String, Integer>> test;
+	
 	public Lobby(Login_frame mainJf,Receiver ch, MyData myData) {
 		this.myData= myData; 
 		this.ch = ch;
@@ -133,6 +135,9 @@ public class Lobby extends JPanel implements NetExecute {
 		userProfile.setBounds(820,530,350, 220);
 		add(userProfile);
 		roomList.getVerticalScrollBar().setValue(1);
+		
+
+		
 		repaint();
 	}
 	
@@ -215,15 +220,15 @@ public class Lobby extends JPanel implements NetExecute {
 			System.out.println("여기까지 오냐 로비의 테스트 무브? ");
 			System.out.println((HashMap<Integer, HashMap<String, Integer>>)data.oData);
 //			
-//			HashMap<Integer, HashMap<String, Integer>> test = (HashMap<Integer, HashMap<String, Integer>>)data.oData;
+			HashMap<Integer, HashMap<String, Integer>> test = (HashMap<Integer, HashMap<String, Integer>>)data.oData;
 //			
 //			for (String un :test.get(-1).keySet()) {
 //				userArea.append(un+"\n");
 //			}
-//			System.out.println("__________________");
-//			for (String un :test.get(-1).keySet()) {
-//				System.out.println(un);
-//			}
+			System.out.println("__________________");
+			for (String un :test.get(-1).keySet()) {
+				System.out.println(un);
+			}
 //			for (Integer un :test.get(-1).values()) {
 //				System.out.println(un);
 //			}
