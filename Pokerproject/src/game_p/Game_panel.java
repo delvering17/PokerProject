@@ -597,7 +597,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		
 		
 		tcpData.DataDestination = "testMove";
-		tcpData.oData = new UserData(-1,tcpData.UserPos,tcpData.name, null);
+		tcpData.oData = new UserData(-1,addr,myData.nickName, null);
 		
 		ch.send(tcpData);
 		

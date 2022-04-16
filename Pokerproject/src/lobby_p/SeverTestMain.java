@@ -26,8 +26,6 @@ class MulServer {
 		
 		if (no != null) {
 			test.get(td.pre).remove(td.nickName);
-		}
-		
 			for(Map.Entry<String, Integer> me: test.get(td.pre).entrySet()) {
 				
 				if(me.getValue() > no) {
@@ -36,6 +34,9 @@ class MulServer {
 				}
 				
 			}	
+		}
+		
+
 		
 		
 		System.out.println(td.nickName+ "가 "+ td.pre+ "에서 " + td.pos+ "로 이동 ");

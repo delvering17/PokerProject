@@ -33,6 +33,8 @@ import net_p.TCPData;
 public class Making implements RoomAction {
 	TCPData tcpdata;
 	Lobby lobby;
+	MyData myData;
+	
 	@Override
 	public void room(Login_frame mainJf,Receiver ch,Lobby lobby, MyData myData,Integer addr) {
 		
