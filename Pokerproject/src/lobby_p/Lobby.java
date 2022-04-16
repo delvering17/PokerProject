@@ -175,7 +175,7 @@ public class Lobby extends JPanel implements NetExecute {
 					mainJf.remove(lobby);
 					Game_panel game_panel = new Game_panel(mainJf,ch,myData,addr);
 					mainJf.add(game_panel);
-					mainJf.game_panelarr.add(game_panel);
+					mainJf.game_panel = game_panel;
 					mainJf.repaint();
 				}
 			} catch (Exception e1) {
