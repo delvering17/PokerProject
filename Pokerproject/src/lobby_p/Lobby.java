@@ -11,6 +11,7 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -219,24 +220,9 @@ public class Lobby extends JPanel implements NetExecute {
 			//인원 변경시에 대한 화면 변경 처리
 			System.out.println("여기까지 오냐 로비의 테스트 무브? ");
 			System.out.println((HashMap<Integer, HashMap<String, Integer>>)data.oData);
-//			
 			HashMap<Integer, HashMap<String, Integer>> test = (HashMap<Integer, HashMap<String, Integer>>)data.oData;
-//			
-//			for (String un :test.get(-1).keySet()) {
-//				userArea.append(un+"\n");
-//			}
-			System.out.println("__________________");
-			for (String un :test.get(-1).keySet()) {
-				System.out.println(un);
-			}
-//			for (Integer un :test.get(-1).values()) {
-//				System.out.println(un);
-//			}
-//			for (Map.Entry<Integer, HashMap<String, Integer>> hm : test.entrySet()) {
-//				if (hm.getValue().size() == 5) {
-//					
-//				}
-//			}
+			access(test);
+			innout(test);
 			
 			break;
 		}
@@ -244,5 +230,18 @@ public class Lobby extends JPanel implements NetExecute {
 		
 	}
 	
-
+	void innout(HashMap<Integer, HashMap<String, Integer>> test) {
+		for (int i = 0; i < btnlist.size(); i++) {
+			if(test.get(i).size() >0) btnlist.get(i).setText("입장");
+			else btnlist.get(i).setText("만들기");
+		}
+	}
+	void access(HashMap<Integer, HashMap<String, Integer>> test) {
+		userArea.setText("");
+		Set<String> name = test.get(-1).keySet();
+		java.util.Iterator<String> a = name.iterator();
+		for (int i = 0; i < name.size(); i++) {
+			userArea.append(a.next()+"\n");
+		}
+	}
 }
