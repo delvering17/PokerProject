@@ -126,7 +126,7 @@ public class Lobby extends JPanel implements NetExecute {
 		userProfile.add(profile);
 		profile.setEditable(false);
 		
-		profile.setText("닉네임 : "+tcpdata.name+"\n\n"+"성별 : "+tcpdata.gender+"\n\n"+"보유머니 : "+myData.money+"\n\n"+"승 : "+myData.win+" 패 : "+myData.lose);
+		profile.setText("닉네임 : "+myData.nickName+"\n\n"+ "보유머니 : "+myData.money+"\n\n"+"승 : "+myData.win+" 패 : "+myData.lose);
 		
 		userProfile.setBounds(820,530,350, 220);
 		add(userProfile);

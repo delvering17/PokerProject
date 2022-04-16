@@ -24,7 +24,9 @@ class MulServer {
 	void testMove(UserData td) {
 		Integer no  = test.get(td.pre).get(td.nickName);
 		
-		test.get(td.pre).remove(td.nickName);
+		if (no != null) {
+			test.get(td.pre).remove(td.nickName);
+		}
 		
 			for(Map.Entry<String, Integer> me: test.get(td.pre).entrySet()) {
 				

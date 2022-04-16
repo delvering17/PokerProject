@@ -185,9 +185,10 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 //					tcpData.playData.get(tcpData.UserPos)[num]=-1;
 ////					tcpData.test.get(tcpData.UserPos).remove(num); 
 //
-//					login_frame.add(new Lobby(login_frame,tcpData,ch,myData));
-//					login_frame.remove(game_panel);
-//					login_frame.repaint();
+					login_frame.add(new Lobby(login_frame,tcpData,ch,myData));
+					login_frame.remove(game_panel);
+					login_frame.repaint();
+					
 //					tcpData.DataDestination = "testMove";
 //					tcpData.oData = new UserData(addr,-1,tcpData.name,null);
 //					ch.send(tcpData);
