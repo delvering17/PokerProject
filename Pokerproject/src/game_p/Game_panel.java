@@ -134,6 +134,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		
 		this.ch = ch;
 		this.ch.game_panel = this;
+		this.ch.lobby_panel = null;
 		this.login_frame = login_frame;		
 		game_panel = this;
 		// 족보 흔적기관
@@ -621,9 +622,14 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		case "testMove":
 			System.out.println("여기까지 오냐 게임 패널의 테스트 무브? ");
 			real_users = ((HashMap<Integer, HashMap<String, Integer>>)data.oData).get(myData.pos);
+			
 			myData.playerNum = real_users.get(myData.nickName);
+			//System.out.println(myData.playerNum+ "번으로 접속 ");
 			
 			if(myData.playerNum ==0) {
+				
+			//System.out.println("너는 0번이다.");
+			
 			JButton GameStart = new JButton("게임 시작");
 			GameStart.setBounds(500, 280, 200, 80);
 			add(GameStart);
@@ -635,10 +641,13 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					
 					game_users = (HashMap<String, Integer>) real_users.clone();
 					betting_Button_true();
-			
+					
 					me.userCount = myData.playerNum;
+					
+					me.dealerDeck = new ArrayList<PokerCard>();
 					for (int i = 2; i < 15; i++) {
 						for (int j = 1; j < 5; j++) {
+							
 							me.dealerDeck.add(new PokerCard(i,j));
 						}
 					}
