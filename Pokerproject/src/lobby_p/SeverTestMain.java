@@ -14,12 +14,12 @@ import net_p.MsgData;
 import net_p.TCPData;
 import net_p.UserData;
 class MulServer {
-	HashSet<String> userName;
+//	HashSet<String> userName;
 	HashMap<String,ObjectOutputStream> userList;
-	HashMap<Integer,Integer[]> playData;
-	public int[] easyStudy;
+//	HashMap<Integer,Integer[]> playData;
+//	public int[] easyStudy;
 	public HashMap<Integer, HashMap<String, Integer>> test;
-	public HashMap<Integer, Boolean> roomclose;
+//	public HashMap<Integer, Boolean> roomclose;
 	
 	void testMove(UserData td) {
 		Integer no  = test.get(td.pre).get(td.nickName);
@@ -51,33 +51,33 @@ class MulServer {
 			test.get(td.pos).put(td.nickName, no);
 		}
 		
-		for (String un :test.get(-1).keySet()) {
-			System.out.println("로비: "+un);
-		}
-		for (String un :test.get(0).keySet()) {
-			System.out.println("0번방: "+un);
-		}
+//		for (String un :test.get(-1).keySet()) {
+//			System.out.println("로비: "+un);
+//		}
+//		for (String un :test.get(0).keySet()) {
+//			System.out.println("0번방: "+un);
+//		}
 	}
 	
 	
 	public MulServer() {
 		try {
-			roomclose = new HashMap<Integer, Boolean>();
-			for (int i = 0; i < 9; i++) {
-				roomclose.put(i, false);
-			}
+//			roomclose = new HashMap<Integer, Boolean>();
+//			for (int i = 0; i < 9; i++) {
+//				roomclose.put(i, false);
+//			}
 			ServerSocket server = new ServerSocket(8888);
-			userName = new HashSet<String>();
-			playData = new HashMap<Integer, Integer[]>();
-			easyStudy = new int[9];
-			for (int j = 0; j < 9; j++) {
-				playData.put(j,new Integer[5]);
-				for (int i = 0; i < playData.get(j).length; i++) {
-					playData.get(j)[i] = -1;
-				}
-			}
+//			userName = new HashSet<String>();
+//			playData = new HashMap<Integer, Integer[]>();
+//			easyStudy = new int[9];
+//			for (int j = 0; j < 9; j++) {
+//				playData.put(j,new Integer[5]);
+//				for (int i = 0; i < playData.get(j).length; i++) {
+//					playData.get(j)[i] = -1;
+//				}
+//			}
 			
-			test = new HashMap<Integer, HashMap<String, Integer >>();
+			test = new HashMap<Integer, HashMap<String, Integer>>();
 			for (int i = -1; i < 9; i++) {
 				test.put(i,new HashMap<String, Integer >());
 			}
@@ -86,8 +86,8 @@ class MulServer {
 			System.out.println("나 서버");
 			userList = new HashMap<String,ObjectOutputStream>();
 			Collections.synchronizedMap(userList);
-			Collections.synchronizedMap(playData);
-			Collections.synchronizedSet(userName);
+//			Collections.synchronizedMap(playData);
+//			Collections.synchronizedSet(userName);
 			Collections.synchronizedMap(test);
 			while(true) {
 				Socket client = server.accept();
@@ -118,19 +118,17 @@ class MulServer {
 				while(ois!=null) {
 				
 					data = (TCPData)ois.readObject();
-					userName.add(data.name);
-					userList.put(data.name,oos);
+//					userName.add(data.name);
 //					data.userName = userName;
-					System.out.println("서버가 클라이언트에게 받음");
-					if(data.DataDestination.equals("first")) {
-//						data.playData = playData;
-//						data.easyStudy = easyStudy;
-//						data.test = test;
-//						
-//						sendTo(data);
-					}else if(data.DataDestination.equals("testMove")) {
-						System.out.println("서버가 뿌림?");
+//					System.out.println("서버가 클라이언트에게 받음");
+					if(data.DataDestination.equals("testMove")) {
+//						System.out.println("서버가 뿌림?");
 						UserData td = (UserData)data.oData;
+						
+						System.out.println(td.nickName);
+						userList.put(td.nickName,oos);
+						System.out.println(userList.size());
+						
 						testMove(td);
 						data.oData = test; 
 						sendToAll(data);

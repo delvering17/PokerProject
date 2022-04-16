@@ -717,6 +717,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		
 		
 		case "testMove":
+			System.out.println(tdata.oData);
 			real_users = ((HashMap<Integer, HashMap<String, Integer>>)tdata.oData).get(myData.pos);
 			me.playerNum = real_users.get(me.nickName);
 			

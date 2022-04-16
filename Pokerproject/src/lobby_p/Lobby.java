@@ -208,7 +208,7 @@ public class Lobby extends JPanel implements NetExecute {
 			break;
 		case "testMove":
 			//인원 변경시에 대한 화면 변경 처리
-		
+			System.out.println(data.oData);
 			
 			HashMap<Integer, HashMap<String, Integer>> test = (HashMap<Integer, HashMap<String, Integer>>)data.oData;
 			
