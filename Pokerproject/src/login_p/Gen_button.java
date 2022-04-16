@@ -94,21 +94,22 @@ class LogIn_in implements Inter_button_login {
 					
 					ProfileDTO datathis = new SignDB().num_profileRead(" profilenum = " +memberNum+ ";");
 					try {
-						Socket client = new Socket("192.168.0.18", 8888);
+						Socket client = new Socket("192.168.0.4", 8888);
 						Receiver ch = new Receiver(login_frame, client);
 						TCPData tcpdata = new TCPData();
 						ch.start();
 						MyData myData = new MyData(datathis);
 						login_frame.remove(login_frame.login_panel);
 						//클라이언트를 서버에 보내기 시작
+					
 						
 						
-						
-						Lobby lobby_panel = new Lobby(login_frame,tcpdata,ch,myData);
+						Lobby lobby_panel = new Lobby(login_frame,ch,myData);
 						login_frame.add(lobby_panel) ;
 						login_frame.userDTO = datathis;
 						login_frame.lobby_panel = lobby_panel;
 						login_frame.repaint();
+						tcpdata.name = myData.nickName;
 						tcpdata.DataDestination = "testMove";
 						tcpdata.oData = new UserData(-1,-1,datathis.nickname,null);
 						ch.send(tcpdata);

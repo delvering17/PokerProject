@@ -176,16 +176,17 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == exit) {
+					TCPData tcpdata = new TCPData();
+					tcpdata.name = myData.nickName;
+					tcpdata.DataDestination = "testMove";
+					tcpdata.oData = new UserData(addr,-1,myData.nickName,null);
+					ch.send(tcpdata);
 					
-					
-					tcpData.DataDestination = "testMove";
-					tcpData.oData = new UserData(addr,-1,myData.nickName,null);
-					ch.send(tcpData);
 //					tcpData.easyStudy[tcpData.UserPos]--;
 //					tcpData.playData.get(tcpData.UserPos)[num]=-1;
 ////					tcpData.test.get(tcpData.UserPos).remove(num); 
 //
-					login_frame.add(new Lobby(login_frame,tcpData,ch,myData));
+					login_frame.add(new Lobby(login_frame,ch,myData));
 					login_frame.remove(game_panel);
 					login_frame.repaint();
 					
@@ -595,11 +596,12 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		ttt.add(player4cardShow);
 		ttt.add(player5cardShow);
 		
+		TCPData tcpdata = new TCPData();
+		tcpdata.name = myData.nickName;
+		tcpdata.DataDestination = "testMove";
+		tcpdata.oData = new UserData(-1,addr,myData.nickName, null);
 		
-		tcpData.DataDestination = "testMove";
-		tcpData.oData = new UserData(-1,addr,myData.nickName, null);
-		
-		ch.send(tcpData);
+		ch.send(tcpdata);
 		
    }
 
@@ -718,36 +720,36 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		
 		case "testMove":
 			System.out.println(tdata.oData);
-			real_users = ((HashMap<Integer, HashMap<String, Integer>>)tdata.oData).get(myData.pos);
-			me.playerNum = real_users.get(me.nickName);
-			
-			if(me.playerNum ==0) {
-				JButton GameStart = new JButton("게임 시작");
-				GameStart.setBounds(500, 280, 200, 80);
-				add(GameStart);
-				GameStart.addActionListener(new ActionListener() {
-					//게임 시작 버튼
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						
-						game_users = (HashMap<String, Integer>) real_users.clone();
-						betting_Button_true();
-						//tcpData.DataDestination = "Game";
-						//tcpData.userCount = num;
-						me.userCount = me.playerNum;
-						for (int i = 2; i < 15; i++) {
-							for (int j = 1; j < 5; j++) {
-								me.dealerDeck.add(new PokerCard(i,j));
-							}
-						}
-						me.roomclose.replace(myData.pos, true);
-						GameProcess();
-						game_panel.remove(GameStart);
-						repaint();
-					}
-				});
-				
-			}
+//			real_users = ((HashMap<Integer, HashMap<String, Integer>>)tdata.oData).get(0);
+//			me.playerNum = real_users.get(myData.nickName);
+//			
+//			if(me.playerNum ==0) {
+//				JButton GameStart = new JButton("게임 시작");
+//				GameStart.setBounds(500, 280, 200, 80);
+//				add(GameStart);
+//				GameStart.addActionListener(new ActionListener() {
+//					//게임 시작 버튼
+//					@Override
+//					public void actionPerformed(ActionEvent e) {
+//						
+//						game_users = (HashMap<String, Integer>) real_users.clone();
+//						betting_Button_true();
+//						//tcpData.DataDestination = "Game";
+//						//tcpData.userCount = num;
+//						me.userCount = me.playerNum;
+//						for (int i = 2; i < 15; i++) {
+//							for (int j = 1; j < 5; j++) {
+//								me.dealerDeck.add(new PokerCard(i,j));
+//							}
+//						}
+//						me.roomclose.replace(myData.pos, true);
+//						GameProcess();
+//						game_panel.remove(GameStart);
+//						repaint();
+//					}
+//				});
+//				
+//			}
 			
 			break;
 	

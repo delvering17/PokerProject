@@ -43,7 +43,7 @@ public class Lobby extends JPanel implements NetExecute {
 	//방 체크할 리스트
 	HashMap<InetAddress, Object> roomChk;
 	ArrayList<RoomBtn> btnlist = new ArrayList<RoomBtn>();
-	public Lobby(Login_frame mainJf,TCPData tcpdata,Receiver ch, MyData myData) {
+	public Lobby(Login_frame mainJf,Receiver ch, MyData myData) {
 		this.myData= myData; 
 		this.ch = ch;
 //		this.tcpdata = tcpdata;
@@ -61,8 +61,8 @@ public class Lobby extends JPanel implements NetExecute {
 		Component roomAdd = new Component(10, 10, 800, 100);
 		add(roomAdd);
 		
-		roomAdd.add(new RoomBtn("방만들기","Making",590,35,100,60,this,tcpdata));
-		roomAdd.add(new RoomBtn("바로입장","Enter",0,695,35,100,60,this,tcpdata));
+		roomAdd.add(new RoomBtn("방만들기","Making",590,35,100,60,this));
+		roomAdd.add(new RoomBtn("바로입장","Enter",0,695,35,100,60,this));
 		
 		JScrollPane roomList = new JScrollPane();//스크롤팬 생성
 		roomList.setBounds(10, 120, 800, 400);
@@ -75,7 +75,7 @@ public class Lobby extends JPanel implements NetExecute {
 			jl.setBorder(new LineBorder(Color.black,2));
 			jl.setOpaque(true);
 			jl.setBackground(new Color(255,111,111));
-			RoomBtn rBtn = new RoomBtn("만들기","Making",i,90,110,80,40,this,tcpdata);
+			RoomBtn rBtn = new RoomBtn("만들기","Making",i,90,110,80,40,this);
 			btnlist.add(rBtn);
 			jl.add(rBtn);
 			roomPanel.add(jl);
@@ -104,6 +104,8 @@ public class Lobby extends JPanel implements NetExecute {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				TCPData tcpdata = new TCPData();
+				tcpdata.name = myData.nickName;
 				tcpdata.oData = new MsgData(myData.nickName, jtf.getText()) ;
 				tcpdata.DataDestination = "Chatting";
 				ch.send(tcpdata);
@@ -139,7 +141,7 @@ public class Lobby extends JPanel implements NetExecute {
 		String name;
 		Lobby lobby;
 		Integer addr;
-		public RoomBtn(String name,String cname,int x,int y,int width , int height,Lobby lobby,TCPData tcptcpdata) {
+		public RoomBtn(String name,String cname,int x,int y,int width , int height,Lobby lobby) {
 			super(name);
 			this.cname = cname;
 			this.name = name;
@@ -147,7 +149,7 @@ public class Lobby extends JPanel implements NetExecute {
 			setBounds(x, y, width, height);
 			addActionListener(this);
 		}
-		public RoomBtn(String name,String cname,int addr,int x,int y,int width , int height,Lobby lobby,TCPData tcptcpdata) {
+		public RoomBtn(String name,String cname,int addr,int x,int y,int width , int height,Lobby lobby) {
 			super(name);
 			this.cname = cname;
 			this.name = name;
@@ -185,21 +187,23 @@ public class Lobby extends JPanel implements NetExecute {
 		}
 	}
 
+
 	@Override
 	public void execute(TCPData data) {
-		
+		System.out.println("들어오냐");
 		//전체 기본
 //		System.out.println("??");
 //		this.tcpdata.playData = data.playData;
 //		this.tcpdata.easyStudy = data.easyStudy;
 //		this.tcpdata.userName = data.userName;
 //		this.tcpdata.test = data.test;
-		userArea.setText("");
+//		userArea.setText("");
 		
 		
 		switch (data.DataDestination) {
 		
 		case "Chatting":
+			
 			MsgData msg = (MsgData)data.oData;
 			
 				jta.append(msg.nickName + " : "+ msg.msg+"\n");
@@ -208,45 +212,27 @@ public class Lobby extends JPanel implements NetExecute {
 			break;
 		case "testMove":
 			//인원 변경시에 대한 화면 변경 처리
-			System.out.println(data.oData);
-			
-			HashMap<Integer, HashMap<String, Integer>> test = (HashMap<Integer, HashMap<String, Integer>>)data.oData;
-			
-			for (String un :test.get(-1).keySet()) {
-				userArea.append(un+"\n");
-			}
-			for (String un :test.get(-1).keySet()) {
-				System.out.println(un);
-			}
-			for (Integer un :test.get(-1).values()) {
-				System.out.println(un);
-			}
-			for (Map.Entry<Integer, HashMap<String, Integer>> hm : test.entrySet()) {
-				if (hm.getValue().size() == 5) {
-					
-				}
-			}
-			
-			
-//			for (RoomBtn roomBtn : btnlist) {
-//				if(data.easyStudy[roomBtn.addr]>0) {
-//					roomBtn.setText("입장");
-//					if(data.easyStudy[roomBtn.addr]==5) roomBtn.setEnabled(false);
-//					else roomBtn.setEnabled(true);
-//				}else {
-//					roomBtn.setText("만들기");
-//				}
-//			}
+			System.out.println("여기까지 오냐 로비의 테스트 무브? ");
+			System.out.println((HashMap<Integer, HashMap<String, Integer>>)data.oData);
 //			
-//			for (RoomBtn roomBtn : btnlist) {
-//				if(data.roomclose.get(roomBtn.addr)) {
-//					roomBtn.setEnabled(false);
-//				}else {
-//					roomBtn.setEnabled(true);				
-//				}
-//				
-//				
+//			HashMap<Integer, HashMap<String, Integer>> test = (HashMap<Integer, HashMap<String, Integer>>)data.oData;
+//			
+//			for (String un :test.get(-1).keySet()) {
+//				userArea.append(un+"\n");
 //			}
+//			System.out.println("__________________");
+//			for (String un :test.get(-1).keySet()) {
+//				System.out.println(un);
+//			}
+//			for (Integer un :test.get(-1).values()) {
+//				System.out.println(un);
+//			}
+//			for (Map.Entry<Integer, HashMap<String, Integer>> hm : test.entrySet()) {
+//				if (hm.getValue().size() == 5) {
+//					
+//				}
+//			}
+			
 			break;
 		}
 		repaint();
