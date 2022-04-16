@@ -679,7 +679,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				
 					
 					game_panel.remove(GameStart);
-					repaint();
+					game_panel.repaint();
 					
 					GameProcess();
 				}
@@ -1308,10 +1308,10 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	int next(int a) {
 		int testnum = 0;
 		for (Map.Entry<String, Integer > jump : game_users.entrySet()) {
-			Integer integer = jump.getValue();
-			if(game_users.get(integer) != null) {
-				if(testnum<integer) {
-					testnum=integer;
+			
+			if(game_users.get(jump.getKey()) != null) {
+				if(testnum<jump.getValue()) {
+					testnum=jump.getValue();
 				}
 			}
 		}
