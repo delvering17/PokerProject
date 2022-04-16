@@ -696,8 +696,8 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			cht.setCaretPosition(cht.getDocument().getLength());
 			
 			break;
-		case "카드 나와라":
 			
+		case "카드 나와라":
 			GameData gd = (GameData)data.oData;
 			me = gd;
 			
@@ -716,6 +716,70 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			bt.setEnabled(false);
 
 			break;	
+			
+		case "betting_bbing" :	// 이제 베팅 누가 했는지  보고 신호 줘야
+			gd = (GameData)data.oData;
+			me = gd;
+			System.out.println("삥");
+			
+			betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
+			cht.append("전체 베팅금액: "+me.wholeBettingMoney+ ", 배팅 머니: "+ me.btMoney);
+			playerturn();
+			
+			break;	
+			
+		case "betting_ddadang" :
+			gd = (GameData)data.oData;
+			me = gd;
+			System.out.println("따당");
+			
+			betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
+			cht.append("전체 베팅금액 : "+me.wholeBettingMoney+ ", 배팅 머니 : "+ me.btMoney+", 내 머니 : "+me.money);
+			playerturn();
+			
+			break;
+			
+		case "betting_half" :
+			gd = (GameData)data.oData;
+			me = gd;
+			System.out.println("하프");
+			
+		betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
+		cht.append("전체 베팅금액 : "+me.wholeBettingMoney+ ", 배팅 머니 : "+ me.btMoney+", 내 머니 : "+me.money);
+		playerturn();
+			
+			break;	
+		
+		case "betting_quarter" :
+			gd = (GameData)data.oData;
+			me = gd;
+			System.out.println("쿼터");
+			
+			betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
+			cht.append("전체 베팅금액 : "+me.wholeBettingMoney+ ", 배팅 머니 : "+ me.btMoney+", 내 머니 : "+me.money);
+			playerturn();
+		
+			break;
+			
+		case "betting_max" :
+			gd = (GameData)data.oData;
+			me = gd;
+			System.out.println("쿼터");
+			
+			betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
+			cht.append("전체 베팅금액 : "+me.wholeBettingMoney+ ", 배팅 머니 : "+ me.btMoney+", 내 머니 : "+me.money);
+			playerturn();	
+			
+			break;
+			
+		case "betting_die":
+			gd = (GameData)data.oData;
+			me = gd;
+			System.out.println("다이");
+			
+			playerturn();
+			
+			break;
 			
 //		this.tcpData.playData = data.playData;
 //		this.tcpData.playerDeck = data.playerDeck;
@@ -843,18 +907,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 //			switch (gd.msg) {
 //			
 
-//			case "betting_bbing" :
-//				me.bettingMoney = gd.bettingMoney;
-//				me.bettingMoney = gd.bettingMoney;
-//				me.wholeBettingMoney = gd.wholeBettingMoney;
-//				me.wholeBettingMoney = gd.wholeBettingMoney;
-//				me.panMoney = gd.panMoney;
-//				//me.panMoney = data.panMoney;
-//				betting.setText("전체 베팅금액: "+gd.wholeBettingMoney+ ", 현재 판돈: "+ gd.panMoney);
-//				cht.append("전체 베팅금액: "+gd.wholeBettingMoney+ ", 배팅 머니: "+ gd.btMoney);
-//				playerturn();
-//				
-//				break;
+
 //			case "betting_call":
 //				me.bettingMoney = gd.bettingMoney;
 //				me.bettingMoney = gd.bettingMoney;
@@ -1043,62 +1096,10 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 //				}
 //
 //				break;	
-//			case "betting_ddadang" :
-//				me.bettingMoney = gd.bettingMoney;
-//				me.bettingMoney = gd.bettingMoney;
-//				me.wholeBettingMoney = gd.wholeBettingMoney;
-//				me.wholeBettingMoney = gd.wholeBettingMoney;
-//				me.panMoney = gd.panMoney;
-//				me.panMoney = gd.panMoney;
-//				betting.setText("전체 베팅금액: "+gd.wholeBettingMoney+ ", 현재 판돈: "+ gd.panMoney);
-//				cht.append("전체 베팅금액 : "+gd.wholeBettingMoney+ ", 배팅 머니 : "+ gd.btMoney+", 내 머니 : "+gd.money);
-//				playerturn();
+//			
 //				
-//				
-//				break;
-//			case "betting_half" :
-//				me.bettingMoney = gd.bettingMoney;
-//				me.bettingMoney = gd.bettingMoney;
-//				me.wholeBettingMoney = gd.wholeBettingMoney;
-//				me.wholeBettingMoney = gd.wholeBettingMoney;
-//				me.panMoney = gd.panMoney;
-//				me.panMoney = gd.panMoney;
-//				betting.setText("전체 베팅금액: "+gd.wholeBettingMoney+ ", 현재 판돈: "+ gd.panMoney);
-//				cht.append("전체 베팅금액 : "+gd.wholeBettingMoney+ ", 배팅 머니 : "+ gd.btMoney+", 내 머니 : "+gd.money);
-//				playerturn();
-//				
-//				
-//				break;
-//
-//			case "betting_quarter" :
-//				me.bettingMoney = gd.bettingMoney;
-//				me.bettingMoney = gd.bettingMoney;
-//				me.wholeBettingMoney = gd.wholeBettingMoney;
-//				me.wholeBettingMoney = gd.wholeBettingMoney;
-//				me.panMoney = gd.panMoney;
-//				me.panMoney = gd.panMoney;
-//				betting.setText("전체 베팅금액: "+gd.wholeBettingMoney+ ", 현재 판돈: "+ gd.panMoney);
-//				cht.append("전체 베팅금액 : "+gd.wholeBettingMoney+ ", 배팅 머니 : "+ gd.btMoney+", 내 머니 : "+gd.money);
-//				playerturn();
-//				
-//				
-//				break;
-//			case "betting_max" :
-//				me.bettingMoney = gd.bettingMoney;
-//				me.bettingMoney = gd.bettingMoney;
-//				me.wholeBettingMoney = gd.wholeBettingMoney;
-//				me.wholeBettingMoney = gd.wholeBettingMoney;
-//				me.panMoney = gd.panMoney;
-//				me.panMoney = gd.panMoney;
-//				betting.setText("전체 베팅금액: "+gd.wholeBettingMoney+ ", 현재 판돈: "+ gd.panMoney);
-//				cht.append("전체 베팅금액 : "+gd.wholeBettingMoney+ ", 배팅 머니 : "+ gd.btMoney+", 내 머니 : "+gd.money);
-//				playerturn();
-//				
-//				
-//				break;
-//			case "betting_die":
-//				playerturn();
-//				break;
+
+
 //			} 
 //			
 //			
