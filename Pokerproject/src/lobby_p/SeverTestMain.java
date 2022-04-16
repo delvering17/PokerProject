@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import net_p.MsgData;
 import net_p.TCPData;
 import net_p.UserData;
 class MulServer {
@@ -21,22 +22,28 @@ class MulServer {
 	public HashMap<Integer, Boolean> roomclose;
 	
 	void testMove(UserData td) {
-		
-		int no  = test.get(td.pre).get(td.nickName);
+		Integer no  = test.get(td.pre).get(td.nickName);
 		
 		test.get(td.pre).remove(td.nickName);
 		
-		for(Map.Entry<String, Integer> me: test.get(td.pre).entrySet()) {
-			
-			if(me.getValue() > no) {
+			for(Map.Entry<String, Integer> me: test.get(td.pre).entrySet()) {
 				
-				test.get(td.pre).put(me.getKey(), me.getValue()-1);
-			}
-			
-		}
-
+				if(me.getValue() > no) {
+					
+					test.get(td.pre).put(me.getKey(), me.getValue()-1);
+				}
+				
+			}	
+		
+		
+		System.out.println(td.nickName+ "가 "+ td.pre+ "에서 " + td.pos+ "로 이동 ");
+		
 		no = test.get(td.pos).size();
-		test.get(td.pos).put(td.nickName, no);
+		if (td.pos == -1) {
+			test.get(td.pos).put(td.nickName, null);
+		} else {
+			test.get(td.pos).put(td.nickName, no);
+		}
 	}
 	
 	
@@ -96,10 +103,12 @@ class MulServer {
 		public void run() {
 			try {
 				while(ois!=null) {
+				
 					data = (TCPData)ois.readObject();
 					userName.add(data.name);
 					userList.put(data.name,oos);
 //					data.userName = userName;
+					System.out.println("서버가 클라이언트에게 받음");
 					if(data.DataDestination.equals("first")) {
 //						data.playData = playData;
 //						data.easyStudy = easyStudy;
@@ -107,13 +116,13 @@ class MulServer {
 //						
 //						sendTo(data);
 					}else if(data.DataDestination.equals("testMove")) {
+						System.out.println("서버가 뿌림?");
 						UserData td = (UserData)data.oData;
 						testMove(td);
 						data.oData = test; 
 						sendToAll(data);
-					}
-					
-					else {
+						
+					} else {
 //						playData = data.playData;
 //						easyStudy = data.easyStudy;
 //						test = data.test;
@@ -143,6 +152,7 @@ class MulServer {
 	void sendToAll(TCPData data) {
 		for (ObjectOutputStream dd : userList.values()) {
 			try {
+				System.out.println("서버가 모두에게 보냄");
 				dd.writeObject(data);
 				dd.flush();
 				dd.reset();

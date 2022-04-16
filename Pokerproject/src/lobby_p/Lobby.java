@@ -201,14 +201,14 @@ public class Lobby extends JPanel implements NetExecute {
 		
 		case "Chatting":
 			MsgData msg = (MsgData)data.oData;
-			if(data.UserPos==myData.pos) {
+			
 				jta.append(msg.nickName + " : "+ msg.msg+"\n");
 				jta.setCaretPosition(jta.getDocument().getLength());
-			}
+			
 			break;
 		case "testMove":
 			//인원 변경시에 대한 화면 변경 처리
-			System.out.println("로비 testMove:"+data.oData);
+			
 			
 			HashMap<Integer, HashMap<String, Integer>> test = (HashMap<Integer, HashMap<String, Integer>>)data.oData;
 			
