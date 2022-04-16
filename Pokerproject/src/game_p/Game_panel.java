@@ -1229,7 +1229,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	void first_split() {
 		// 처음 입장판돈 
 		me.wholeBettingMoney = game_users.size()*me.panMoney; 
-		
+		me.playerDeck = new HashMap<Integer, ArrayList<PokerCard>>();
 		// 플레이어 카드집 공간 생성
 		for (Map.Entry<String, Integer > cd : game_users.entrySet()) {
 			me.playerDeck.put(cd.getValue(),new ArrayList<PokerCard>());
