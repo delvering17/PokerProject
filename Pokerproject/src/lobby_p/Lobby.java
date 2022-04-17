@@ -28,6 +28,7 @@ import net_p.MsgData;
 import net_p.MyData;
 import net_p.NetExecute;
 import net_p.Receiver;
+import net_p.RoomChk;
 import net_p.TCPData;
 import net_p.UserData;
 
@@ -45,6 +46,7 @@ public class Lobby extends JPanel implements NetExecute {
 	HashMap<InetAddress, Object> roomChk;
 	ArrayList<RoomBtn> btnlist = new ArrayList<RoomBtn>();
 //	HashMap<Integer, HashMap<String, Integer>> test;
+	
 	
 	public Lobby(Login_frame mainJf,Receiver ch, MyData myData) {
 		this.myData= myData; 
@@ -109,6 +111,7 @@ public class Lobby extends JPanel implements NetExecute {
 			public void actionPerformed(ActionEvent e) {
 				TCPData tcpdata = new TCPData();
 				tcpdata.name = myData.nickName;
+				tcpdata.UserPos = -1;
 				tcpdata.oData = new MsgData(myData.nickName, jtf.getText()) ;
 				tcpdata.DataDestination = "Chatting";
 				ch.send(tcpdata);
@@ -211,9 +214,10 @@ public class Lobby extends JPanel implements NetExecute {
 		case "Chatting":
 			
 			MsgData msg = (MsgData)data.oData;
-			
-				jta.append(msg.nickName + " : "+ msg.msg+"\n");
-				jta.setCaretPosition(jta.getDocument().getLength());
+				if (data.UserPos == -1) {
+					jta.append(msg.nickName + " : "+ msg.msg+"\n");
+					jta.setCaretPosition(jta.getDocument().getLength());		
+				}
 			
 			break;
 		case "testMove":
@@ -225,7 +229,13 @@ public class Lobby extends JPanel implements NetExecute {
 			innout(test);
 			
 			break;
+		case "RoomChk":
+			RoomChk rc = (RoomChk)data.oData;
+			if(rc.bl) btnlist.get(rc.roomNum).setEnabled(false);
+			else btnlist.get(rc.roomNum).setEnabled(true);
+			break;
 		}
+		
 		repaint();
 		
 	}

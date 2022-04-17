@@ -71,6 +71,32 @@ public class Ingame_userProfile_panel extends JPanel {
 		}
 	}
 	
+	public Ingame_userProfile_panel(int playerNum) {
+		
+		setLayout(null);
+		switch (playerNum) {
+		
+		case 0:
+			setBounds(220, 520, 200, 200);
+			break;
+		case 1:
+			setBounds(10, 50, 200, 200);
+			break;
+		case 2:
+			setBounds(10, 280, 200, 200);
+			break;
+		case 3:
+			setBounds(1000, 50, 200, 200);
+			break;
+		case 4:
+			setBounds(1000, 280, 200, 200);
+			break;
+		
+		
+		}
+		
+	}
+
 	ProfileDTO playerDTO_get(String nickname) {
 		
 		ProfileDTO profileDTO = new SignDB().num_profileRead(" nickname = '" + nickname + "';");
