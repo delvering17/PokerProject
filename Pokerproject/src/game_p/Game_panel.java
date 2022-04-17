@@ -343,8 +343,9 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					if(me.callCount == me.game_users.size()-1 && me.playerDeck.get(myData.playerNum).size()==7) {
 						me.result = new HashMap<Integer, String>();
 						for (Integer cd : me.game_users.values()) {
-						
-							me.result.put(cd, jokbbo.jokbo(me.playerDeck.get(cd)));
+							if(cd != null) {
+								me.result.put(cd, jokbbo.jokbo(me.playerDeck.get(cd)));
+							}
 						}
 						
 						me.winner = jk.resultWinner(me.result)+"";
