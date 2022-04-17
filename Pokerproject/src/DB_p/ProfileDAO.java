@@ -24,7 +24,7 @@ public class ProfileDAO {
 	
 	public ProfileDAO() {
 		
-		String url = "jdbc:mariadb://192.168.0.4:3306/poker_db";
+		String url = "jdbc:mariadb://192.168.0.10:3306/poker_db";
 		String username = "pokertest";
 		String password = "cksdnr12";
 		

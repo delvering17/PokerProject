@@ -654,37 +654,37 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			if(myData.playerNum ==0 && gameStart_Gen == false) {
 			
 				gameStart_Gen = true;
-			//System.out.println("너는 0번이다.");
+				//System.out.println("너는 0번이다.");
 			
-			JButton GameStart = new JButton("게임 시작");
-			GameStart.setBounds(500, 280, 200, 80);
-			add(GameStart);
+				JButton GameStart = new JButton("게임 시작");
+				GameStart.setBounds(500, 280, 200, 80);
+				add(GameStart);	
 			
-			GameStart.addActionListener(new ActionListener() {
+				GameStart.addActionListener(new ActionListener() {
 				//게임 시작 버튼
 				@Override
-				public void actionPerformed(ActionEvent e) {
-					
-					me.game_users = (HashMap<String, Integer>) real_users.clone();
-					betting_Button_true();
-					gameStart_Gen = false;
-					me.userCount = myData.playerNum;
-					
-					me.dealerDeck = new ArrayList<PokerCard>();
-					for (int i = 2; i < 15; i++) {
-						for (int j = 1; j < 5; j++) {
-							
-							me.dealerDeck.add(new PokerCard(i,j));
+					public void actionPerformed(ActionEvent e) {
+						
+						me.game_users = (HashMap<String, Integer>) real_users.clone();
+						betting_Button_true();
+						gameStart_Gen = false;
+						me.userCount = myData.playerNum;
+						
+						me.dealerDeck = new ArrayList<PokerCard>();
+						for (int i = 2; i < 15; i++) {
+							for (int j = 1; j < 5; j++) {
+								
+								me.dealerDeck.add(new PokerCard(i,j));
+							}
 						}
+						
+						
+						game_panel.remove(GameStart);
+						game_panel.repaint();
+						
+						GameProcess();
 					}
-					
-					
-					game_panel.remove(GameStart);
-					game_panel.repaint();
-					
-					GameProcess();
-				}
-			});
+				});
 			
 			}
 			
@@ -901,10 +901,11 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					
 					repaint();
 					
-					if(me.playerNum == 0) {
+					if(myData.playerNum == 0 && gameStart_Gen == false) {
 						JButton GameStart = new JButton("게임 시작");
 						GameStart.setBounds(500, 280, 200, 80);
 						add(GameStart);
+						gameStart_Gen = true;
 						GameStart.addActionListener(new ActionListener() {
 							//게임 시작 버튼
 							@Override
@@ -912,7 +913,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 								
 								me.game_users = (HashMap<String, Integer>) real_users.clone();
 								betting_Button_true();
-								
+								gameStart_Gen = false;
 								me.userCount = myData.playerNum;
 								
 								me.dealerDeck = new ArrayList<PokerCard>();
