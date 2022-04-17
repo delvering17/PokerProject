@@ -165,6 +165,13 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					
 					TCPData tcpdata = new TCPData();
 					tcpdata.name = myData.nickName;
+					tcpdata.DataDestination = "out";
+					tcpdata.oData = myData.playerNum;
+					ch.send(tcpdata);
+					
+					
+					
+					tcpdata.name = myData.nickName;
 					tcpdata.DataDestination = "testMove";
 					tcpdata.oData = new UserData(addr,-1,myData.nickName,null);
 					ch.send(tcpdata);
@@ -325,6 +332,9 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					me.prebetMoney = me.btMoney;
 					me.wholeBettingMoney += me.btMoney;
 					myData.money -= me.btMoney;
+					me.money = myData.money;
+					me.playerNum = myData.playerNum;
+					
 					System.out.println("패널의 myData: "+ myData.money);
 //					me.callCount = me.playerNum;
 					me.callCount++;
@@ -373,7 +383,9 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				me.prebetMoney = me.btMoney; 
 				me.wholeBettingMoney += me.btMoney;
 				myData.money -= me.btMoney;
-					
+				me.money = myData.money;
+				me.playerNum = myData.playerNum;
+				
 				tcpdata.DataDestination = "betting_bbing";
 				tcpdata.name = myData.nickName;
 				tcpdata.oData = me;
@@ -402,6 +414,8 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				me.prebetMoney = me.btMoney;
 				me.wholeBettingMoney += me.btMoney;
 				myData.money -= me.btMoney;
+				me.money = myData.money;
+				me.playerNum = myData.playerNum;
 				
 				tcpdata.DataDestination = "betting_ddadang";
 				tcpdata.name = myData.nickName;
@@ -429,7 +443,8 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				me.prebetMoney = me.btMoney;
 				me.wholeBettingMoney += me.btMoney;
 				myData.money -= me.btMoney;
-			
+				me.money = myData.money;
+				me.playerNum = myData.playerNum;
 				
 				tcpdata.DataDestination = "betting_half";
 				tcpdata.name = myData.nickName;
@@ -449,9 +464,10 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
                 
                 
             	me.userCount = myData.playerNum;
-
+            	
             	me.game_users.replace(myData.nickName,null);
-        
+            	me.playerNum = myData.playerNum;
+            	
             	tcpdata.DataDestination = "betting_die";
 				tcpdata.name = myData.nickName;
 				tcpdata.oData = me;
@@ -478,7 +494,9 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				me.prebetMoney = me.btMoney;
 		        me.wholeBettingMoney += me.btMoney;
 		        myData.money -= me.btMoney;
-		          
+		        me.money = myData.money;  
+		        me.playerNum = myData.playerNum;
+		        
 		        tcpdata.DataDestination = "betting_quarter";
 		        tcpdata.name = myData.nickName;
 		        tcpdata.oData = me;	
@@ -498,12 +516,13 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		
 				me.btMoney = myData.money;
 				me.prebetMoney = me.btMoney;
-				me.wholeBettingMoney += me.btMoney ;
+				me.wholeBettingMoney += me.btMoney;
 				myData.money -= me.btMoney;
-				
-				
+				me.money = myData.money;
+				me.playerNum = myData.playerNum;
 				
 				tcpdata.DataDestination = "betting_max";
+				
 		        tcpdata.name = myData.nickName;
 		        tcpdata.oData = me;	
 		        ch.send(tcpdata);
@@ -688,6 +707,9 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			
 			}
 			
+			ipjang_profileReset ();
+			
+			
 			break;
 			
 		case "Chatting" :
@@ -695,6 +717,13 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			
 			cht.append(msg.nickName + " : "+ msg.msg+"\n");
 			cht.setCaretPosition(cht.getDocument().getLength());
+			
+			break;
+		
+		case "out" :	
+			
+			int playerNum = (int)data.oData;
+			out_profileRemove(playerNum);
 			
 			break;
 			
@@ -723,8 +752,8 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			me = gd;
 			System.out.println("삥");
 			
+			betting_Show(me.playerNum, "betting_bbing");
 			betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
-			cht.append("전체 베팅금액: "+me.wholeBettingMoney+ ", 배팅 머니: "+ me.btMoney);
 			playerturn();
 			
 			break;	
@@ -734,8 +763,8 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			me = gd;
 			System.out.println("따당");
 			
+			betting_Show(me.playerNum, "betting_ddadang");
 			betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
-			cht.append("전체 베팅금액 : "+me.wholeBettingMoney+ ", 배팅 머니 : "+ me.btMoney+", 내 머니 : "+myData.money);
 			playerturn();
 			
 			break;
@@ -745,9 +774,9 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			me = gd;
 			System.out.println("하프");
 			
-		betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
-		cht.append("전체 베팅금액 : "+me.wholeBettingMoney+ ", 배팅 머니 : "+ me.btMoney+", 내 머니 : "+myData.money);
-		playerturn();
+			betting_Show(me.playerNum, "betting_half");
+			betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
+			playerturn();
 			
 			break;	
 		
@@ -756,8 +785,8 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			me = gd;
 			System.out.println("쿼터");
 			
+			betting_Show(me.playerNum, "betting_quarter");
 			betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
-			cht.append("전체 베팅금액 : "+me.wholeBettingMoney+ ", 배팅 머니 : "+ me.btMoney+", 내 머니 : "+myData.money);
 			playerturn();
 		
 			break;
@@ -765,10 +794,10 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		case "betting_max" :
 			gd = (GameData)data.oData;
 			me = gd;
-			System.out.println("쿼터");
+			System.out.println("맥스");
 			
+			betting_Show(me.playerNum, "betting_max");
 			betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
-			cht.append("전체 베팅금액 : "+me.wholeBettingMoney+ ", 배팅 머니 : "+ me.btMoney+", 내 머니 : "+myData.money);
 			playerturn();	
 			
 			break;
@@ -778,6 +807,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			me = gd;
 			System.out.println("다이");
 			
+			betting_Show(me.playerNum, "betting_die");
 			playerturn();
 			
 			break;
@@ -787,16 +817,21 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			me = gd;
 			System.out.println("콜");
 			
+			betting_Show(me.playerNum, "betting_call");
 			betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
-			cht.append("전체 베팅금액 : "+me.wholeBettingMoney+ ", 배팅 머니 : "+ me.btMoney+", 내 머니 : "+myData.money);
 			playerturn();	
 			System.out.println("익스큐트의 myData: "+ myData.money);
+			
 			if(me.callCount == me.game_users.keySet().size()-1 && me.playerDeck.get(0).size()==7 && me.last) {
 				System.out.println("종료입니다.");
 				System.out.println("집가자 가고싶어요 보내줘요" + me.winner);
 				
-				// DB 입력 
-			
+		 
+				p1_turn.setIcon(default_bet);
+				p2_turn.setIcon(default_bet);
+				p3_turn.setIcon(default_bet);
+				p4_turn.setIcon(default_bet);
+				p5_turn.setIcon(default_bet);
 				
 				
 				//
@@ -813,13 +848,11 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					myData.totalGame ++;
 				
 				}
-				// DB와 게임 시작 시 프로필 리셋 
-				
-				// 베팅 초기화  
-			
+
+
 				
 				
-//				gameRes_DBInsert(this.tcpData); 
+				gameRes_DBInsert(); 
 				
 				
 				
@@ -841,58 +874,10 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					
 					Thread.sleep(3000);
 					
-//					for (Map.Entry<String, Integer > entry : me.game_users.entrySet()) {
-//						switch (entry.getValue()) {
-//						
-//						case 0:
-//						
-//								remove(Ingame_userProfile_panel_0);
-//				
-//								Ingame_userProfile_panel_0 = new Ingame_userProfile_panel(0,entry.getKey());
-//								System.out.println(entry.getValue()+"," + Ingame_userProfile_panel_0.userMoney);
-//								add(Ingame_userProfile_panel_0);
-//							
-//							break;
-//						case 1:
-//							
-//								remove(Ingame_userProfile_panel_1);
-//								Ingame_userProfile_panel_1 = new Ingame_userProfile_panel(1,entry.getKey());
-//								System.out.println(entry.getValue()+"," + Ingame_userProfile_panel_1.userMoney);
-//								add(Ingame_userProfile_panel_1);
-//							
-//							break;
-//						case 2:
-//						
-//								remove(Ingame_userProfile_panel_2);
-//								Ingame_userProfile_panel_2 = new Ingame_userProfile_panel(2,entry.getKey());
-//								System.out.println(entry.getValue()+"," + Ingame_userProfile_panel_2.userMoney);
-//								add(Ingame_userProfile_panel_2);
-//							
-//							break;
-//						case 3:
-//						
-//								remove(Ingame_userProfile_panel_3);
-//								Ingame_userProfile_panel_3 = new Ingame_userProfile_panel(3,entry.getKey());
-//								add(Ingame_userProfile_panel_3);
-//							
-//							break;
-//						case 4:
-//						
-//								remove(Ingame_userProfile_panel_4);
-//								Ingame_userProfile_panel_4 = new Ingame_userProfile_panel(4,entry.getKey());
-//								add(Ingame_userProfile_panel_4);
-//								
-//							break;
-//						}
-//					}
+					endGame_profileReset();
 					
 					turnNickname.setText("차례 : ");
-					
-					p1_turn.setIcon(default_bet);
-					p2_turn.setIcon(default_bet);
-					p3_turn.setIcon(default_bet);
-					p4_turn.setIcon(default_bet);
-					p5_turn.setIcon(default_bet);
+					betting.setText("전체 베팅금액: "+0+ ", 현재 판돈: "+ 0);
 					p1_bet_jokbo.setText("베팅 : "+ 0);
 					p2_bet_jokbo.setText("베팅 : "+ 0);
 					p3_bet_jokbo.setText("베팅 : "+ 0);
@@ -956,6 +941,11 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 						}
 					}
 				}
+				p1_turn.setIcon(default_bet);
+				p2_turn.setIcon(default_bet);
+				p3_turn.setIcon(default_bet);
+				p4_turn.setIcon(default_bet);
+				p5_turn.setIcon(default_bet);
 			}else if(me.callCount == me.game_users.keySet().size()-1) {
 				me.callCount=0;
 				if(myData.money <= 0) {
@@ -967,7 +957,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				for (Map.Entry<String, Integer > turn : me.game_users.entrySet()) {
 					
 					if(me.game_users.get(turn.getKey()) != null) {
-						cardJip.get(turn.getValue()).get(me.playerDeck.get(turn.getValue()).size()-1).setIcon(gd.playerDeck.get(turn.getValue()).get(me.playerDeck.get(turn.getValue()).size()-1).img);
+						cardJip.get(turn.getValue()).get(me.playerDeck.get(turn.getValue()).size()-1).setIcon(me.playerDeck.get(turn.getValue()).get(me.playerDeck.get(turn.getValue()).size()-1).img);
 					}
 				}
 				
@@ -980,287 +970,14 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			}
 
 			break;		
-			
-			
-//		this.tcpData.playData = data.playData;
-//		this.tcpData.playerDeck = data.playerDeck;
-//		this.tcpData.easyStudy = data.easyStudy;
-//		this.tcpData.userName = data.userName;
-//		this.tcpData.test = data.test;
-//		if(data.UserPos==this.tcpData.UserPos) {
-//			this.tcpData.dealerDeck = data.dealerDeck;
-//			cht.append(data.name+" : "+data.msg+"\n");
-//			this.tcpData.prebetMoney = data.prebetMoney;
-//			this.tcpData.userCount = data.userCount;
-//			this.tcpData.callCount = data.callCount;
-//			this.tcpData.last = data.last;
-//			this.tcpData.userNumber = data.userNumber;
-//		}
-		
-		
-	
-//		
-//		
 
-
-//
-//		if (data.msg.contains("[입장]") ) {
-//			System.out.println("프로필 생성");
-//			
-////			for () {
-////				
-////				new Ingame_userProfile_panel(); // playNum, nickname
-////				
-////			}
-//			for (Map.Entry<String, Integer > entry : data.test.get(data.UserPos).entrySet()) {
-//				switch (entry.getValue()) {
-//				
-//				case 0:
-//					if (Ingame_userProfile_panel_0 == null) {
-//						Ingame_userProfile_panel_0 = new Ingame_userProfile_panel(0,entry.getKey());
-//						add(Ingame_userProfile_panel_0);
-//					}
-//					break;
-//				case 1:
-//					if (Ingame_userProfile_panel_1 == null) {
-//						Ingame_userProfile_panel_1 = new Ingame_userProfile_panel(1,entry.getKey());
-//						add(Ingame_userProfile_panel_1);
-//					}
-//					break;
-//				case 2:
-//					if (Ingame_userProfile_panel_2 == null) {
-//						Ingame_userProfile_panel_2 = new Ingame_userProfile_panel(2,entry.getKey());
-//						add(Ingame_userProfile_panel_2);
-//					}
-//					break;
-//				case 3:
-//					if (Ingame_userProfile_panel_3 == null) {
-//						Ingame_userProfile_panel_3 = new Ingame_userProfile_panel(3,entry.getKey());
-//						add(Ingame_userProfile_panel_3);
-//					}
-//					break;
-//				case 4:
-//					if (Ingame_userProfile_panel_4 == null) {
-//						Ingame_userProfile_panel_4 = new Ingame_userProfile_panel(4,entry.getKey());
-//						add(Ingame_userProfile_panel_4);
-//					}	
-//					break;
-//				}
-//			}
-//
-////			if (Ingame_userProfile_panel_0 == null) {
-////				Ingame_userProfile_panel_0 = new Ingame_userProfile_panel(0,);
-////			}
-//			
-//	
-//		}
-		//
-	
-		
-//			
-
-			
-		
-//		case "Game":
-//			GameData gd = (GameData)data.oData;
-//			
-//			int go = 0;
-//			if (gd.msg.contains("betting")) {
-//				
-//				
-////				for (Map.Entry< String, Integer> entry : tdata.test.get(data.UserPos).entrySet()) {
-////					if (data.name.equals(entry.getValue())) {
-////						go = entry.getValue();
-////					}
-////				}
-//				switch(go) {
-//				case 0:
-//					p1_bet_jokbo.setText("베팅 : "+ gd.btMoney);
-//					betting_profileReset (gd, 0);
-//					whatBetting(gd.msg.split("_")[1],go);
-//					break;
-//				case 1:
-//					p2_bet_jokbo.setText("베팅 : "+ gd.btMoney);
-//					betting_profileReset (gd, 1);
-//					whatBetting(gd.msg.split("_")[1],go);
-//					break;
-//				case 2:
-//					p3_bet_jokbo.setText("베팅 : "+ gd.btMoney);
-//					betting_profileReset (gd, 2);
-//					whatBetting(gd.msg.split("_")[1],go);
-//					break;
-//				case 3:
-//					p4_bet_jokbo.setText("베팅 : "+ gd.btMoney);
-//					betting_profileReset (gd, 3);
-//					whatBetting(gd.msg.split("_")[1],go);
-//					break;
-//				case 4:
-//					p5_bet_jokbo.setText("베팅 : "+ gd.btMoney);
-//					betting_profileReset (gd, 4);
-//					whatBetting(gd.msg.split("_")[1],go);
-//					break;
-//				}
-//				
-//			
-//				
-//			}
-//			
-//			switch (gd.msg) {
-//			
-
-
-//			
-//			
-//				
-
-
-//			} 
-//			
-//			
-//		
-//
-//	    	repaint();
-//	    
-//			break;
-//
 		}
 		
 		repaint();
 
 		
 	}
-	void whatBetting(String whatBet, int go) {
-		ImageIcon img;
-		switch (whatBet) {
-		case "call":
-			img = new ImageIcon("img/gamepanel/call.png");
-			if (go == 0) {
-				p1_turn.setIcon(img);	
-			}
-			if (go == 1) {
-				p2_turn.setIcon(img);	
-			}
-			if (go == 2) {
-				p3_turn.setIcon(img);	
-			}
-			if (go == 3) {
-				p4_turn.setIcon(img);	
-			}
-			if (go == 4) {
-				p5_turn.setIcon(img);	
-			}
-			break;
-		case "bbing":
-			img = new ImageIcon("img/gamepanel/bbing.png");
-			if (go == 0) {
-				p1_turn.setIcon(img);	
-			}
-			if (go == 1) {
-				p2_turn.setIcon(img);	
-			}
-			if (go == 2) {
-				p3_turn.setIcon(img);	
-			}
-			if (go == 3) {
-				p4_turn.setIcon(img);	
-			}
-			if (go == 4) {
-				p5_turn.setIcon(img);	
-			}
-			break;
-		case "ddadang":
-			img = new ImageIcon("img/gamepanel/ddadang.png");
-			if (go == 0) {
-				p1_turn.setIcon(img);	
-			}
-			if (go == 1) {
-				p2_turn.setIcon(img);	
-			}
-			if (go == 2) {
-				p3_turn.setIcon(img);	
-			}
-			if (go == 3) {
-				p4_turn.setIcon(img);	
-			}
-			if (go == 4) {
-				p5_turn.setIcon(img);	
-			}
-			break;
-		case "half":
-			img = new ImageIcon("img/gamepanel/half.png");
-			if (go == 0) {
-				p1_turn.setIcon(img);	
-			}
-			if (go == 1) {
-				p2_turn.setIcon(img);	
-			}
-			if (go == 2) {
-				p3_turn.setIcon(img);	
-			}
-			if (go == 3) {
-				p4_turn.setIcon(img);	
-			}
-			if (go == 4) {
-				p5_turn.setIcon(img);	
-			}
-			break;
-		case "die":
-			img = new ImageIcon("img/gamepanel/die.png");
-			if (go == 0) {
-				p1_turn.setIcon(img);	
-			}
-			if (go == 1) {
-				p2_turn.setIcon(img);	
-			}
-			if (go == 2) {
-				p3_turn.setIcon(img);	
-			}
-			if (go == 3) {
-				p4_turn.setIcon(img);	
-			}
-			if (go == 4) {
-				p5_turn.setIcon(img);	
-			}
-			break;
-		case "quarter":
-			img = new ImageIcon("img/gamepanel/quarter.png");
-			if (go == 0) {
-				p1_turn.setIcon(img);	
-			}
-			if (go == 1) {
-				p2_turn.setIcon(img);	
-			}
-			if (go == 2) {
-				p3_turn.setIcon(img);	
-			}
-			if (go == 3) {
-				p4_turn.setIcon(img);	
-			}
-			if (go == 4) {
-				p5_turn.setIcon(img);	
-			}
-			break;
-		case "max":
-			img = new ImageIcon("img/gamepanel/max.png");
-			if (go == 0) {
-				p1_turn.setIcon(img);	
-			}
-			if (go == 1) {
-				p2_turn.setIcon(img);	
-			}
-			if (go == 2) {
-				p3_turn.setIcon(img);	
-			}
-			if (go == 3) {
-				p4_turn.setIcon(img);	
-			}
-			if (go == 4) {
-				p5_turn.setIcon(img);	
-			}
-			break;
-		}
 	
-	}
 	
 	void GameProcess() {
 		// 카드  7장 나눠주기
@@ -1361,6 +1078,8 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
         }
     }
 	
+	
+	
     void betting_Button_false (){
         bt.setEnabled(false);
         bt1.setEnabled(false);
@@ -1383,43 +1102,79 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
     }
     
     
-    void gameRes_DBInsert (GameData data){
+    void gameRes_DBInsert (){
     	new SignDB().resInsert(myData);
     }
     //
     // 베팅한 사람의 프로필 리셋
-    void betting_profileReset (GameData gd, Integer playerNum) {
+    void betting_Show (Integer playerNum, String whatBet) {
+    	
+    	
+			switch(playerNum) {
+			case 0:
+				p1_bet_jokbo.setText("베팅 : "+ me.btMoney);
+				betting_profileReset (0);
+				whatBetting(whatBet,playerNum);
+				break;
+			case 1:
+				p2_bet_jokbo.setText("베팅 : "+ me.btMoney);
+				betting_profileReset (1);
+				whatBetting(whatBet,playerNum);
+				break;
+			case 2:
+				p3_bet_jokbo.setText("베팅 : "+ me.btMoney);
+				betting_profileReset (2);
+				whatBetting(whatBet,playerNum);
+				break;
+			case 3:
+				p4_bet_jokbo.setText("베팅 : "+ me.btMoney);
+				betting_profileReset (3);
+				whatBetting(whatBet,playerNum);
+				break;
+			case 4:
+				p5_bet_jokbo.setText("베팅 : "+ me.btMoney);
+				betting_profileReset (4);
+				whatBetting(whatBet,playerNum);
+				break;
+			}
+			
+		
+			
+	}
+    
+    
+    void betting_profileReset (Integer playerNum) {
     	
 		
 			System.out.println("이사람");
 			switch (playerNum) {
 			
 			case 0:
-				Ingame_userProfile_panel_0.userMoney = gd.money;
-				Ingame_userProfile_panel_0.userMoney_text.setText("보유머니 : " + gd.money);
+				Ingame_userProfile_panel_0.userMoney = me.money;
+				Ingame_userProfile_panel_0.userMoney_text.setText("보유머니 : " + me.money);
 					
 
 				break;
 			case 1:
-				Ingame_userProfile_panel_1.userMoney = gd.money;
-				Ingame_userProfile_panel_1.userMoney_text.setText("보유머니 : " + gd.money);
+				Ingame_userProfile_panel_1.userMoney = me.money;
+				Ingame_userProfile_panel_1.userMoney_text.setText("보유머니 : " + me.money);
 				
 				break;
 			case 2:
 				
-				Ingame_userProfile_panel_2.userMoney = gd.money;
-				Ingame_userProfile_panel_2.userMoney_text.setText("보유머니 : " + gd.money);
+				Ingame_userProfile_panel_2.userMoney = me.money;
+				Ingame_userProfile_panel_2.userMoney_text.setText("보유머니 : " + me.money);
 			
 				break;
 			case 3:
 
-				Ingame_userProfile_panel_3.userMoney = gd.money;
-				Ingame_userProfile_panel_3.userMoney_text.setText("보유머니 : " + gd.money);
+				Ingame_userProfile_panel_3.userMoney = me.money;
+				Ingame_userProfile_panel_3.userMoney_text.setText("보유머니 : " + me.money);
 			
 				break;
 			case 4:
-				Ingame_userProfile_panel_4.userMoney = gd.money;
-				Ingame_userProfile_panel_4.userMoney_text.setText("보유머니 : " + gd.money);
+				Ingame_userProfile_panel_4.userMoney = me.money;
+				Ingame_userProfile_panel_4.userMoney_text.setText("보유머니 : " + me.money);
 			
 				break;
 			}
@@ -1428,8 +1183,262 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		
     }
     
-  
+    void ipjang_profileReset () {
+    	
+		for (Map.Entry<String, Integer> entry : real_users.entrySet()) {
+				
+				switch (entry.getValue()) {
+				
+				case 0:
+					if (Ingame_userProfile_panel_0 == null) {
+						Ingame_userProfile_panel_0 = new Ingame_userProfile_panel(0,entry.getKey());
+						add(Ingame_userProfile_panel_0);
+					}
+					
+					break;
+				case 1:
+					if (Ingame_userProfile_panel_1 == null) {
+						Ingame_userProfile_panel_1 = new Ingame_userProfile_panel(1,entry.getKey());
+						add(Ingame_userProfile_panel_1);
+					}
+					
+					break;
+				case 2:
+					if (Ingame_userProfile_panel_2 == null) {
+						Ingame_userProfile_panel_2 = new Ingame_userProfile_panel(2,entry.getKey());
+						add(Ingame_userProfile_panel_2);
+					}
+					
+					break;
+				case 3:
+					if (Ingame_userProfile_panel_3 == null) {
+						Ingame_userProfile_panel_3 = new Ingame_userProfile_panel(3,entry.getKey());
+						add(Ingame_userProfile_panel_3);
+					}
+					
+					break;
+				case 4:
+					if (Ingame_userProfile_panel_4 == null) {
+						Ingame_userProfile_panel_4 = new Ingame_userProfile_panel(4,entry.getKey());
+						add(Ingame_userProfile_panel_4);
+					}	
+					
+					break;
+					
+				}
+		}
+    }
 	
+
+    
+    void whatBetting(String whatBet, Integer playerNum) {
+		ImageIcon img;
+		
+		switch (whatBet) {
+		
+		case "betting_call":
+			img = new ImageIcon("img/gamepanel/call.png");
+			if (playerNum.equals(0)) {
+				p1_turn.setIcon(img);	
+			}
+			if (playerNum.equals(1)) {
+				p2_turn.setIcon(img);	
+			}
+			if (playerNum.equals(2)) {
+				p3_turn.setIcon(img);	
+			}
+			if (playerNum.equals(3)) {
+				p4_turn.setIcon(img);	
+			}
+			if (playerNum.equals(4)) {
+				p5_turn.setIcon(img);	
+			}
+			break;
+		case "betting_bbing":
+			img = new ImageIcon("img/gamepanel/bbing.png");
+			if (playerNum.equals(0)) {
+				p1_turn.setIcon(img);	
+			}
+			if (playerNum.equals(1)) {
+				p2_turn.setIcon(img);	
+			}
+			if (playerNum.equals(2)) {
+				p3_turn.setIcon(img);	
+			}
+			if (playerNum.equals(3)) {
+				p4_turn.setIcon(img);	
+			}
+			if (playerNum.equals(4)) {
+				p5_turn.setIcon(img);	
+			}
+			break;
+		case "betting_ddadang":
+			img = new ImageIcon("img/gamepanel/ddadang.png");
+			if (playerNum.equals(0)) {
+				p1_turn.setIcon(img);	
+			}
+			if (playerNum.equals(1)) {
+				p2_turn.setIcon(img);	
+			}
+			if (playerNum.equals(2)) {
+				p3_turn.setIcon(img);	
+			}
+			if (playerNum.equals(3)) {
+				p4_turn.setIcon(img);	
+			}
+			if (playerNum.equals(4)) {
+				p5_turn.setIcon(img);	
+			}
+			break;
+		case "betting_half":
+			img = new ImageIcon("img/gamepanel/half.png");
+			if (playerNum.equals(0)) {
+				p1_turn.setIcon(img);	
+			}
+			if (playerNum.equals(1)) {
+				p2_turn.setIcon(img);	
+			}
+			if (playerNum.equals(2)) {
+				p3_turn.setIcon(img);	
+			}
+			if (playerNum.equals(3)) {
+				p4_turn.setIcon(img);	
+			}
+			if (playerNum.equals(4)) {
+				p5_turn.setIcon(img);	
+			}
+			break;
+		case "betting_die":
+			img = new ImageIcon("img/gamepanel/die.png");
+			if (playerNum.equals(0)) {
+				p1_turn.setIcon(img);	
+			}
+			if (playerNum.equals(1)) {
+				p2_turn.setIcon(img);	
+			}
+			if (playerNum.equals(2)) {
+				p3_turn.setIcon(img);	
+			}
+			if (playerNum.equals(3)) {
+				p4_turn.setIcon(img);	
+			}
+			if (playerNum.equals(4)) {
+				p5_turn.setIcon(img);	
+			}
+			break;
+		case "quarter":
+			img = new ImageIcon("img/gamepanel/quarter.png");
+			if (playerNum.equals(0)) {
+				p1_turn.setIcon(img);	
+			}
+			if (playerNum.equals(1)) {
+				p2_turn.setIcon(img);	
+			}
+			if (playerNum.equals(2)) {
+				p3_turn.setIcon(img);	
+			}
+			if (playerNum.equals(3)) {
+				p4_turn.setIcon(img);	
+			}
+			if (playerNum.equals(4)) {
+				p5_turn.setIcon(img);	
+			}
+			break;
+		case "betting_max":
+			img = new ImageIcon("img/gamepanel/max.png");
+			if (playerNum.equals(0)) {
+				p1_turn.setIcon(img);	
+			}
+			if (playerNum.equals(1)) {
+				p2_turn.setIcon(img);	
+			}
+			if (playerNum.equals(2)) {
+				p3_turn.setIcon(img);	
+			}
+			if (playerNum.equals(3)) {
+				p4_turn.setIcon(img);	
+			}
+			if (playerNum.equals(4)) {
+				p5_turn.setIcon(img);	
+			}
+			break;
+		}
+	
+	}
+    
+    void out_profileRemove (int playerNum) {
+    	
+			switch (playerNum) {
+				
+				case 0:
+					
+					remove(Ingame_userProfile_panel_0);
+					
+					break;
+				case 1:
+					
+					remove(Ingame_userProfile_panel_1);
+					
+					break;
+				case 2:
+					
+					remove(Ingame_userProfile_panel_2);
+					
+					break;
+				case 3:
+				
+					remove(Ingame_userProfile_panel_3);
+					
+					break;
+				case 4:
+					
+					remove(Ingame_userProfile_panel_4);
+					
+					break;
+					
+			}
+	}
+    
+    void endGame_profileReset() {
+    	
+    	for (Map.Entry<String, Integer> entry : real_users.entrySet()) {
+			
+			switch (entry.getValue()) {
+			
+			case 0:
+				remove(Ingame_userProfile_panel_0);
+				Ingame_userProfile_panel_0 = new Ingame_userProfile_panel(0,entry.getKey());
+				add(Ingame_userProfile_panel_0);
+				
+				break;
+			case 1:
+				remove(Ingame_userProfile_panel_1);
+				Ingame_userProfile_panel_1 = new Ingame_userProfile_panel(1,entry.getKey());
+				add(Ingame_userProfile_panel_1);
+				
+				break;
+			case 2:
+				remove(Ingame_userProfile_panel_2);
+				Ingame_userProfile_panel_2 = new Ingame_userProfile_panel(2,entry.getKey());
+				add(Ingame_userProfile_panel_2);
+				
+				break;
+			case 3:
+				remove(Ingame_userProfile_panel_3);
+				Ingame_userProfile_panel_3 = new Ingame_userProfile_panel(3,entry.getKey());
+				add(Ingame_userProfile_panel_3);
+				
+				break;
+			case 4:
+				remove(Ingame_userProfile_panel_4);
+				Ingame_userProfile_panel_4 = new Ingame_userProfile_panel(4,entry.getKey());
+				add(Ingame_userProfile_panel_4);
+				
+				break;
+				
+			}
+    	}
+    }
 }	
 	
 class Help_pg extends JFrame{
