@@ -1007,7 +1007,8 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					//
 					turnNickname.setText("승: "+me.winner+"번 / "+jokbbo.jokbo(me.playerDeck.get(Integer.parseInt(me.winner))));
 					repaint();
-					
+
+					roomckh(false);
 					Thread.sleep(3000);
 					if (myData.money == 0) {
                         TCPData tcpdata = new TCPData();
