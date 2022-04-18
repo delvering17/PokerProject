@@ -41,35 +41,35 @@ public class Making implements RoomAction {
 		this.lobby = lobby;
 		String[] beting = {"1원","10원","100원","1000원"};
 		JFrame jf = new JFrame();
-		jf.setBounds(600, 200, 300, 400);
+		jf.setBounds(600, 200, 300, 200);
 		jf.setLayout(null);
 		jf.setResizable(false);
 		JTextField title = new JTextField();
 		title.setBounds(100, 35, 170, 25);
 		JCheckBox pwchk = new JCheckBox();
 		pwchk.setBounds(15, 70, 20, 20);
-		jf.add(pwchk);
+//		jf.add(pwchk);
 		JPasswordField pw = new JPasswordField();
 		pw.setEditable(false);
 		pw.setBounds(100, 100, 170, 25);
 		JComboBox<String> bet = new JComboBox<String>(beting);
 		bet.setBackground(Color.white);
 		bet.setBounds(100, 150, 170, 25);
-		jf.add(title);
-		jf.add(pw);
-		jf.add(bet);
+//		jf.add(title);
+//		jf.add(pw);
+//		jf.add(bet);
 		JLabel titleT = new JLabel("방 제목 : ");
 		titleT.setBounds(20, 35, 60, 25);
 		JLabel pwT = new JLabel("비밀번호 : ");
 		pwT.setBounds(20, 100, 60, 25);
 		JLabel betT = new JLabel("판돈 : ");
 		betT.setBounds(20, 150, 60, 25);
-		jf.add(titleT);
-		jf.add(pwT);
-		jf.add(betT);
+		//jf.add(titleT);
+		//jf.add(pwT);
+		//jf.add(betT);
 		
 		JButton roomAdd = new JButton("만들기");
-		roomAdd.setBounds(55, 200, 90, 35);
+		roomAdd.setBounds(55, 50, 90, 35);
 		pwchk.addActionListener(new ActionListener() {
 			
 			@Override
@@ -95,7 +95,7 @@ public class Making implements RoomAction {
 			}
 		});
 		JButton roomCancel = new JButton("취소");
-		roomCancel.setBounds(155, 200, 90, 35);
+		roomCancel.setBounds(155, 50, 90, 35);
 		roomCancel.addActionListener(new ActionListener() {
 			
 			@Override

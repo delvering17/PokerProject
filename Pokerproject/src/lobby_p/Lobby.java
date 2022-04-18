@@ -66,8 +66,8 @@ public class Lobby extends JPanel implements NetExecute {
 		Component roomAdd = new Component(10, 10, 800, 100);
 		add(roomAdd);
 		
-		roomAdd.add(new RoomBtn("방만들기","Making",590,35,100,60,this));
-		roomAdd.add(new RoomBtn("바로입장","Enter",0,695,35,100,60,this));
+		//roomAdd.add(new RoomBtn("방만들기","Making",590,35,100,60,this));
+		//roomAdd.add(new RoomBtn("바로입장","Enter",0,695,35,100,60,this));
 		
 		JScrollPane roomList = new JScrollPane();//스크롤팬 생성
 		roomList.setBounds(10, 120, 800, 400);
