@@ -30,6 +30,8 @@ public class Login_frame extends JFrame{
 	public JTextArea jta;
 	public Game_panel game_panel;
 	
+	
+	
 	public Login_frame() {
 		
 		login_frame=this;

@@ -1,24 +1,25 @@
 package login_p;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Vector;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-
-import net_p.Receiver;
 
 public class Signin_panel extends JPanel {
 	Login_frame login_frame;
 	
 	ArrayList<Gen_textfiled> signInfo ;
 	ArrayList<Textfiled_password> pwInfo ;
-	
+	Vector<String> genderList;
 	boolean doubleCheck_id = true;
 	boolean doublecCheck_nickname = true;
-
+	String idCon = "";
+	String nickNameCon = "";
+	JComboBox<String> genderInfo;
 	public Signin_panel(Login_frame login_frame) {
 		
 		this.login_frame = login_frame;
@@ -50,11 +51,19 @@ public class Signin_panel extends JPanel {
 		signInfo.add(new Gen_textfiled(login_frame,"이름","Login_textfiled_id",500,250, 200,50));
 		signInfo.add(new Gen_textfiled(login_frame,"이메일","Login_textfiled_id",500,300, 200,50));
 		signInfo.add(new Gen_textfiled(login_frame,"닉네임","Login_textfiled_id",500,350, 200,50));
-		signInfo.add(new Gen_textfiled(login_frame,"성별","Login_textfiled_id",500,400, 200,50));
+		signInfo.add(new Gen_textfiled(login_frame,"성별","Login_textfiled_id",0,0, 0,0));
 		signInfo.add(new Gen_textfiled(login_frame,"비밀번호질문","Login_textfiled_id",500,450, 200,50));
 		signInfo.add(new Gen_textfiled(login_frame,"비밀번호답변","Login_textfiled_id",500,500, 200,50));
 		signInfo.add(new Gen_textfiled(login_frame,"자기소개","Login_textfiled_id",500,550, 200,50));
 		
+
+		
+		genderInfo = new JComboBox<String>();
+		genderInfo.setModel(new DefaultComboBoxModel<String>(new String[] { "남", "여", "무관" }));
+		genderInfo.setBounds(900,400, 200,100);
+//		genderInfo.setSelectedItem("무관");					
+		add(genderInfo);
+//		genderInfo.getSelectedItem().toString();
 		
 		for (Gen_textfiled gen_textfiled :signInfo) {
 			add(gen_textfiled);

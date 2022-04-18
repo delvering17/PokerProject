@@ -201,24 +201,28 @@ class SignInComplete_in implements Inter_button_login {
 		
 		password = new KorEng().con(pwInfo.get(0).getText().trim());
 		passwordCon = new KorEng().con(pwInfo.get(1).getText().trim());
-	
+		
+		
 		
 		signDate = "2022-01-01";
 		
 		nickname = signInfo.get(3).getText().trim();
-		gender = signInfo.get(4).getText().trim();
+		gender = login_frame.signin_panel.genderInfo.getSelectedItem().toString();
 		introduce = signInfo.get(7).getText().trim();
 		totalGame = 0;
 		win = 0;
 		lose = 0;
 		money = 1000000; 
-		
+		String a = login_frame.signin_panel.nickNameCon;
+		String b = nickname;
+		String c = login_frame.signin_panel.idCon;
+		String d = id;
 		boolean resA = false;
 		boolean resB = false;
 		boolean resGongback = false;
 		String Gong = "";
 		for (int i = 0 ; i < 7 ; i++) {
-			if (new GongbackCon().sicon(signInfo.get(i).getText())) {
+			if (new GongbackCon().sicon(signInfo.get(i).getText()) && i != 5) {
 				Gong = signInfo.get(i).getName();
 			resGongback = true;
 			break;
@@ -235,11 +239,15 @@ class SignInComplete_in implements Inter_button_login {
 			new noticeWindow("빈 칸을 채워주세요", "오류", JOptionPane.ERROR_MESSAGE);
 		
 		} else if (resGongback) {
-			
+
 			new noticeWindow(Gong +"의 공백을 제외하고 입력해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
-		}  else if (new CharLimit().email(email)) {
+		} else if (new CharLimit().email(email)) {
 			
 			new noticeWindow("이메일 형식에 맞지 않습니다.", "오류", JOptionPane.ERROR_MESSAGE);
+		} else if (new CharLimit().password(password)) {
+			
+			new noticeWindow("비밀번호는 6~16자리이며 영문+숫자+특수문자 조합이어야 합니다.", "오류", JOptionPane.ERROR_MESSAGE);
+			
 		} else if (!password.equals(passwordCon)) {
 		
 			new noticeWindow("비밀번호와 확인이 일치하지 않습니다.", "오류", JOptionPane.ERROR_MESSAGE);
@@ -249,8 +257,15 @@ class SignInComplete_in implements Inter_button_login {
 		} else if (login_frame.signin_panel.doublecCheck_nickname) {
 		
 			new noticeWindow("닉네임 중복 체크를 해주세요", "오류", JOptionPane.ERROR_MESSAGE);
+		} else if (!c.equals(d)) {
+		
+			new noticeWindow("아이디 중복 체크를 다시 해주세요", "오류", JOptionPane.ERROR_MESSAGE);
+		}  else if (!a.equals(b)) {
+			
+			new noticeWindow("닉네임 중복 체크를 다시 해주세요", "오류", JOptionPane.ERROR_MESSAGE);
 		} else {
-			System.out.println("회원가입완료");
+			new noticeWindow("회원가입 완료", "완료", JOptionPane.PLAIN_MESSAGE);
+		
 			complete();
 		}
 		
@@ -316,9 +331,12 @@ class SignIn_ID_DoubleCheck implements Inter_button_login {
 			new noticeWindow("아이디를 입력해주세요", "오류", JOptionPane.ERROR_MESSAGE);
 		} else if (new CharLimit().id(str)) {	
 			
-			new noticeWindow("아이디는 영문과 숫자만으로 된 5~12자리여야 합니다.", "오류", JOptionPane.ERROR_MESSAGE);
+			new noticeWindow("아이디는 영문으로 시작하는 영문+숫자 조합의 5~12자리여야 합니다.", "오류", JOptionPane.ERROR_MESSAGE);
+		} else if (new GongbackCon().sicon(str)) {
+			new noticeWindow("아이디의 공백을 제거해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
 		} else {
 			boolean res = true;
+			
 			res = new SignDB().DBmemCheck("id = '"+
 			str + "';");
 			
@@ -328,7 +346,9 @@ class SignIn_ID_DoubleCheck implements Inter_button_login {
 			} else {
 				new noticeWindow("아이디 사용 가능", "사용가능", JOptionPane.INFORMATION_MESSAGE);
 				login_frame.signin_panel.doubleCheck_id = false;
-			}
+				login_frame.signin_panel.idCon = str;
+			} 
+			
 		}
 		
 		
@@ -345,6 +365,10 @@ class SignIn_Nickname_DoubleCheck implements Inter_button_login {
 		if (new GongbackCon().con(str)) {
 			
 			new noticeWindow("닉네임을 입력해주세요", "오류", JOptionPane.ERROR_MESSAGE);
+		} else if (new CharLimit().nickname(str)) {
+			new noticeWindow("닉네임은 2~8자리여야 합니다.", "오류", JOptionPane.ERROR_MESSAGE);
+		} else if (new GongbackCon().sicon(str)) {
+			new noticeWindow("닉네임의 공백을 제거해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
 		} else {
 			boolean res = true;
 			res = new SignDB().DBproCheck("nickname = '"+
@@ -357,6 +381,7 @@ class SignIn_Nickname_DoubleCheck implements Inter_button_login {
 			} else {
 				new noticeWindow("닉네임 사용 가능", "사용 가능", JOptionPane.INFORMATION_MESSAGE);
 				login_frame.signin_panel.doublecCheck_nickname = false;
+				login_frame.signin_panel.nickNameCon = str;
 			}
 		
 		}
@@ -382,6 +407,8 @@ class FindID_button implements Inter_button_login {
 		if (new GongbackCon().con(name_find) || new GongbackCon().con(email_find) ) {
 		
 			new noticeWindow("빈칸을 채워주세요", "사용가능", JOptionPane.ERROR_MESSAGE);
+		} else if (new GongbackCon().sicon(name_find) ||new GongbackCon().sicon(email_find) ) {
+			new noticeWindow("공백을 제거해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
 		} else {
 			if (res) {
 				
@@ -428,6 +455,8 @@ class FindPW_button implements Inter_button_login {
 		if (new GongbackCon().con(idpw_find) ) {
 			
 			new noticeWindow("빈칸을 채워주세요", "사용가능", JOptionPane.ERROR_MESSAGE);
+		} else if (new GongbackCon().sicon(idpw_find) ) {
+			new noticeWindow("공백을 제거해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
 		} else {
 			if (res) {
 				String aa = "";
@@ -501,7 +530,7 @@ class KorEng {
 	
 	public String con(String str) {
 		String result = "";
-		String eng = "abcdefghijklmnopqrstuvwxyzqwertop";
+		String eng = "abcdefghijklmnopqrstuvwxyzQWERTOP";
 		
 		String kor = "ㅁㅠㅊㅇㄷㄹㅎㅗㅑㅓㅏㅣㅡㅜㅐㅔㅂㄱㄴㅅㅕㅍㅈㅌㅛㅋㅃㅉㄸㄲㅆㅒㅖ";
 		
@@ -590,6 +619,27 @@ class CharLimit {
 		
 	}
 	
+	public boolean nickname(String nickname) {
+		boolean res = true;
+		String nick = ""+nickname;
+		char[] concon = nick.toCharArray();
+		if (concon.length > 1 && concon.length < 9) {
+			res = false;
+		} 
+		return res;
+	}
+	
+	public boolean password(String password) { // 6~16
+		boolean res = true;
+
+		String pass = "^.*(?=^.{8,15}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$";
+		
+		if ((Pattern.matches(pass, password))) {
+			res = false;
+		}
+		
+		return res;
+	}
 }
 
 
