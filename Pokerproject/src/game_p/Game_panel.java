@@ -534,7 +534,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
         betbuttonarea.add(bt1);
         betbuttonarea.add(bt2);
         betbuttonarea.add(bt3);
-        betbuttonarea.add(bt4);
+//        betbuttonarea.add(bt4);
         betbuttonarea.add(bt5);
         betbuttonarea.add(bt6);
         

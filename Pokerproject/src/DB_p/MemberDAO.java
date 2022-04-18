@@ -19,7 +19,7 @@ public class MemberDAO {
 	
 	public MemberDAO() {
 		
-		String url = "jdbc:mariadb://192.168.0.10:3306/poker_db";
+		String url = "jdbc:mariadb://192.168.20.21:3306/poker_db";
 		String username = "pokertest";
 		String password = "cksdnr12";
 		// mysql -u pokertest -p -h 192.168.20.28 
