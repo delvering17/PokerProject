@@ -13,6 +13,7 @@ import java.util.Map;
 import net_p.MsgData;
 import net_p.TCPData;
 import net_p.UserData;
+
 class MulServer {
 
 	HashMap<String,ObjectOutputStream> userList;
@@ -20,7 +21,7 @@ class MulServer {
 	public HashMap<Integer, HashMap<String, Integer>> test;
 
 	
-	void testMove(UserData td) {
+	synchronized void testMove(UserData td) {
 		Integer no  = test.get(td.pre).get(td.nickName);
 		
 		test.get(td.pre).remove(td.nickName);
@@ -132,15 +133,18 @@ class MulServer {
 			
 		}
 	}
-	void sendToAll(TCPData data) {
+	synchronized  void sendToAll(TCPData data) {
 		for (Map.Entry<String,ObjectOutputStream> dd: userList.entrySet()) {
 			try {
 				
-				System.out.println("서버가 "+data.DataDestination+"을 목적으로 "+ dd.getKey()+"에게 보냄");
+				
 				
 				dd.getValue().writeObject(data);
 				dd.getValue().flush();
 				dd.getValue().reset();
+				
+				System.out.println("서버가 "+data.DataDestination+"을 목적으로 "+ dd.getKey()+"에게 보냄");
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

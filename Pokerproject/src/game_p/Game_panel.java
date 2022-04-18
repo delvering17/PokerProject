@@ -1009,7 +1009,18 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					repaint();
 					
 					Thread.sleep(3000);
-					
+					if (myData.money == 0) {
+                        TCPData tcpdata = new TCPData();
+
+                        login_frame.add(new Lobby(login_frame,ch,myData));
+                        login_frame.remove(game_panel);
+                        login_frame.repaint();
+
+                        tcpdata.name = myData.nickName;
+                        tcpdata.DataDestination = "testMove";
+                        tcpdata.oData = new UserData(myData.pos,-1,myData.nickName,null);
+                        ch.send(tcpdata);
+                    }
 					endGame_profileReset();
 					
 					turnNickname.setText("차례 : ");
