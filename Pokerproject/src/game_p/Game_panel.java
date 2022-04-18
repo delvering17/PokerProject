@@ -916,6 +916,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 							public void actionPerformed(ActionEvent e) {
 								
 								me.game_users = (HashMap<String, Integer>) real_users.clone();
+								roomckh(true);
 								betting_Button_true();
 								gameStart_Gen = false;
 								me.userCount = myData.playerNum;
