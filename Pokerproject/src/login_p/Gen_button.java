@@ -406,7 +406,7 @@ class FindID_button implements Inter_button_login {
 		
 		if (new GongbackCon().con(name_find) || new GongbackCon().con(email_find) ) {
 		
-			new noticeWindow("빈칸을 채워주세요", "사용가능", JOptionPane.ERROR_MESSAGE);
+			new noticeWindow("빈칸을 채워주세요", "오류", JOptionPane.ERROR_MESSAGE);
 		} else if (new GongbackCon().sicon(name_find) ||new GongbackCon().sicon(email_find) ) {
 			new noticeWindow("공백을 제거해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
 		} else {
@@ -422,13 +422,13 @@ class FindID_button implements Inter_button_login {
 					
 				} else {
 				
-					new noticeWindow("해당되는 정보가 없습니다", "사용가능", JOptionPane.ERROR_MESSAGE);
+					new noticeWindow("해당되는 정보가 없습니다", "오류", JOptionPane.ERROR_MESSAGE);
 				}
 				
 				
 			} else {
 				
-				new noticeWindow("해당되는 정보가 없습니다", "사용가능", JOptionPane.ERROR_MESSAGE);
+				new noticeWindow("해당되는 정보가 없습니다", "오류", JOptionPane.ERROR_MESSAGE);
 			}
 
 		
@@ -454,7 +454,7 @@ class FindPW_button implements Inter_button_login {
 		
 		if (new GongbackCon().con(idpw_find) ) {
 			
-			new noticeWindow("빈칸을 채워주세요", "사용가능", JOptionPane.ERROR_MESSAGE);
+			new noticeWindow("빈칸을 채워주세요", "오류", JOptionPane.ERROR_MESSAGE);
 		} else if (new GongbackCon().sicon(idpw_find) ) {
 			new noticeWindow("공백을 제거해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
 		} else {
@@ -472,7 +472,7 @@ class FindPW_button implements Inter_button_login {
 							, "아이디 찾기 성공" , JOptionPane.INFORMATION_MESSAGE);
 				} else {
 				
-					new noticeWindow("답이 맞지 않습니다", "사용가능", JOptionPane.ERROR_MESSAGE);
+					new noticeWindow("답이 맞지 않습니다", "오류", JOptionPane.ERROR_MESSAGE);
 		
 
 				}
@@ -480,7 +480,7 @@ class FindPW_button implements Inter_button_login {
 		
 			} else {
 			
-				new noticeWindow("정보가 맞지 않습니다", "사용가능", JOptionPane.ERROR_MESSAGE);
+				new noticeWindow("정보가 맞지 않습니다", "오류", JOptionPane.ERROR_MESSAGE);
 			}
 		
 		}
