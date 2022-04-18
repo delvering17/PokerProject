@@ -76,7 +76,7 @@ public class JokBoTEST implements Serializable{
 				
 			} else if (z.getValue() == aaa)  {
 				int a = Integer.parseInt(res.get(z.getKey()).split("_")[1].split(",")[0]);
-				int b = Integer.parseInt(res.get(test2.get(num)).split("_")[1].split(",")[0]);
+				int b = Integer.parseInt(res.get(num).split("_")[1].split(",")[0]);
 				if (a > b) {
 					win = z.getKey();
 					
@@ -84,7 +84,7 @@ public class JokBoTEST implements Serializable{
 					win = num;
 				} else if (a == b) {
 					int c = Integer.parseInt(res.get(z.getKey()).split("_")[1].split(",")[1]);
-					int d = Integer.parseInt(res.get(test2.get(num)).split("_")[1].split(",")[1]);
+					int d = Integer.parseInt(res.get(num).split("_")[1].split(",")[1]);
 					if (c > d) {
 						win = z.getKey();
 					} else {
