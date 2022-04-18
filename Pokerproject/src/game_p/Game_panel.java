@@ -172,6 +172,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				
 					tcpdata.name = myData.nickName;
 					tcpdata.DataDestination = "testMove";
+					tcpdata.UserPos = myData.pos;
 					tcpdata.oData = new UserData(addr,-1,myData.nickName,null);
 					ch.send(tcpdata);
 					
@@ -353,6 +354,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 						
 						tcpdata.DataDestination = "betting_call";
 						tcpdata.name = myData.nickName;
+						tcpdata.UserPos = myData.pos;
 						tcpdata.oData = me;
 						ch.send(tcpdata);
 					}else if(me.callCount == me.game_users.size()-1){
@@ -362,6 +364,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 						
 						tcpdata.DataDestination = "betting_call";
 						tcpdata.name = myData.nickName;
+						tcpdata.UserPos = myData.pos;
 						tcpdata.oData = me;
 						ch.send(tcpdata);
 					}
@@ -388,6 +391,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				me.playerNum = myData.playerNum;
 				
 				tcpdata.DataDestination = "betting_bbing";
+				tcpdata.UserPos = myData.pos;
 				tcpdata.name = myData.nickName;
 				tcpdata.oData = me;
 				ch.send(tcpdata);
@@ -420,6 +424,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				
 				tcpdata.DataDestination = "betting_ddadang";
 				tcpdata.name = myData.nickName;
+				tcpdata.UserPos = myData.pos;
 				tcpdata.oData = me;
 				ch.send(tcpdata);
 				
@@ -449,6 +454,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				
 				tcpdata.DataDestination = "betting_half";
 				tcpdata.name = myData.nickName;
+				tcpdata.UserPos = myData.pos;
 				tcpdata.oData = me;
 				ch.send(tcpdata);
 				
@@ -468,7 +474,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
             	
             	me.game_users.replace(myData.nickName,null);
             	me.playerNum = myData.playerNum;
-            	
+            	tcpdata.UserPos = myData.pos;
             	tcpdata.DataDestination = "betting_die";
 				tcpdata.name = myData.nickName;
 				tcpdata.oData = me;
@@ -500,6 +506,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		        
 		        tcpdata.DataDestination = "betting_quarter";
 		        tcpdata.name = myData.nickName;
+		    	tcpdata.UserPos = myData.pos;
 		        tcpdata.oData = me;	
 		        ch.send(tcpdata);
             }
@@ -523,7 +530,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				me.playerNum = myData.playerNum;
 				
 				tcpdata.DataDestination = "betting_max";
-				
+				tcpdata.UserPos = myData.pos;
 		        tcpdata.name = myData.nickName;
 		        tcpdata.oData = me;	
 		        ch.send(tcpdata);
@@ -615,6 +622,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					TCPData tcpdata = new TCPData();
 					tcpdata.UserPos = myData.pos;
 					tcpdata.name = myData.nickName;
+					
 					tcpdata.DataDestination = "Chatting";
 					tcpdata.oData = new MsgData(myData.nickName,chf.getText());
 					ch.send(tcpdata);
@@ -636,6 +644,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		
 		TCPData tcpdata = new TCPData();
 		tcpdata.name = myData.nickName;
+		tcpdata.UserPos = myData.pos;
 		tcpdata.DataDestination = "testMove";
 		tcpdata.oData = new UserData(-1,addr,myData.nickName, null);
 		ch.send(tcpdata);
@@ -729,6 +738,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			
 			break;
 			
+	
 		case "Chatting" :
 			MsgData msg = (MsgData)data.oData;
 			if (data.UserPos == myData.pos) {
@@ -739,409 +749,413 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				
 			}
 			break;
-		
-		case "RoomClose" :
-			
-			
-			
-			break;
-		
-		case "out" :	
-			
-			int playerNum = (int)data.oData;
-			System.out.println(playerNum+"번 나감 ");
-			out_profileRemove(playerNum);
-			
-			break;
-			
-		case "카드 나와라":
-			GameData gd = (GameData)data.oData;
-			me = gd;
-			
-			System.out.println("카드 나와라:"+me.game_users);
-			
-			exit.setEnabled(false);
-			
-			for (Map.Entry<String, Integer> cd: me.game_users.entrySet()) {
-				for (Integer i = 2; i >= 0; i--) {
-					if((!cd.getValue().equals(myData.playerNum))&& i<2) {
-						cardJip.get(cd.getValue()).get(i).setIcon(cdback);														
-					}else {
-						cardJip.get(cd.getValue()).get(i).setIcon(me.playerDeck.get(cd.getValue()).get(i).img);							
-					}
-				}
-			}
-			
-			bt.setEnabled(false);
-
-			break;	
-			
-		case "betting_bbing" :	// 이제 베팅 누가 했는지  보고 신호 줘야
-			gd = (GameData)data.oData;
-			me = gd;
-			System.out.println("삥");
-			
-			betting_Show(me.playerNum, "betting_bbing");
-			betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
-			playerturn();
-			bt1.setEnabled(false);
-			break;	
-			
-		case "betting_ddadang" :
-			gd = (GameData)data.oData;
-			me = gd;
-			System.out.println("따당");
-			
-			betting_Show(me.playerNum, "betting_ddadang");
-			betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
-			playerturn();
-			bt1.setEnabled(false);
-			break;
-			
-		case "betting_half" :
-			gd = (GameData)data.oData;
-			me = gd;
-			System.out.println("하프");
-			
-			betting_Show(me.playerNum, "betting_half");
-			betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
-			playerturn();
-			bt1.setEnabled(false);
-			break;	
-		
-		case "betting_quarter" :
-			gd = (GameData)data.oData;
-			me = gd;
-			System.out.println("쿼터");
-			
-			betting_Show(me.playerNum, "betting_quarter");
-			betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
-			playerturn();
-			bt1.setEnabled(false);
-			break;
-			
-		case "betting_max" :
-			gd = (GameData)data.oData;
-			me = gd;
-			System.out.println("맥스");
-			
-			betting_Show(me.playerNum, "betting_max");
-			betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
-			playerturn();	
-			bt1.setEnabled(false);
-			break;
-			
-		case "betting_die":
-			gd = (GameData)data.oData;
-			me = gd;
-			System.out.println("다이");
-			
-			if(diechk() == 1) {
-				System.out.println("종료입니다.");
-				System.out.println("집가자 가고싶어요 보내줘요" + me.winner);
-				
-		 
-				p1_turn.setIcon(default_bet);
-				p2_turn.setIcon(default_bet);
-				p3_turn.setIcon(default_bet);
-				p4_turn.setIcon(default_bet);
-				p5_turn.setIcon(default_bet);
-				
-				if (myData.nickName.equals(winnerName())) {
-					System.out.println("승자");
-					myData.win ++;
-					myData.totalGame ++;
-					myData.money += me.wholeBettingMoney;
-					
-				} else {
-					System.out.println("패자");
-					myData.lose ++;
-					myData.totalGame ++;
-				
-				}
-
-
-				
-				
-				gameRes_DBInsert(); 
-				
-				
-				//여기
-				try {
-					me.last = false;
-					me.callCount = 0;
-					System.out.println("==========");
-//					for (Map.Entry<String, Integer> z : me.game_users.entrySet()) {
-						for (int i = 0; i < 7; i++) {
-							
-							cardJip.get(0).get(i).setIcon(null);
-							cardJip.get(1).get(i).setIcon(null);
-							cardJip.get(2).get(i).setIcon(null);
-							cardJip.get(3).get(i).setIcon(null);
-							cardJip.get(4).get(i).setIcon(null);
-						}
-//					}
-					System.out.println("==========");
-					betting_Button_false ();
-					//
-					
-					//
-					turnNickname.setText("승: "+winnerName());
-					repaint();
-					
-					Thread.sleep(3000);
-					exit.setEnabled(true);
-					roomckh(false);
-					endGame_profileReset();
-					
-					turnNickname.setText("차례 : ");
-					betting.setText("전체 베팅금액: "+0+ ", 현재 판돈: "+ 0);
-					p1_bet_jokbo.setText("베팅 : "+ 0);
-					p2_bet_jokbo.setText("베팅 : "+ 0);
-					p3_bet_jokbo.setText("베팅 : "+ 0);
-					p4_bet_jokbo.setText("베팅 : "+ 0);
-					p5_bet_jokbo.setText("베팅 : "+ 0);
-					
-					repaint();
-					
-					if(myData.playerNum == 0 && gameStart_Gen == false) {
-						GameStart = new JButton("게임 시작");
-						GameStart.setBounds(500, 280, 200, 80);
-//						GameStart.setEnabled(false);
-						add(GameStart);
-						gameStart_Gen = true;
-						GameStart.addActionListener(new ActionListener() {
-							//게임 시작 버튼
-							@Override
-							public void actionPerformed(ActionEvent e) {
-								
-								me.game_users = (HashMap<String, Integer>) real_users.clone();
-								roomckh(true);
-								betting_Button_true();
-								gameStart_Gen = false;
-								me.userCount = myData.playerNum;
-								
-								me.dealerDeck = new ArrayList<PokerCard>();
-								for (int i = 2; i < 15; i++) {
-									for (int j = 1; j < 5; j++) {
-										
-										me.dealerDeck.add(new PokerCard(i,j));
-									}
-								}
-							
-								
-								game_panel.remove(GameStart);
-								game_panel.repaint();
-								
-								GameProcess();
-							}
-						});
-						
-					}
-					
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-			}else {
-				
-				betting_Show(me.playerNum, "betting_die");
-				playerturn();
-			}
-
-			break;
-			
-		case "betting_call":
-			gd = (GameData)data.oData;
-			me = gd;
-			System.out.println("콜");
-			
-			betting_Show(me.playerNum, "betting_call");
-			betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
-			playerturn();	
-			bt1.setEnabled(false);
-			System.out.println("익스큐트의 myData: "+ myData.money);
-			System.out.println(me.last+"=========================");
-			System.out.println(me.callCount+"=========================");
-			System.out.println(me.game_users.keySet().size()-1);
-			if((me.callCount == me.game_users.keySet().size()-1 && me.playerDeck.get(myData.playerNum).size()==7 && me.last)||
-				(me.callCount == me.game_users.keySet().size()-1 && me.playerDeck.get(1).size()==7 && me.last)||
-				(me.callCount == me.game_users.keySet().size()-1 && me.playerDeck.get(2).size()==7 && me.last)
-					) {
-				System.out.println("종료입니다.");
-				System.out.println("집가자 가고싶어요 보내줘요" + me.winner);
-				
-		 
-				p1_turn.setIcon(default_bet);
-				p2_turn.setIcon(default_bet);
-				p3_turn.setIcon(default_bet);
-				p4_turn.setIcon(default_bet);
-				p5_turn.setIcon(default_bet);
-				
-				
-				//
-				// 승패 입력
-				if (myData.playerNum == Integer.parseInt(me.winner)) {
-					System.out.println("승자");
-					myData.win ++;
-					myData.totalGame ++;
-					myData.money += me.wholeBettingMoney;
-					
-				} else {
-					System.out.println("패자");
-					myData.lose ++;
-					myData.totalGame ++;
-				
-				}
-
-
-				
-				
-				gameRes_DBInsert(); 
-				
-				
-				
-				try {
-					me.last = false;
-					me.callCount = 0;
-					for (Map.Entry<String, Integer> z : me.game_users.entrySet()) {
-						for (int i = 0; i < 7; i++) {
-							System.out.println("testestse");
-							cardJip.get(0).get(i).setIcon(null);
-							cardJip.get(1).get(i).setIcon(null);
-							cardJip.get(2).get(i).setIcon(null);
-							cardJip.get(3).get(i).setIcon(null);
-							cardJip.get(4).get(i).setIcon(null);
-						}
-					}
-					betting_Button_false ();
-					//
-					
-					//
-					turnNickname.setText("승: "+me.winner+"번 / "+jokbbo.jokbo(me.playerDeck.get(Integer.parseInt(me.winner))));
-					repaint();
-
-					roomckh(false);
-					Thread.sleep(3000);
-					if (myData.money == 0) {
-                        TCPData tcpdata = new TCPData();
-
-                        login_frame.add(new Lobby(login_frame,ch,myData));
-                        login_frame.remove(game_panel);
-                        login_frame.repaint();
-
-                        tcpdata.name = myData.nickName;
-                        tcpdata.DataDestination = "testMove";
-                        tcpdata.oData = new UserData(myData.pos,-1,myData.nickName,null);
-                        ch.send(tcpdata);
-                    }
-					endGame_profileReset();
-					
-					turnNickname.setText("차례 : ");
-					betting.setText("전체 베팅금액: "+0+ ", 현재 판돈: "+ 0);
-					p1_bet_jokbo.setText("베팅 : "+ 0);
-					p2_bet_jokbo.setText("베팅 : "+ 0);
-					p3_bet_jokbo.setText("베팅 : "+ 0);
-					p4_bet_jokbo.setText("베팅 : "+ 0);
-					p5_bet_jokbo.setText("베팅 : "+ 0);
-					exit.setEnabled(true);
-					repaint();
-					
-					if(myData.playerNum == 0 && gameStart_Gen == false) {
-						GameStart = new JButton("게임 시작");
-						GameStart.setBounds(500, 280, 200, 80);
-//						GameStart.setEnabled(false);
-						add(GameStart);
-						gameStart_Gen = true;
-						GameStart.addActionListener(new ActionListener() {
-							//게임 시작 버튼
-							@Override
-							public void actionPerformed(ActionEvent e) {
-								
-								me.game_users = (HashMap<String, Integer>) real_users.clone();
-								betting_Button_true();
-								gameStart_Gen = false;
-								me.userCount = myData.playerNum;
-
-								roomckh(true);
-								me.dealerDeck = new ArrayList<PokerCard>();
-								for (int i = 2; i < 15; i++) {
-									for (int j = 1; j < 5; j++) {
-										
-										me.dealerDeck.add(new PokerCard(i,j));
-									}
-								}
-							
-								
-								game_panel.remove(GameStart);
-								game_panel.repaint();
-								
-								GameProcess();
-							}
-						});
-						
-					}
-					
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			} else if(me.callCount == me.game_users.keySet().size()-1 && me.playerDeck.get(0).size()==7) {
-				me.callCount=0;
-				if(myData.money <= 0) {
-					playerturn();						
-				}else {
-					playerturn();
-					bt.setEnabled(false);
-				}
-				
-				for (Map.Entry<String, Integer > z :me.game_users.entrySet()) {
-					if(me.game_users.get(z.getKey()) != null) {
-						if(z.getValue().equals(myData.playerNum)) {
-							cardJip.get(z.getValue())
-							.get(me.playerDeck.get(z.getValue()).size()-1)
-							.setIcon(me.playerDeck.get(z.getValue())
-							.get(me.playerDeck.get(z.getValue()).size()-1).img);
-
-						
-						}else {
-							cardJip.get(z.getValue()).get(me.playerDeck.get(z.getValue()).size()-1).setIcon(cdback);							
-						}
-					}
-				}
-				p1_turn.setIcon(default_bet);
-				p2_turn.setIcon(default_bet);
-				p3_turn.setIcon(default_bet);
-				p4_turn.setIcon(default_bet);
-				p5_turn.setIcon(default_bet);
-			}else if(me.callCount == me.game_users.keySet().size()-1) {
-				me.callCount=0;
-				if(myData.money <= 0) {
-					playerturn();						
-				}else {
-					playerturn();
-					bt.setEnabled(false);
-				}
-				for (Map.Entry<String, Integer > turn : me.game_users.entrySet()) {
-					
-					if(me.game_users.get(turn.getKey()) != null) {
-						cardJip.get(turn.getValue()).get(me.playerDeck.get(turn.getValue()).size()-1).setIcon(me.playerDeck.get(turn.getValue()).get(me.playerDeck.get(turn.getValue()).size()-1).img);
-					}
-				}
-				
-				p1_turn.setIcon(default_bet);
-				p2_turn.setIcon(default_bet);
-				p3_turn.setIcon(default_bet);
-				p4_turn.setIcon(default_bet);
-				p5_turn.setIcon(default_bet);
-				
-			}
-
-			break;		
-
 		}
-		
+		if (myData.pos.equals(data.UserPos)) {
+			switch (data.DataDestination) {
+				
+				
+			case "RoomClose" :
+				
+				
+				
+				break;
+			
+			case "out" :	
+				
+				int playerNum = (int)data.oData;
+				System.out.println(playerNum+"번 나감 ");
+				out_profileRemove(playerNum);
+				
+				break;
+				
+			case "카드 나와라":
+				GameData gd = (GameData)data.oData;
+				me = gd;
+				
+				System.out.println("카드 나와라:"+me.game_users);
+				
+				exit.setEnabled(false);
+				
+				for (Map.Entry<String, Integer> cd: me.game_users.entrySet()) {
+					for (Integer i = 2; i >= 0; i--) {
+						if((!cd.getValue().equals(myData.playerNum))&& i<2) {
+							cardJip.get(cd.getValue()).get(i).setIcon(cdback);														
+						}else {
+							cardJip.get(cd.getValue()).get(i).setIcon(me.playerDeck.get(cd.getValue()).get(i).img);							
+						}
+					}
+				}
+				
+				bt.setEnabled(false);
+	
+				break;	
+				
+			case "betting_bbing" :	// 이제 베팅 누가 했는지  보고 신호 줘야
+				gd = (GameData)data.oData;
+				me = gd;
+				System.out.println("삥");
+				
+				betting_Show(me.playerNum, "betting_bbing");
+				betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
+				playerturn();
+				bt1.setEnabled(false);
+				break;	
+				
+			case "betting_ddadang" :
+				gd = (GameData)data.oData;
+				me = gd;
+				System.out.println("따당");
+				
+				betting_Show(me.playerNum, "betting_ddadang");
+				betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
+				playerturn();
+				bt1.setEnabled(false);
+				break;
+				
+			case "betting_half" :
+				gd = (GameData)data.oData;
+				me = gd;
+				System.out.println("하프");
+				
+				betting_Show(me.playerNum, "betting_half");
+				betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
+				playerturn();
+				bt1.setEnabled(false);
+				break;	
+			
+			case "betting_quarter" :
+				gd = (GameData)data.oData;
+				me = gd;
+				System.out.println("쿼터");
+				
+				betting_Show(me.playerNum, "betting_quarter");
+				betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
+				playerturn();
+				bt1.setEnabled(false);
+				break;
+				
+			case "betting_max" :
+				gd = (GameData)data.oData;
+				me = gd;
+				System.out.println("맥스");
+				
+				betting_Show(me.playerNum, "betting_max");
+				betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
+				playerturn();	
+				bt1.setEnabled(false);
+				break;
+				
+			case "betting_die":
+				gd = (GameData)data.oData;
+				me = gd;
+				System.out.println("다이");
+				
+				if(diechk() == 1) {
+					System.out.println("종료입니다.");
+					System.out.println("집가자 가고싶어요 보내줘요" + me.winner);
+					
+			 
+					p1_turn.setIcon(default_bet);
+					p2_turn.setIcon(default_bet);
+					p3_turn.setIcon(default_bet);
+					p4_turn.setIcon(default_bet);
+					p5_turn.setIcon(default_bet);
+					
+					if (myData.nickName.equals(winnerName())) {
+						System.out.println("승자");
+						myData.win ++;
+						myData.totalGame ++;
+						myData.money += me.wholeBettingMoney;
+						
+					} else {
+						System.out.println("패자");
+						myData.lose ++;
+						myData.totalGame ++;
+					
+					}
+	
+	
+					
+					
+					gameRes_DBInsert(); 
+					
+					
+					//여기
+					try {
+						me.last = false;
+						me.callCount = 0;
+						System.out.println("==========");
+	//					for (Map.Entry<String, Integer> z : me.game_users.entrySet()) {
+							for (int i = 0; i < 7; i++) {
+								
+								cardJip.get(0).get(i).setIcon(null);
+								cardJip.get(1).get(i).setIcon(null);
+								cardJip.get(2).get(i).setIcon(null);
+								cardJip.get(3).get(i).setIcon(null);
+								cardJip.get(4).get(i).setIcon(null);
+							}
+	//					}
+						System.out.println("==========");
+						betting_Button_false ();
+						//
+						
+						//
+						turnNickname.setText("승: "+winnerName());
+						repaint();
+						
+						Thread.sleep(3000);
+						exit.setEnabled(true);
+						roomckh(false);
+						endGame_profileReset();
+						
+						turnNickname.setText("차례 : ");
+						betting.setText("전체 베팅금액: "+0+ ", 현재 판돈: "+ 0);
+						p1_bet_jokbo.setText("베팅 : "+ 0);
+						p2_bet_jokbo.setText("베팅 : "+ 0);
+						p3_bet_jokbo.setText("베팅 : "+ 0);
+						p4_bet_jokbo.setText("베팅 : "+ 0);
+						p5_bet_jokbo.setText("베팅 : "+ 0);
+						
+						repaint();
+						
+						if(myData.playerNum == 0 && gameStart_Gen == false) {
+							GameStart = new JButton("게임 시작");
+							GameStart.setBounds(500, 280, 200, 80);
+	//						GameStart.setEnabled(false);
+							add(GameStart);
+							gameStart_Gen = true;
+							GameStart.addActionListener(new ActionListener() {
+								//게임 시작 버튼
+								@Override
+								public void actionPerformed(ActionEvent e) {
+									
+									me.game_users = (HashMap<String, Integer>) real_users.clone();
+									roomckh(true);
+									betting_Button_true();
+									gameStart_Gen = false;
+									me.userCount = myData.playerNum;
+									
+									me.dealerDeck = new ArrayList<PokerCard>();
+									for (int i = 2; i < 15; i++) {
+										for (int j = 1; j < 5; j++) {
+											
+											me.dealerDeck.add(new PokerCard(i,j));
+										}
+									}
+								
+									
+									game_panel.remove(GameStart);
+									game_panel.repaint();
+									
+									GameProcess();
+								}
+							});
+							
+						}
+						
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}else {
+					
+					betting_Show(me.playerNum, "betting_die");
+					playerturn();
+				}
+	
+				break;
+				
+			case "betting_call":
+				gd = (GameData)data.oData;
+				me = gd;
+				System.out.println("콜");
+				
+				betting_Show(me.playerNum, "betting_call");
+				betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
+				playerturn();	
+				bt1.setEnabled(false);
+				System.out.println("익스큐트의 myData: "+ myData.money);
+				System.out.println(me.last+"=========================");
+				System.out.println(me.callCount+"=========================");
+				System.out.println(me.game_users.keySet().size()-1);
+				if((me.callCount == me.game_users.keySet().size()-1 && me.playerDeck.get(myData.playerNum).size()==7 && me.last)||
+					(me.callCount == me.game_users.keySet().size()-1 && me.playerDeck.get(1).size()==7 && me.last)||
+					(me.callCount == me.game_users.keySet().size()-1 && me.playerDeck.get(2).size()==7 && me.last)
+						) {
+					System.out.println("종료입니다.");
+					System.out.println("집가자 가고싶어요 보내줘요" + me.winner);
+					
+			 
+					p1_turn.setIcon(default_bet);
+					p2_turn.setIcon(default_bet);
+					p3_turn.setIcon(default_bet);
+					p4_turn.setIcon(default_bet);
+					p5_turn.setIcon(default_bet);
+					
+					
+					//
+					// 승패 입력
+					if (myData.playerNum == Integer.parseInt(me.winner)) {
+						System.out.println("승자");
+						myData.win ++;
+						myData.totalGame ++;
+						myData.money += me.wholeBettingMoney;
+						
+					} else {
+						System.out.println("패자");
+						myData.lose ++;
+						myData.totalGame ++;
+					
+					}
+	
+	
+					
+					
+					gameRes_DBInsert(); 
+					
+					
+					
+					try {
+						me.last = false;
+						me.callCount = 0;
+						for (Map.Entry<String, Integer> z : me.game_users.entrySet()) {
+							for (int i = 0; i < 7; i++) {
+								System.out.println("testestse");
+								cardJip.get(0).get(i).setIcon(null);
+								cardJip.get(1).get(i).setIcon(null);
+								cardJip.get(2).get(i).setIcon(null);
+								cardJip.get(3).get(i).setIcon(null);
+								cardJip.get(4).get(i).setIcon(null);
+							}
+						}
+						betting_Button_false ();
+						//
+						
+						//
+						turnNickname.setText("승: "+me.winner+"번 / "+jokbbo.jokbo(me.playerDeck.get(Integer.parseInt(me.winner))));
+						repaint();
+	
+						roomckh(false);
+						Thread.sleep(3000);
+						if (myData.money == 0) {
+	                        TCPData tcpdata = new TCPData();
+	
+	                        login_frame.add(new Lobby(login_frame,ch,myData));
+	                        login_frame.remove(game_panel);
+	                        login_frame.repaint();
+	                    	tcpdata.UserPos = myData.pos;
+	                        tcpdata.name = myData.nickName;
+	                        tcpdata.DataDestination = "testMove";
+	                        tcpdata.oData = new UserData(myData.pos,-1,myData.nickName,null);
+	                        ch.send(tcpdata);
+	                    }
+						endGame_profileReset();
+						
+						turnNickname.setText("차례 : ");
+						betting.setText("전체 베팅금액: "+0+ ", 현재 판돈: "+ 0);
+						p1_bet_jokbo.setText("베팅 : "+ 0);
+						p2_bet_jokbo.setText("베팅 : "+ 0);
+						p3_bet_jokbo.setText("베팅 : "+ 0);
+						p4_bet_jokbo.setText("베팅 : "+ 0);
+						p5_bet_jokbo.setText("베팅 : "+ 0);
+						exit.setEnabled(true);
+						repaint();
+						
+						if(myData.playerNum == 0 && gameStart_Gen == false) {
+							GameStart = new JButton("게임 시작");
+							GameStart.setBounds(500, 280, 200, 80);
+	//						GameStart.setEnabled(false);
+							add(GameStart);
+							gameStart_Gen = true;
+							GameStart.addActionListener(new ActionListener() {
+								//게임 시작 버튼
+								@Override
+								public void actionPerformed(ActionEvent e) {
+									
+									me.game_users = (HashMap<String, Integer>) real_users.clone();
+									betting_Button_true();
+									gameStart_Gen = false;
+									me.userCount = myData.playerNum;
+	
+									roomckh(true);
+									me.dealerDeck = new ArrayList<PokerCard>();
+									for (int i = 2; i < 15; i++) {
+										for (int j = 1; j < 5; j++) {
+											
+											me.dealerDeck.add(new PokerCard(i,j));
+										}
+									}
+								
+									
+									game_panel.remove(GameStart);
+									game_panel.repaint();
+									
+									GameProcess();
+								}
+							});
+							
+						}
+						
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} else if(me.callCount == me.game_users.keySet().size()-1 && me.playerDeck.get(0).size()==7) {
+					me.callCount=0;
+					if(myData.money <= 0) {
+						playerturn();						
+					}else {
+						playerturn();
+						bt.setEnabled(false);
+					}
+					
+					for (Map.Entry<String, Integer > z :me.game_users.entrySet()) {
+						if(me.game_users.get(z.getKey()) != null) {
+							if(z.getValue().equals(myData.playerNum)) {
+								cardJip.get(z.getValue())
+								.get(me.playerDeck.get(z.getValue()).size()-1)
+								.setIcon(me.playerDeck.get(z.getValue())
+								.get(me.playerDeck.get(z.getValue()).size()-1).img);
+	
+							
+							}else {
+								cardJip.get(z.getValue()).get(me.playerDeck.get(z.getValue()).size()-1).setIcon(cdback);							
+							}
+						}
+					}
+					p1_turn.setIcon(default_bet);
+					p2_turn.setIcon(default_bet);
+					p3_turn.setIcon(default_bet);
+					p4_turn.setIcon(default_bet);
+					p5_turn.setIcon(default_bet);
+				}else if(me.callCount == me.game_users.keySet().size()-1) {
+					me.callCount=0;
+					if(myData.money <= 0) {
+						playerturn();						
+					}else {
+						playerturn();
+						bt.setEnabled(false);
+					}
+					for (Map.Entry<String, Integer > turn : me.game_users.entrySet()) {
+						
+						if(me.game_users.get(turn.getKey()) != null) {
+							cardJip.get(turn.getValue()).get(me.playerDeck.get(turn.getValue()).size()-1).setIcon(me.playerDeck.get(turn.getValue()).get(me.playerDeck.get(turn.getValue()).size()-1).img);
+						}
+					}
+					
+					p1_turn.setIcon(default_bet);
+					p2_turn.setIcon(default_bet);
+					p3_turn.setIcon(default_bet);
+					p4_turn.setIcon(default_bet);
+					p5_turn.setIcon(default_bet);
+					
+				}
+	
+				break;		
+	
+			}
+		}
 		repaint();
 
 		
@@ -1150,6 +1164,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	void roomckh(boolean chk) {
 		TCPData roomchk = new TCPData();
 		roomchk.oData = new RoomChk(myData.pos,chk);
+		roomchk.UserPos = myData.pos;
 		roomchk.DataDestination = "RoomChk";
 		ch.send(roomchk);
 	}
@@ -1187,10 +1202,10 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		TCPData tcpdata = new TCPData();
 		tcpdata.name = myData.nickName;
 		tcpdata.DataDestination = "카드 나와라";
-		
+		tcpdata.UserPos = myData.pos;
 		me.prebetMoney = 1;
 		tcpdata.oData = me;
-	
+		
 		
 		ch.send(tcpdata);
 	}
@@ -1209,6 +1224,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		TCPData tcpdata = new TCPData();
 		tcpdata.name = myData.nickName;
 		tcpdata.DataDestination = "betting_call";
+		tcpdata.UserPos = myData.pos;
 		tcpdata.oData = me;
 		ch.send(tcpdata);
 	}
