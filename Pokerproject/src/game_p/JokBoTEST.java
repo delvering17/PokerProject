@@ -61,9 +61,8 @@ public class JokBoTEST implements Serializable{
 		
 		// test = 9, 0 
 		int num = 0;
-		int aaa = 0;
-		int win = -1;
-		
+		int aaa = -1;
+		int win = 0;
 		
 		for (Map.Entry<Integer, Integer> z : test2.entrySet()) {
 			
