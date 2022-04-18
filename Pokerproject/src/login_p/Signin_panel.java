@@ -45,23 +45,24 @@ public class Signin_panel extends JPanel {
 		signInfo = new ArrayList<Gen_textfiled>();
 		pwInfo = new ArrayList<Textfiled_password>();
 		
-		signInfo.add(new Gen_textfiled(login_frame,"아이디","Login_textfiled_id",500,100, 200,50));
-		pwInfo.add(new Textfiled_password(login_frame,"비밀번호",500,150, 200,50));
-		pwInfo.add(new Textfiled_password(login_frame,"비밀번호확인",500,200, 200,50));
-		signInfo.add(new Gen_textfiled(login_frame,"이름","Login_textfiled_id",500,250, 200,50));
-		signInfo.add(new Gen_textfiled(login_frame,"이메일","Login_textfiled_id",500,300, 200,50));
-		signInfo.add(new Gen_textfiled(login_frame,"닉네임","Login_textfiled_id",500,350, 200,50));
+		signInfo.add(new Gen_textfiled(login_frame,"아이디","Login_textfiled_id",500,100, 200,45));
+		pwInfo.add(new Textfiled_password(login_frame,"비밀번호",500,150, 200,45));
+		pwInfo.add(new Textfiled_password(login_frame,"비밀번호확인",500,200, 200,45));
+		signInfo.add(new Gen_textfiled(login_frame,"이름","Login_textfiled_id",500,250, 200,45));
+		signInfo.add(new Gen_textfiled(login_frame,"이메일","Login_textfiled_id",500,300, 200,45));
+		signInfo.add(new Gen_textfiled(login_frame,"닉네임","Login_textfiled_id",500,350, 200,45));
 		signInfo.add(new Gen_textfiled(login_frame,"성별","Login_textfiled_id",0,0, 0,0));
-		signInfo.add(new Gen_textfiled(login_frame,"비밀번호질문","Login_textfiled_id",500,450, 200,50));
-		signInfo.add(new Gen_textfiled(login_frame,"비밀번호답변","Login_textfiled_id",500,500, 200,50));
-		signInfo.add(new Gen_textfiled(login_frame,"자기소개","Login_textfiled_id",500,550, 200,50));
+		signInfo.add(new Gen_textfiled(login_frame,"비밀번호질문","Login_textfiled_id",500,450, 200,45));
+		signInfo.add(new Gen_textfiled(login_frame,"비밀번호답변","Login_textfiled_id",500,500, 200,45));
+		signInfo.add(new Gen_textfiled(login_frame,"자기소개","Login_textfiled_id",500,550, 200,45));
 		
 
 		
 		genderInfo = new JComboBox<String>();
 		genderInfo.setModel(new DefaultComboBoxModel<String>(new String[] { "남", "여", "무관" }));
-		genderInfo.setBounds(900,400, 200,100);
-//		genderInfo.setSelectedItem("무관");					
+		genderInfo.setBounds(500,400, 200,45);
+//		genderInfo.setSelectedItem("무관");	
+		genderInfo.setBackground(Color.white);
 		add(genderInfo);
 //		genderInfo.getSelectedItem().toString();
 		
@@ -77,8 +78,8 @@ public class Signin_panel extends JPanel {
 		add(new Gen_button_login(login_frame,"완료","SignInComplete_in",550,620, 100,50));
 		add(new Gen_button_login(login_frame,"취소","SignInCancel_in",400,620, 100,50));
 		
-		add(new Gen_button_login(login_frame,"중복 확인","SignIn_ID_DoubleCheck",700,100, 100,50));
-		add(new Gen_button_login(login_frame,"중복 확인","SignIn_Nickname_DoubleCheck",700,350, 100,50));
+		add(new Gen_button_login(login_frame,"중복 확인","SignIn_ID_DoubleCheck",710,100, 100,45));
+		add(new Gen_button_login(login_frame,"중복 확인","SignIn_Nickname_DoubleCheck",710,350, 100,45));
 		
 		
 	}
