@@ -1063,7 +1063,8 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 								betting_Button_true();
 								gameStart_Gen = false;
 								me.userCount = myData.playerNum;
-								
+
+								roomckh(true);
 								me.dealerDeck = new ArrayList<PokerCard>();
 								for (int i = 2; i < 15; i++) {
 									for (int j = 1; j < 5; j++) {
