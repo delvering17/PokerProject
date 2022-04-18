@@ -341,7 +341,8 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					me.userCount = myData.playerNum;
 					
 					if(me.callCount == me.game_users.size()-1 && me.playerDeck.get(myData.playerNum).size()==7) {
-						me.result = new HashMap<Integer, String>();
+						me.last = true;
+						me.result = new HashMap<Integer, String>(); // "풀하우스_1,1"
 						for (Integer cd : me.game_users.values()) {
 							if(cd != null) {
 								me.result.put(cd, jokbbo.jokbo(me.playerDeck.get(cd)));
@@ -349,7 +350,6 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 						}
 						
 						me.winner = jk.resultWinner(me.result)+"";
-						me.last = true;
 						
 						tcpdata.DataDestination = "betting_call";
 						tcpdata.name = myData.nickName;
@@ -534,7 +534,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
         betbuttonarea.add(bt1);
         betbuttonarea.add(bt2);
         betbuttonarea.add(bt3);
-//        betbuttonarea.add(bt4);
+        betbuttonarea.add(bt4);
         betbuttonarea.add(bt5);
         betbuttonarea.add(bt6);
         
@@ -758,6 +758,8 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			GameData gd = (GameData)data.oData;
 			me = gd;
 			
+			System.out.println("카드 나와라:"+me.game_users);
+			
 			exit.setEnabled(false);
 			
 			for (Map.Entry<String, Integer> cd: me.game_users.entrySet()) {
@@ -868,6 +870,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				try {
 					me.last = false;
 					me.callCount = 0;
+					System.out.println("==========");
 //					for (Map.Entry<String, Integer> z : me.game_users.entrySet()) {
 						for (int i = 0; i < 7; i++) {
 							
@@ -878,6 +881,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 							cardJip.get(4).get(i).setIcon(null);
 						}
 //					}
+					System.out.println("==========");
 					betting_Button_false ();
 					//
 					
@@ -957,8 +961,13 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			playerturn();	
 			bt1.setEnabled(false);
 			System.out.println("익스큐트의 myData: "+ myData.money);
-			
-			if(me.callCount == me.game_users.keySet().size()-1 && me.playerDeck.get(0).size()==7 && me.last) {
+			System.out.println(me.last+"=========================");
+			System.out.println(me.callCount+"=========================");
+			System.out.println(me.game_users.keySet().size()-1);
+			if((me.callCount == me.game_users.keySet().size()-1 && me.playerDeck.get(myData.playerNum).size()==7 && me.last)||
+				(me.callCount == me.game_users.keySet().size()-1 && me.playerDeck.get(1).size()==7 && me.last)||
+				(me.callCount == me.game_users.keySet().size()-1 && me.playerDeck.get(2).size()==7 && me.last)
+					) {
 				System.out.println("종료입니다.");
 				System.out.println("집가자 가고싶어요 보내줘요" + me.winner);
 				
@@ -997,8 +1006,12 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					me.callCount = 0;
 					for (Map.Entry<String, Integer> z : me.game_users.entrySet()) {
 						for (int i = 0; i < 7; i++) {
-							
-							cardJip.get(z.getValue()).get(i).setIcon(null);
+							System.out.println("testestse");
+							cardJip.get(0).get(i).setIcon(null);
+							cardJip.get(1).get(i).setIcon(null);
+							cardJip.get(2).get(i).setIcon(null);
+							cardJip.get(3).get(i).setIcon(null);
+							cardJip.get(4).get(i).setIcon(null);
 						}
 					}
 					betting_Button_false ();

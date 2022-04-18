@@ -3,6 +3,7 @@ package game_p;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class JokBoTEST implements Serializable{
 
@@ -46,42 +47,46 @@ public class JokBoTEST implements Serializable{
 		bb.add("로얄스트레이트플러쉬");		// 모양  10JQKA
 		
 
-		int[] test = new int[res.size()];
-		for (int i = 0; i < test.length; i++) {
+//		int[] test = new int[res.size()];
+		HashMap<Integer, Integer> test2 = new HashMap<Integer, Integer>();
+		for (Map.Entry<Integer, String> i : res.entrySet()) {
+			
 			for (int j = 0; j < bb.size(); j++) {
-				if(bb.get(j).equals(res.get(i).split("_")[0])) {
-					test[i]=j; 
+				if(bb.get(j).equals(i.getValue().split("_")[0])) {
+					test2.put(i.getKey(),j);
 //					System.out.println(j);
 				}
 			}
 		}
+		
 		// test = 9, 0 
 		int num = 0;
 		int aaa = 0;
 		int win = -1;
 		
 		
-		for (int i : res.keySet()) {
+		for (Map.Entry<Integer, Integer> z : test2.entrySet()) {
 			
 		
-			if(test[i]>aaa) {
-				aaa=test[i];
-				num = i;
-				win =i;
+			if(z.getValue()>aaa) {
+				aaa = z.getValue();
 				
-			} else if (test[i] == aaa)  {
-				int a = Integer.parseInt(res.get(i).split("_")[1].split(",")[0]);
-				int b = Integer.parseInt(res.get(num).split("_")[1].split(",")[0]);
+				num = z.getKey();
+				win =z.getKey();
+				
+			} else if (z.getValue() == aaa)  {
+				int a = Integer.parseInt(res.get(z.getKey()).split("_")[1].split(",")[0]);
+				int b = Integer.parseInt(res.get(test2.get(num)).split("_")[1].split(",")[0]);
 				if (a > b) {
-					win = i;
+					win = z.getKey();
 					
 				} else if (a < b) {
 					win = num;
 				} else if (a == b) {
-					int c = Integer.parseInt(res.get(i).split("_")[1].split(",")[1]);
-					int d = Integer.parseInt(res.get(num).split("_")[1].split(",")[1]);
+					int c = Integer.parseInt(res.get(z.getKey()).split("_")[1].split(",")[1]);
+					int d = Integer.parseInt(res.get(test2.get(num)).split("_")[1].split(",")[1]);
 					if (c > d) {
-						win = i;
+						win = z.getKey();
 					} else {
 						win = num;
 					}
@@ -90,13 +95,12 @@ public class JokBoTEST implements Serializable{
 			}
 		}
 	
-		String winner = "";
-		if (res.get(0).equals(res.get(1))) {
-			winner = "무승부!";
-		} else {
-			winner = num +"번!";
+//		String winner = "";
+//		if (res.get(0).equals(res.get(1))) {
+//			winner = "무승부!";
+//		} else {
 			
-		}
+//		}
 		
 		return win;
 		
@@ -107,6 +111,5 @@ public class JokBoTEST implements Serializable{
 //		ch.send(tcpdata);
     }
 		
-
 
 }
