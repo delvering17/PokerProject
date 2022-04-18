@@ -42,7 +42,7 @@ class MulServer {
 		
 
 		
-		System.out.println(td.nickName+ "가 "+ td.pre+ "에서 " + td.pos+ "로 이동 ");
+//		System.out.println(td.nickName+ "가 "+ td.pre+ "에서 " + td.pos+ "로 이동 ");
 		
 		no = test.get(td.pos).size();
 		if (td.pos == -1) {
@@ -104,19 +104,57 @@ class MulServer {
 				
 					data = (TCPData)ois.readObject();
 
-					if(data.DataDestination.equals("testMove")) {
-
+//					if(data.DataDestination.equals("testMove")) {
+//
+//						UserData td = (UserData)data.oData;
+//						userList.put(td.nickName,oos);		
+//						
+//						testMove(td);
+//						data.oData = test; 
+//						sendToAll(data);
+//						
+//					} else {
+//
+//						
+//						sendToAll(data);
+//					}
+					
+					switch (data.DataDestination) {
+					case "testMove":
 						UserData td = (UserData)data.oData;
 						userList.put(td.nickName,oos);		
 						
 						testMove(td);
 						data.oData = test; 
 						sendToAll(data);
-						
-					} else {
-
-						
+						break;
+					case "betting_bbing":
+						sendToGame(data);
+						break;
+					case "betting_ddadang":
+						sendToGame(data);
+						break;
+					case "betting_half":
+						sendToGame(data);
+						break;
+					case "betting_quarter":
+						sendToGame(data);
+						break;
+					case "betting_max":
+						sendToGame(data);
+						break;
+					case "betting_die":
+						sendToGame(data);
+						break;
+					case "betting_call":
+						sendToGame(data);
+						break;
+					case "카드 나와라":
+						sendToGame(data);
+						break;
+					default:
 						sendToAll(data);
+						break;
 					}
 				}
 			}catch (Exception e) {
@@ -137,13 +175,11 @@ class MulServer {
 		for (Map.Entry<String,ObjectOutputStream> dd: userList.entrySet()) {
 			try {
 				
-				
-				
 				dd.getValue().writeObject(data);
 				dd.getValue().flush();
 				dd.getValue().reset();
 				
-				System.out.println("서버가 "+data.DataDestination+"을 목적으로 "+ dd.getKey()+"에게 보냄");
+//				System.out.println("서버가 "+data.DataDestination+"을 목적으로 "+ dd.getKey()+"에게 보냄");
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -162,7 +198,18 @@ class MulServer {
 //			}
 //		}
 	}
-
+	synchronized  void sendToGame(TCPData data) {
+		for (String gm : test.get(data.UserPos).keySet()) {
+			try {
+				userList.get(gm).writeObject(data);
+				userList.get(gm).flush();
+				userList.get(gm).reset();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 }
 public class SeverTestMain {
 
