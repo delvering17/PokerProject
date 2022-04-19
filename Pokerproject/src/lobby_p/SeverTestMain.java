@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 import net_p.MsgData;
+import net_p.RoomChk;
 import net_p.TCPData;
 import net_p.UserData;
 
@@ -19,7 +20,7 @@ class MulServer {
 	HashMap<String,ObjectOutputStream> userList;
 
 	public HashMap<Integer, HashMap<String, Integer>> test;
-
+	public HashMap<Integer,Boolean> rk;
 	
 	synchronized void testMove(UserData td) {
 		Integer no  = test.get(td.pre).get(td.nickName);
@@ -52,9 +53,12 @@ class MulServer {
 			test.get(td.pos).put(td.nickName, no);
 		}
 		
-
+		
 	}
-	
+	void roomchk(TCPData data) {
+		RoomChk rc = (RoomChk)data.oData;
+		rk.put(rc.roomNum, rc.bl);
+	}
 	
 	
 	public MulServer() {
@@ -67,12 +71,12 @@ class MulServer {
 			for (int i = -1; i < 9; i++) {
 				test.put(i,new HashMap<String, Integer >());
 			}
-			
+			rk = new HashMap<Integer, Boolean>();
 			
 			System.out.println("나 서버");
 			userList = new HashMap<String,ObjectOutputStream>();
 			Collections.synchronizedMap(userList);
-
+			Collections.synchronizedMap(rk);
 			Collections.synchronizedMap(test);
 			while(true) {
 				Socket client = server.accept();
@@ -126,6 +130,16 @@ class MulServer {
 						
 						testMove(td);
 						data.oData = test; 
+						sendToAll(data);
+						
+						if(!td.pre.equals(-1)) {
+							data.DataDestination = "rk";
+							data.oData = rk;
+							sendTo(data);
+						}
+						break;
+					case "RoomChk":
+						roomchk(data);
 						sendToAll(data);
 						break;
 					case "betting_bbing":
@@ -208,6 +222,16 @@ class MulServer {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+	}
+	synchronized  void sendTo(TCPData data) {
+		try {
+			userList.get(data.name).writeObject(data);
+			userList.get(data.name).flush();
+			userList.get(data.name).reset();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }

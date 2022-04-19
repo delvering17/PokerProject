@@ -231,8 +231,16 @@ public class Lobby extends JPanel implements NetExecute {
 			break;
 		case "RoomChk":
 			RoomChk rc = (RoomChk)data.oData;
+			
 			if(rc.bl) btnlist.get(rc.roomNum).setEnabled(false);
 			else btnlist.get(rc.roomNum).setEnabled(true);
+			break;
+		case "rk":
+			HashMap<Integer,Boolean> rk = (HashMap<Integer,Boolean>)data.oData;
+			for (Map.Entry<Integer,Boolean> room : rk.entrySet()) {
+				if(room.getValue()) btnlist.get(room.getKey()).setEnabled(false);
+				else btnlist.get(room.getKey()).setEnabled(true);
+			}
 			break;
 		}
 		
