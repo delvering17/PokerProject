@@ -33,7 +33,7 @@ public class FindIDPW_panel extends JPanel{
  		email_find = new Gen_textfiled(login_frame,"아이디","Login_textfiled_id",500,200, 200,50);
  		
  		// 확인 버튼
- 		add(new Gen_button_login(login_frame,"아이디 찾기","FindID_button",500,250, 100,50));
+ 		add(new Gen_button_login(login_frame,"아이디 찾기","FindID_button",500,250, 140,50));
  		
  		
 		// 비밀번호 찾기
@@ -43,7 +43,7 @@ public class FindIDPW_panel extends JPanel{
 		idpw_find = new Gen_textfiled(login_frame,"아이디","Login_textfiled_id",500,450, 200,50);
  		// 창 나옴 ,  질문에 답 , 맞으면 다시 창열어서  알려줌 비번
 		// 확인 버튼
-		add(new Gen_button_login(login_frame,"비밀번호 찾기","FindPW_button",500,500, 100,50));
+		add(new Gen_button_login(login_frame,"비밀번호 찾기","FindPW_button",500,500, 140,50));
 		
 		
 		// 나가기
