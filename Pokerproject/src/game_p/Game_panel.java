@@ -29,6 +29,7 @@ import javax.swing.JTextField;
 import DB_p.SignDB;
 import lobby_p.Lobby;
 import login_p.Login_frame;
+
 import net_p.GameData;
 import net_p.MsgData;
 import net_p.MyData;
@@ -687,6 +688,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			
 			myData.playerNum = real_users.get(myData.nickName);
 			
+			
 			if(myData.playerNum ==0 && gameStart_Gen == false) {
 				if(data.UserPos == myData.pos) {
 					
@@ -702,32 +704,36 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 						//게임 시작 버튼
 						@Override
 						public void actionPerformed(ActionEvent e) {
-							
-							roomckh(true);
 							me.game_users = (HashMap<String, Integer>) real_users.clone();
-							betting_Button_true();
-							gameStart_Gen = false;
-							me.userCount = myData.playerNum;
-							
-							me.dealerDeck = new ArrayList<PokerCard>();
-							for (int i = 2; i < 15; i++) {
-								for (int j = 1; j < 5; j++) {
-									
-									me.dealerDeck.add(new PokerCard(i,j));
+							if(me.game_users.size()>1) {
+								
+								roomckh(true);
+								betting_Button_true();
+								gameStart_Gen = false;
+								me.userCount = myData.playerNum;
+								
+								me.dealerDeck = new ArrayList<PokerCard>();
+								for (int i = 2; i < 15; i++) {
+									for (int j = 1; j < 5; j++) {
+										
+										me.dealerDeck.add(new PokerCard(i,j));
+									}
 								}
+								
+								
+								game_panel.remove(GameStart);
+								game_panel.repaint();
+								
+								GameProcess();
+							} else {
+								new GamenoticeWindow("2인 이상 필요", "오류", JOptionPane.ERROR_MESSAGE);
 							}
-							
-							
-							game_panel.remove(GameStart);
-							game_panel.repaint();
-							
-							GameProcess();
 						}
 					});
 				}
 				
 			}
-
+//			startEnabled();
 			
 			endGame_profileReset();
 			
@@ -941,7 +947,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 							});
 							
 						}
-						
+
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -1372,7 +1378,10 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 
 		
     }
-    
+    void startEnabled() {
+		if(gameStart_Gen == true && real_users.size()>1&&myData.playerNum ==0) GameStart.setEnabled(true);
+		else GameStart.setEnabled(false);
+    }
     void ipjang_profileReset () {
 
 		for (Map.Entry<String, Integer> entry : real_users.entrySet()) {
@@ -1718,5 +1727,19 @@ class PlayerCard_Label extends JLabel {
 		setBounds(x, y, width, height);
 
 	}
+}
+
+class GamenoticeWindow {
+	
+	public GamenoticeWindow(String message, String title, int informationMessage) {
+		JOptionPane.showMessageDialog(null, message, title, informationMessage);
+	}
+	/*
+	 - ERROR_MESSAGE
+     - INFORMATION_MESSAGE
+     - QUESTION_MESAGE
+     - WARNING_MESSAGE
+     - PLAIN_MESSAGE 
+	 */
 }
 
