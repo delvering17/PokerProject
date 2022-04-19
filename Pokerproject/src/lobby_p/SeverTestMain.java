@@ -91,6 +91,8 @@ class MulServer {
 		ObjectInputStream ois;
 		ObjectOutputStream oos;
 		Socket client;
+		String nname;
+		boolean chk = true;
 		public Reciver(Socket client) {
 			try {
 				this.client = client;
@@ -107,7 +109,10 @@ class MulServer {
 				while(ois!=null) {
 				
 					data = (TCPData)ois.readObject();
-
+					if(chk) {
+						nname = data.name;
+						chk=false;
+					}
 //					if(data.DataDestination.equals("testMove")) {
 //
 //						UserData td = (UserData)data.oData;
@@ -132,7 +137,7 @@ class MulServer {
 						data.oData = test; 
 						sendToAll(data);
 						
-						if(!td.pre.equals(-1)) {
+						if(td.pos.equals(-1)) {
 							data.DataDestination = "rk";
 							data.oData = rk;
 							sendTo(data);
@@ -175,9 +180,15 @@ class MulServer {
 
 			}finally {
 				try {
-
-//					oos.close();
-//					ois.close();
+					TCPData td = new TCPData();
+					userList.remove(nname);
+					test.get(-1).remove(nname);
+					td.UserPos = -1;
+					td.oData = test;
+					td.DataDestination = "testMove";
+					sendToAll(td);
+					oos.close();
+					ois.close();
 				} catch (Exception e1) {
 
 				}

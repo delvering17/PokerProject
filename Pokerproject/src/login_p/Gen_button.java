@@ -94,7 +94,7 @@ class LogIn_in implements Inter_button_login {
 					
 					ProfileDTO datathis = new SignDB().num_profileRead(" profilenum = " +memberNum+ ";");
 					try {
-						Socket client = new Socket("192.168.20.21", 8888);
+						Socket client = new Socket("192.168.20.34", 8888);
 						Receiver ch = new Receiver(login_frame, client);
 						TCPData tcpdata = new TCPData();
 						ch.start();
@@ -109,6 +109,7 @@ class LogIn_in implements Inter_button_login {
 						login_frame.userDTO = datathis;
 						login_frame.lobby_panel = lobby_panel;
 						login_frame.repaint();
+						tcpdata.UserPos = -1;
 						tcpdata.name = myData.nickName;
 						tcpdata.DataDestination = "testMove";
 						tcpdata.oData = new UserData(-1,-1,datathis.nickname,null);
