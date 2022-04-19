@@ -166,7 +166,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				
 				if (e.getSource() == exit) {
 					TCPData tcpdata = new TCPData();
-					login_frame.setDefaultCloseOperation(1);
+					login_frame.setDefaultCloseOperation(3);
 					login_frame.add(new Lobby(login_frame,ch,myData));
 					login_frame.remove(game_panel);
 					login_frame.repaint();

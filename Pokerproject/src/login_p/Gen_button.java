@@ -196,7 +196,7 @@ class SignInComplete_in implements Inter_button_login {
 		
 		id = signInfo.get(0).getText().trim(); 
 		name = signInfo.get(1).getText().trim(); 
-		email = signInfo.get(2).getText().trim(); 
+		email = signInfo.get(2).getText().trim()+"@"+login_frame.signin_panel.emailInfo.getSelectedItem().toString();
 		findPasswordQ = signInfo.get(5).getText().trim(); 
 		findPasswordA = signInfo.get(6).getText().trim();
 		
@@ -206,10 +206,10 @@ class SignInComplete_in implements Inter_button_login {
 		
 		
 		signDate = "2022-01-01";
-		
+		System.out.println(email);
 		nickname = signInfo.get(3).getText().trim();
 		gender = login_frame.signin_panel.genderInfo.getSelectedItem().toString();
-		introduce = signInfo.get(7).getText().trim();
+		introduce = ""+signInfo.get(7).getText().trim();
 		totalGame = 0;
 		win = 0;
 		lose = 0;
@@ -223,14 +223,20 @@ class SignInComplete_in implements Inter_button_login {
 		boolean resGongback = false;
 		String Gong = "";
 		for (int i = 0 ; i < 7 ; i++) {
-			if (new GongbackCon().sicon(signInfo.get(i).getText()) && i != 5) {
+			if (new GongbackCon().sicon(signInfo.get(i).getText()) && i != 5 ) {
 				Gong = signInfo.get(i).getName();
+				System.out.println(Gong);
 			resGongback = true;
 			break;
 			} else {}
 		}
-		for (Gen_textfiled gt  : signInfo) {
-			resA = new GongbackCon().con(gt.getText().trim());
+		for (int i = 0 ; i < 7 ; i++) {
+			if (i == 4 || i == 7) {
+				
+			} else {
+				resA = new GongbackCon().con(signInfo.get(i).getText().trim());
+				
+			}
 		}
 		for (Textfiled_password tp  : pwInfo) {
 			resB = new GongbackCon().con(tp.getText().trim());
@@ -242,9 +248,12 @@ class SignInComplete_in implements Inter_button_login {
 		} else if (resGongback) {
 
 			new noticeWindow(Gong +"의 공백을 제외하고 입력해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
-		} else if (new CharLimit().email(email)) {
+		} else if (new CharLimit().email(signInfo.get(2).getText().trim())) {
 			
 			new noticeWindow("이메일 형식에 맞지 않습니다.", "오류", JOptionPane.ERROR_MESSAGE);
+		} else if (new CharLimit().name(name)) {
+			
+			new noticeWindow("이름은 2~5자의 한글이어야합니다.", "오류", JOptionPane.ERROR_MESSAGE);
 		} else if (new CharLimit().password(password)) {
 			
 			new noticeWindow("비밀번호는 6~16자리이며 영문+숫자+특수문자 조합이어야 합니다.", "오류", JOptionPane.ERROR_MESSAGE);
@@ -332,7 +341,7 @@ class SignIn_ID_DoubleCheck implements Inter_button_login {
 			new noticeWindow("아이디를 입력해주세요", "오류", JOptionPane.ERROR_MESSAGE);
 		} else if (new CharLimit().id(str)) {	
 			
-			new noticeWindow("아이디는 영문으로 시작하는 영문+숫자 조합의 5~12자리여야 합니다.", "오류", JOptionPane.ERROR_MESSAGE);
+			new noticeWindow("아이디는 영문으로 시작하는 영문 또는 숫자 조합의 5~12자리여야 합니다.", "오류", JOptionPane.ERROR_MESSAGE);
 		} else if (new GongbackCon().sicon(str)) {
 			new noticeWindow("아이디의 공백을 제거해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
 		} else {
@@ -348,6 +357,9 @@ class SignIn_ID_DoubleCheck implements Inter_button_login {
 				new noticeWindow("아이디 사용 가능", "사용가능", JOptionPane.INFORMATION_MESSAGE);
 				login_frame.signin_panel.doubleCheck_id = false;
 				login_frame.signin_panel.idCon = str;
+				login_frame.signin_panel.signInfo.get(0).setEditable(false);
+				login_frame.signin_panel.idDouble.setEnabled(false);
+				login_frame.repaint();
 			} 
 			
 		}
@@ -367,7 +379,7 @@ class SignIn_Nickname_DoubleCheck implements Inter_button_login {
 			
 			new noticeWindow("닉네임을 입력해주세요", "오류", JOptionPane.ERROR_MESSAGE);
 		} else if (new CharLimit().nickname(str)) {
-			new noticeWindow("닉네임은 2~8자리여야 합니다.", "오류", JOptionPane.ERROR_MESSAGE);
+			new noticeWindow("닉네임은 한글의 2~8자리여야 합니다.", "오류", JOptionPane.ERROR_MESSAGE);
 		} else if (new GongbackCon().sicon(str)) {
 			new noticeWindow("닉네임의 공백을 제거해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
 		} else {
@@ -383,6 +395,9 @@ class SignIn_Nickname_DoubleCheck implements Inter_button_login {
 				new noticeWindow("닉네임 사용 가능", "사용 가능", JOptionPane.INFORMATION_MESSAGE);
 				login_frame.signin_panel.doublecCheck_nickname = false;
 				login_frame.signin_panel.nickNameCon = str;
+				login_frame.signin_panel.signInfo.get(3).setEditable(false);
+				login_frame.signin_panel.NickDouble.setEnabled(false);
+				login_frame.repaint();
 			}
 		
 		}
@@ -607,10 +622,22 @@ class CharLimit {
 			
 	}
 	
+	public boolean name(String name) {
+		boolean res =true;
+		
+		String name_regex = "^[ㄱ-ㅎㅏ-ㅣ가-힣]{2,5}$"; 
+		
+		if (Pattern.matches(name_regex, name)) {
+			res = false;
+		}
+		
+		return res;
+	}
+	
 	public boolean email(String email) {
 		boolean res = true;
 		
-		String email_regex = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
+		String email_regex = "^[0-9a-zA-Z]{1}[0-9a-zA-Z-_.]{1,19}$";
 		
 		if (Pattern.matches(email_regex, email)) {
 			res = false;
@@ -623,8 +650,9 @@ class CharLimit {
 	public boolean nickname(String nickname) {
 		boolean res = true;
 		String nick = ""+nickname;
+		String nick_regex = "^[ㄱ-ㅎㅏ-ㅣ가-힣]{2,8}$"; 
 		char[] concon = nick.toCharArray();
-		if (concon.length > 1 && concon.length < 9) {
+		if (concon.length > 1 && concon.length < 9 &&Pattern.matches(nick_regex, nickname) ) {
 			res = false;
 		} 
 		return res;
@@ -633,7 +661,7 @@ class CharLimit {
 	public boolean password(String password) { // 6~16
 		boolean res = true;
 
-		String pass = "^.*(?=^.{8,15}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$";
+		String pass = "^.*(?=^.{6,16}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$";
 		
 		if ((Pattern.matches(pass, password))) {
 			res = false;
