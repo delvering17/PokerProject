@@ -126,7 +126,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	public Game_panel(Login_frame login_frame,Receiver ch,MyData myData,Integer addr) {
 		
 		me = new GameData();
-		
+		login_frame.setDefaultCloseOperation(0);
 		
 		this.myData = myData;
 		myData.pos = addr;
@@ -166,7 +166,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				
 				if (e.getSource() == exit) {
 					TCPData tcpdata = new TCPData();
-
+					login_frame.setDefaultCloseOperation(1);
 					login_frame.add(new Lobby(login_frame,ch,myData));
 					login_frame.remove(game_panel);
 					login_frame.repaint();
@@ -689,14 +689,11 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			myData.playerNum = real_users.get(myData.nickName);
 			
 			
+			if(data.UserPos == myData.pos) {
 			if(myData.playerNum ==0 && gameStart_Gen == false) {
-				if(data.UserPos == myData.pos) {
-					
 					gameStart_Gen = true;
-					//System.out.println("너는 0번이다.");
 					
 					GameStart = new JButton("게임 시작");
-//				GameStart.setEnabled(false);
 					GameStart.setBounds(500, 280, 200, 80);
 					add(GameStart);	
 					
@@ -733,15 +730,8 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				}
 				
 			}
-//			startEnabled();
 			
 			endGame_profileReset();
-			
-//			if (myData.playerNum == 0 && real_users.size() > 1) {
-//			GameStart.setEnabled(true);
-//			} else {
-//			GameStart.setEnabled(false);
-//			}
 			
 			break;
 			
