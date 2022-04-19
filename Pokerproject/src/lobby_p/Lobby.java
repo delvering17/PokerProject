@@ -3,6 +3,7 @@ package lobby_p;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
@@ -13,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -20,6 +22,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
+import javax.swing.ImageIcon;
 
 import game_p.Game_panel;
 import lobby_i.RoomAction;
@@ -31,12 +34,14 @@ import net_p.Receiver;
 import net_p.RoomChk;
 import net_p.TCPData;
 import net_p.UserData;
-
+import javax.swing.Timer;
 public class Lobby extends JPanel implements NetExecute {
 	JTextField jtf;
 	JTextArea jta;
 	JTextArea userArea;
 	Receiver ch;
+	ImageIcon img;
+	JLabel lb;
 	//들어올 유져 객체
 //	ArrayList<Object> userList = new ArrayList<Object>();
 	Login_frame mainJf;
@@ -46,7 +51,7 @@ public class Lobby extends JPanel implements NetExecute {
 	HashMap<InetAddress, Object> roomChk;
 	ArrayList<RoomBtn> btnlist = new ArrayList<RoomBtn>();
 //	HashMap<Integer, HashMap<String, Integer>> test;
-	
+	boolean stop = true;
 	
 	public Lobby(Login_frame mainJf,Receiver ch, MyData myData) {
 		this.myData= myData; 
@@ -60,14 +65,17 @@ public class Lobby extends JPanel implements NetExecute {
 		//tcpdata.msg = "[입장]";
 		
 		setBounds(0, 0, 1200, 800);
-		setBackground(Color.black);
+		setBackground(new Color(15,76,130));
 		setLayout(null);
-		
+		img = new ImageIcon("img/gamepanel/logo2.png");
+		lb = new JLabel(img);
+		lb.setBounds(0,0,800,100);
 		Component roomAdd = new Component(10, 10, 800, 100);
 		add(roomAdd);
 		
 		//roomAdd.add(new RoomBtn("방만들기","Making",590,35,100,60,this));
 		//roomAdd.add(new RoomBtn("바로입장","Enter",0,695,35,100,60,this));
+		roomAdd.add(lb);
 		
 		JScrollPane roomList = new JScrollPane();//스크롤팬 생성
 		roomList.setBounds(10, 120, 800, 400);
@@ -76,10 +84,11 @@ public class Lobby extends JPanel implements NetExecute {
 		roomPanel.setLayout(new GridLayout(3,3,10,10));
 		
 		for (int i = 0; i < 9; i++) {
-			JLabel jl= new JLabel();
+			img = new ImageIcon("img/gamepanel/room.png");
+			JLabel jl= new JLabel(img);
 			jl.setBorder(new LineBorder(Color.black,2));
 			jl.setOpaque(true);
-			jl.setBackground(new Color(255,111,111));
+			jl.setBackground(new Color(236,239,247));
 			RoomBtn rBtn = new RoomBtn("만들기","Making",i,90,110,80,40,this);
 			btnlist.add(rBtn);
 			jl.add(rBtn);
@@ -96,8 +105,12 @@ public class Lobby extends JPanel implements NetExecute {
 		Component chatting = new Component(10, 530, 800, 220);
 		add(chatting);
 		jtf = new JTextField();
+		//jtf.setBackground(new Color(236,239,247));
 		jtf.setBounds(0, 200, 800, 20);
+		jtf.setFont(new Font("Arial white",Font.BOLD,15));
 		jta = new JTextArea();
+		jta.setFont(new Font("Arial white",Font.BOLD,15));
+		//jta.setBackground(new Color(213,220,236,80));
 		JScrollPane js = new JScrollPane(jta);
 		js.setBounds(0, 0, 800, 200);
 		jta.setEditable(false);
@@ -109,40 +122,59 @@ public class Lobby extends JPanel implements NetExecute {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				TCPData tcpdata = new TCPData();
-				tcpdata.name = myData.nickName;
-				tcpdata.UserPos = -1;
-				tcpdata.oData = new MsgData(myData.nickName, jtf.getText()) ;
-				tcpdata.DataDestination = "Chatting";
-				ch.send(tcpdata);
-				jta.setCaretPosition(jta.getDocument().getLength());
-				jtf.setText("");
+				if(!jtf.getText().equals("")) {
+					TCPData tcpdata = new TCPData();
+					tcpdata.name = myData.nickName;
+					tcpdata.UserPos = -1;
+					tcpdata.oData = new MsgData(myData.nickName, jtf.getText()) ;
+					tcpdata.DataDestination = "Chatting";
+					ch.send(tcpdata);
+					jta.setCaretPosition(jta.getDocument().getLength());
+					jtf.setText("");
+				}
 			}
 		});
-		JPanel userP = new JPanel();
+		img = new ImageIcon("img/gamepanel/userlist1.png");
+		JLabel userP = new JLabel(img);
 		userP.setBounds(820,10,350, 510);
 		userArea = new JTextArea();
+		userArea.setFont(new Font("Arial white",Font.BOLD,20));
 		JScrollPane userList = new JScrollPane(userArea);
-		userList.setBounds(10,10,330,490);
+		userList.setBounds(28,28,300,460);
 		userArea.setEditable(false);
 		userP.add(userList);
 		add(userP);
 		
 		JTextArea profile = new JTextArea();
 		profile.setBounds(10, 10, 330, 200);
-		JPanel userProfile = new JPanel();
+		profile.setFont(new Font("Arial white",Font.BOLD,15));
+		profile.setOpaque(false);
+		img = new ImageIcon("img/gamepanel/profile.png");
+		JLabel userProfile = new JLabel(img);// img
+		userProfile.setOpaque(true);
 		userProfile.add(profile);
 		profile.setEditable(false);
 		
-		profile.setText("닉네임 : "+myData.nickName+"\n\n"+ "보유머니 : "+myData.money+"\n\n"+"승 : "+myData.win+" 패 : "+myData.lose);
+		profile.setText("\n\n"+"          닉네임 : "+myData.nickName+"\n\n"+ "          보유머니 : "+myData.money+"\n\n"+"          승 : "+myData.win+"    패 : "+myData.lose);
 		
 		userProfile.setBounds(820,530,350, 220);
 		add(userProfile);
 		roomList.getVerticalScrollBar().setValue(1);
-		
+		Timer a = new Timer(50, new ActionListener() {
 
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                while(stop) {
+                    roomList.getVerticalScrollBar().setValue(5);
+                    stop = false;
+                    repaint();
+                }
+            }
+        });
 		
 		repaint();
+		a.start();
 	}
 	
 	class RoomBtn extends JButton implements ActionListener{
@@ -191,7 +223,8 @@ public class Lobby extends JPanel implements NetExecute {
 	class Component extends JPanel {
 		public Component(int x,int y,int width , int height) {
 			setBounds(x,y,width,height);
-			setBackground(Color.blue);
+			setBackground(Color.white);
+//			setBackground(new Color(201,190,184));
 			setLayout(null);
 		}
 	}
@@ -231,16 +264,8 @@ public class Lobby extends JPanel implements NetExecute {
 			break;
 		case "RoomChk":
 			RoomChk rc = (RoomChk)data.oData;
-			
 			if(rc.bl) btnlist.get(rc.roomNum).setEnabled(false);
 			else btnlist.get(rc.roomNum).setEnabled(true);
-			break;
-		case "rk":
-			HashMap<Integer,Boolean> rk = (HashMap<Integer,Boolean>)data.oData;
-			for (Map.Entry<Integer,Boolean> room : rk.entrySet()) {
-				if(room.getValue()) btnlist.get(room.getKey()).setEnabled(false);
-				else btnlist.get(room.getKey()).setEnabled(true);
-			}
 			break;
 		}
 		

@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import javax.swing.border.LineBorder;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -117,7 +118,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 //	public int wholeBettingMoney;
 //	public String winner;
 	ImageIcon default_bet = new ImageIcon("img/gamepanel/default.png");
-	ImageIcon cdback  = new ImageIcon("img/card/CardBackimg.png");
+	ImageIcon cdback  = new ImageIcon("img/card/CardBackimg.jpg");
 	GameData me;
 	TCPData tcpData = new TCPData();
 	
@@ -144,7 +145,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		jokbbo = new Jokbo();
 		jk = new JokBoTEST();
 		setBounds(0, 0, 1200, 800);
-		setBackground(new Color(32,56,48));
+		setBackground(new Color(22,33,78));
 		setLayout(null);
 		
 		// 도움말 help
@@ -312,6 +313,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		add(betting);
 		
 		JPanel betbuttonarea = new JPanel();
+//		betbuttonarea.setBackground(new Color(255,0,0,0));
 		betbuttonarea.setLayout(null);
         betbuttonarea.setBounds(740,520,170,220);
         add(betbuttonarea);
@@ -603,7 +605,11 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		chat.setBackground(Color.black);
 		add(chat);
 		
-		
+//    	ImageIcon table = new ImageIcon("img/gamepanel/gamebg.png");
+//	    JLabel tl = new JLabel(table);
+//	    tl.setBounds(0, 0, 1200, 800);
+////	    tl.setHorizontalAlignment();
+//	    add(tl);
 		chf = new JTextField();
 		chf.setBounds(0,200, 250, 20);
 		chf.addActionListener(this);
@@ -621,7 +627,8 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					
+
+					if(!chf.getText().equals("")) {
 					TCPData tcpdata = new TCPData();
 					tcpdata.UserPos = myData.pos;
 					tcpdata.name = myData.nickName;
@@ -631,6 +638,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					ch.send(tcpdata);
 					
 					chf.setText("");
+					}
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -644,6 +652,9 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		cardJip.add(player3cardShow);
 		cardJip.add(player4cardShow);
 		cardJip.add(player5cardShow);
+		
+
+		
 		
 		TCPData tcpdata = new TCPData();
 		tcpdata.name = myData.nickName;
@@ -1001,7 +1012,83 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 						}
 						betting_Button_false ();
 						
-						turnNickname.setText("승: "+me.winner+"번 / "+jokbbo.jokbo(me.playerDeck.get(Integer.parseInt(me.winner))));
+						if (jokbbo.jokbo(me.playerDeck.get(Integer.parseInt(me.winner))).split("")[0].equals("탑")) {
+                            String aa = "";
+                            String winn = "" ;
+                            switch (jokbbo.jokbo(me.playerDeck.get(Integer.parseInt(me.winner))).split("")[1].split(",")[0]) {
+                            case "11" :
+                                aa = "J";
+                                break;
+                            case "12" :
+                                aa = "Q";
+                                break;
+                            case "13" :
+                                aa = "K";
+                                break;
+                            case "14" :
+                                aa = "A";
+                                break;
+                            }
+                            for (Map.Entry<String, Integer> cd :me.game_users.entrySet()) {
+                            	if ( me.winner.equals(cd.getValue())) {
+                            		winn = cd.getKey();
+                            	}
+                            }
+                            turnNickname.setText("승: "+winn+" / "+
+                                    aa+"탑"
+
+                                    );
+                        } else {
+                        	String winn = "";
+                        	for (Map.Entry<String, Integer> cd :me.game_users.entrySet()) {
+                            	if ( me.winner.equals(cd.getValue())) {
+                            		winn = cd.getKey();
+                            	}
+                            }
+                            turnNickname.setText("승: "+winn+" / "+jokbbo.jokbo(me.playerDeck.get(Integer.parseInt(me.winner))).split("_")[0]);
+
+                        }
+						
+						for ( Integer bb: me.playerDeck.keySet()) {
+                            String cc = jokbbo.jokbo(me.playerDeck.get(bb)).split("")[1].split(",")[0];
+                            switch (jokbbo.jokbo(me.playerDeck.get(bb)).split("")[1].split(",")[0]) {
+                            case "11" :
+                                cc = "J";
+                                break;
+                            case "12" :
+                                cc = "Q";
+                                break;
+                            case "13" :
+                                cc = "K";
+                                break;
+                            case "14" :
+                                cc = "A";
+                                break;
+                            }
+                            switch (bb) {
+                            case 0:
+                            	p1_bet_jokbo.setText(jokbbo.jokbo(me.playerDeck.get(bb)).split("")[0]+"_"+cc);
+                                break;
+
+                            case 1:
+                            	p2_bet_jokbo.setText(jokbbo.jokbo(me.playerDeck.get(bb)).split("")[0]+"_"+cc);
+                                break;
+
+                            case 2:
+                            	p3_bet_jokbo.setText(jokbbo.jokbo(me.playerDeck.get(bb)).split("")[0]+"_"+cc);
+                                break;
+
+                            case 3:
+                                p4_bet_jokbo.setText(jokbbo.jokbo(me.playerDeck.get(bb)).split("")[0]+"_"+cc);
+                                break;
+
+                            case 4:
+                                p5_bet_jokbo.setText(jokbbo.jokbo(me.playerDeck.get(bb)).split("")[0]+"_"+cc);
+                                break;
+
+                            }
+                        }
+						
 						repaint();
 	
 						Thread.sleep(3000);
@@ -1677,7 +1764,9 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
     			}
     		}
     	}
+
     }
+    
 }	
 	
 class Help_pg extends JFrame{
@@ -1706,7 +1795,8 @@ class PlayerCard_panel extends JPanel {
 	
 	public PlayerCard_panel(int x, int y, int width, int height) {
 		setBounds(x, y, width, height);
-		setBackground(new Color(41,67,58));
+        setBackground(new Color(255,0,0,0));
+        setBorder(new LineBorder(Color.white));
 		setLayout(null);
 	}
 }
@@ -1715,7 +1805,6 @@ class PlayerCard_Label extends JLabel {
 	
 	public PlayerCard_Label(int x, int y, int width, int height) {
 		setBounds(x, y, width, height);
-
 	}
 }
 

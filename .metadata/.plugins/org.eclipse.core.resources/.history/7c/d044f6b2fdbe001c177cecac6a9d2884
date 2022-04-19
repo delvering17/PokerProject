@@ -1,0 +1,281 @@
+package lobby_p;
+
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.TextArea;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
+import javax.swing.ImageIcon;
+
+import game_p.Game_panel;
+import lobby_i.RoomAction;
+import login_p.Login_frame;
+import net_p.MsgData;
+import net_p.MyData;
+import net_p.NetExecute;
+import net_p.Receiver;
+import net_p.RoomChk;
+import net_p.TCPData;
+import net_p.UserData;
+
+public class Lobby extends JPanel implements NetExecute {
+	JTextField jtf;
+	JTextArea jta;
+	JTextArea userArea;
+	Receiver ch;
+	ImageIcon img;
+	JLabel lb;
+	//들어올 유져 객체
+//	ArrayList<Object> userList = new ArrayList<Object>();
+	Login_frame mainJf;
+//	TCPData tcpdata;
+	MyData myData;
+	//방 체크할 리스트
+	HashMap<InetAddress, Object> roomChk;
+	ArrayList<RoomBtn> btnlist = new ArrayList<RoomBtn>();
+//	HashMap<Integer, HashMap<String, Integer>> test;
+	
+	
+	public Lobby(Login_frame mainJf,Receiver ch, MyData myData) {
+		this.myData= myData; 
+		this.ch = ch;
+//		this.tcpdata = tcpdata;
+		this.mainJf = mainJf;
+		this.ch.lobby_panel=this;
+		this.ch.game_panel = null;
+		
+//		this.tcpdata.UserPos = -1;
+		//tcpdata.msg = "[입장]";
+		
+		setBounds(0, 0, 1200, 800);
+		setBackground(new Color(15,76,130));
+		setLayout(null);
+		img = new ImageIcon("img/gamepanel/top2.png");
+		ImageIcon img1 = new ImageIcon("img/gamepanel/logo.jpg");
+		ImageIcon img2 = new ImageIcon("img/gamepanel/logo3.jpg");
+		lb = new JLabel(img);
+		JLabel lb1 = new JLabel(img1);
+		JLabel lb2 = new JLabel(img2);
+		lb.setBounds(0,0,100,100);
+//		lb1.setBounds(100,0,564,523);
+		lb2.setBounds(500,0,133,100);
+		Component roomAdd = new Component(10, 10, 800, 100);
+		add(roomAdd);
+		
+		roomAdd.add(new RoomBtn("방만들기","Making",590,35,100,60,this));
+		roomAdd.add(new RoomBtn("바로입장","Enter",0,695,35,100,60,this));
+		roomAdd.add(lb);
+//		roomAdd.add(lb1);
+		roomAdd.add(lb2);
+		
+		JScrollPane roomList = new JScrollPane();//스크롤팬 생성
+		roomList.setBounds(10, 120, 800, 400);
+		JPanel roomPanel = new JPanel();//스크롤팬에 붙일 패널 생성
+		roomPanel.setBorder(new LineBorder(Color.white,10));
+		roomPanel.setLayout(new GridLayout(3,3,10,10));
+		
+		for (int i = 0; i < 9; i++) {
+			JLabel jl= new JLabel();
+			jl.setBorder(new LineBorder(Color.black,2));
+			jl.setOpaque(true);
+			jl.setBackground(new Color(236,239,247));
+			RoomBtn rBtn = new RoomBtn("만들기","Making",i,90,110,80,40,this);
+			btnlist.add(rBtn);
+			jl.add(rBtn);
+			roomPanel.add(jl);
+		}
+		
+		Dimension size = new Dimension();
+		size.setSize(780, 800);
+		roomPanel.setPreferredSize(size);
+		roomList.setViewportView(roomPanel);
+		add(roomList);
+		
+		
+		Component chatting = new Component(10, 530, 800, 220);
+		add(chatting);
+		jtf = new JTextField();
+		//jtf.setBackground(new Color(236,239,247));
+		jtf.setBounds(0, 200, 800, 20);
+		jta = new JTextArea();
+		//jta.setBackground(new Color(213,220,236,80));
+		JScrollPane js = new JScrollPane(jta);
+		js.setBounds(0, 0, 800, 200);
+		jta.setEditable(false);
+		chatting.add(jtf,"Center");
+		chatting.add(js,"South");
+		
+		//ch 리시버 연결 필요
+		jtf.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				TCPData tcpdata = new TCPData();
+				tcpdata.name = myData.nickName;
+				tcpdata.UserPos = -1;
+				tcpdata.oData = new MsgData(myData.nickName, jtf.getText()) ;
+				tcpdata.DataDestination = "Chatting";
+				ch.send(tcpdata);
+				jta.setCaretPosition(jta.getDocument().getLength());
+				jtf.setText("");
+			}
+		});
+		img = new ImageIcon("img/gamepanel/userlist1.png");
+		JLabel userP = new JLabel(img);
+		userP.setBounds(820,10,350, 510);
+		userArea = new JTextArea();
+		userArea.setFont(new Font("Arial white",Font.BOLD,15));
+		JScrollPane userList = new JScrollPane(userArea);
+		userList.setBounds(28,28,300,460);
+		userArea.setEditable(false);
+		userP.add(userList);
+		add(userP);
+		
+		JTextArea profile = new JTextArea();
+		profile.setBounds(10, 10, 330, 200);
+		profile.setFont(new Font("Arial white",Font.BOLD,15));
+		profile.setOpaque(false);
+		img = new ImageIcon("img/gamepanel/Layertest.png");
+		JLabel userProfile = new JLabel(img);// img
+		userProfile.setOpaque(true);
+		userProfile.add(profile);
+		profile.setEditable(false);
+		
+		profile.setText("\n\n"+"    닉네임 : "+myData.nickName+"\n\n"+ "    보유머니 : "+myData.money+"\n\n"+"    승 : "+myData.win+"    패 : "+myData.lose);
+		
+		userProfile.setBounds(820,530,350, 220);
+		add(userProfile);
+		roomList.getVerticalScrollBar().setValue(1);
+		
+
+		
+		repaint();
+	}
+	
+	class RoomBtn extends JButton implements ActionListener{
+		String cname;
+		String name;
+		Lobby lobby;
+		Integer addr;
+		public RoomBtn(String name,String cname,int x,int y,int width , int height,Lobby lobby) {
+			super(name);
+			this.cname = cname;
+			this.name = name;
+			this.lobby = lobby;
+			setBounds(x, y, width, height);
+			addActionListener(this);
+		}
+		public RoomBtn(String name,String cname,int addr,int x,int y,int width , int height,Lobby lobby) {
+			super(name);
+			this.cname = cname;
+			this.name = name;
+			this.addr = addr;
+			this.lobby = lobby;
+			setBounds(x, y, width, height);
+			addActionListener(this);
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			try {
+//				System.out.println(addr);
+				if(e.getActionCommand().equals("만들기")) {
+					RoomAction ra = (RoomAction)Class.forName("lobby_i."+cname).newInstance();
+					ra.room(mainJf,ch,lobby,myData,addr);
+				}else {
+					mainJf.remove(lobby);
+					Game_panel game_panel = new Game_panel(mainJf,ch,myData,addr);
+					mainJf.add(game_panel);
+					mainJf.game_panel = game_panel;
+					mainJf.repaint();
+				}
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			} 
+		}
+	}
+	
+	class Component extends JPanel {
+		public Component(int x,int y,int width , int height) {
+			setBounds(x,y,width,height);
+//			setBackground(Color.white);
+			setBackground(new Color(201,190,184));
+			setLayout(null);
+		}
+	}
+
+
+	@Override
+	public void execute(TCPData data) {
+		System.out.println("로비 들어오냐");
+		//전체 기본
+//		System.out.println("??");
+//		this.tcpdata.playData = data.playData;
+//		this.tcpdata.easyStudy = data.easyStudy;
+//		this.tcpdata.userName = data.userName;
+//		this.tcpdata.test = data.test;
+//		userArea.setText("");
+		
+		
+		switch (data.DataDestination) {
+		
+		case "Chatting":
+			
+			MsgData msg = (MsgData)data.oData;
+				if (data.UserPos == -1) {
+					jta.append(msg.nickName + " : "+ msg.msg+"\n");
+					jta.setCaretPosition(jta.getDocument().getLength());		
+				}
+			
+			break;
+		case "testMove":
+			//인원 변경시에 대한 화면 변경 처리
+			System.out.println("여기까지 오냐 로비의 테스트 무브? ");
+			System.out.println((HashMap<Integer, HashMap<String, Integer>>)data.oData);
+			HashMap<Integer, HashMap<String, Integer>> test = (HashMap<Integer, HashMap<String, Integer>>)data.oData;
+			access(test);
+			innout(test);
+			
+			break;
+		case "RoomChk":
+			RoomChk rc = (RoomChk)data.oData;
+			if(rc.bl) btnlist.get(rc.roomNum).setEnabled(false);
+			else btnlist.get(rc.roomNum).setEnabled(true);
+			break;
+		}
+		
+		repaint();
+		
+	}
+	
+	void innout(HashMap<Integer, HashMap<String, Integer>> test) {
+		for (int i = 0; i < btnlist.size(); i++) {
+			if(test.get(i).size() >0) btnlist.get(i).setText("입장");
+			else btnlist.get(i).setText("만들기");
+		}
+	}
+	void access(HashMap<Integer, HashMap<String, Integer>> test) {
+		userArea.setText("");
+		Set<String> name = test.get(-1).keySet();
+		java.util.Iterator<String> a = name.iterator();
+		for (int i = 0; i < name.size(); i++) {
+			userArea.append(a.next()+"\n");
+		}
+	}
+}

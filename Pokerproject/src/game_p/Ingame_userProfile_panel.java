@@ -55,10 +55,10 @@ public class Ingame_userProfile_panel extends JPanel {
 			setBounds(220, 520, 200, 200);
 			break;
 		case 1:
-			setBounds(10, 50, 200, 200);
+			setBounds(0, 50, 200, 200);
 			break;
 		case 2:
-			setBounds(10, 280, 200, 200);
+			setBounds(0, 280, 200, 200);
 			break;
 		case 3:
 			setBounds(1000, 50, 200, 200);
@@ -80,10 +80,10 @@ public class Ingame_userProfile_panel extends JPanel {
 			setBounds(220, 520, 200, 200);
 			break;
 		case 1:
-			setBounds(10, 50, 200, 200);
+			setBounds(0, 50, 200, 200);
 			break;
 		case 2:
-			setBounds(10, 280, 200, 200);
+			setBounds(0, 280, 200, 200);
 			break;
 		case 3:
 			setBounds(1000, 50, 200, 200);

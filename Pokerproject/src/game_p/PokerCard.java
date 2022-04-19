@@ -18,7 +18,7 @@ public class PokerCard implements Serializable{
 	public PokerCard(int number, int shape) {
 		this.number = number;
 		this.shape = shape;
-		this.imgname = "img/card/Card"+number+"_"+shape+".png";
+		this.imgname = "img/card/Card"+number+"_"+shape+".jpg";
 		this.img = new ImageIcon(imgname);
 	}
 
