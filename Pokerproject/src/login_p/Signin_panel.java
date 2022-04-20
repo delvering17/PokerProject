@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -24,6 +25,9 @@ public class Signin_panel extends JPanel {
 	
 	Gen_button_login idDouble;
 	Gen_button_login NickDouble;
+	Gen_button_login complete_bt;
+	Gen_button_login cancel_bt;
+	ImageIcon img;
 	public Signin_panel(Login_frame login_frame) {
 		
 		this.login_frame = login_frame;
@@ -46,15 +50,15 @@ public class Signin_panel extends JPanel {
 		add(new Gen_label("  자기소개",400,550,80,40));
 		add(new Gen_label("   '*'이 붙은 항목은 필수 항목입니다",500,595,250,40));
 		
-		add(new Gen_label("아이디: 영문 시작, 영문 또는 숫자 조합, 5~12자리",815,100,250,40));
-		add(new Gen_label("닉네임: 한글, 2~8자리",815,350,250,40));
-		add(new Gen_label("비밀번호: 영문+숫자+특수문자 조합, 6~16자리",815,150,250,40));
-		add(new Gen_label("비밀번호 답변은 비밀번호 찾기에 사용, 신중히 기재 요망",815,500,350,40));
+		add(new Gen_label("아이디: 영문 시작, 영문 또는 숫자 조합, 5~12자리",830,100,300,40));
+		add(new Gen_label("닉네임: 한글, 2~8자리",830,350,300,40));
+		add(new Gen_label("비밀번호: 영문+숫자+특수문자 조합, 6~16자리",830,150,300,40));
+		add(new Gen_label("비밀번호 답변은 비밀번호 찾기에 사용, 신중히 기재 요망",830,500,350,40));
 		
 		add(new Gen_label(" @ ",700,300,20,45));
 		signInfo = new ArrayList<Gen_textfiled>();
 		pwInfo = new ArrayList<Textfiled_password>();
-		
+			
 		signInfo.add(new Gen_textfiled(login_frame,"아이디","Login_textfiled_id",500,100, 200,45));
 		pwInfo.add(new Textfiled_password(login_frame,"비밀번호",500,150, 200,45));
 		pwInfo.add(new Textfiled_password(login_frame,"비밀번호확인",500,200, 200,45));
@@ -91,14 +95,31 @@ public class Signin_panel extends JPanel {
 			add(textfiled_password);
 		}
 		
-		add(new Gen_button_login(login_frame,"완료","SignInComplete_in",620,635, 80,45));
-		add(new Gen_button_login(login_frame,"취소","SignInCancel_in",500,635, 80,45));
+		img = new ImageIcon("img/login/chk.png");
+		complete_bt = new Gen_button_login(login_frame,"","SignInComplete_in",620,635, 100,53);
+		complete_bt.setIcon(img);
+		add(complete_bt);
+
+		img = new ImageIcon("img/login/close.png");
+		cancel_bt = new Gen_button_login(login_frame,"","SignInCancel_in",500,635, 100,53);
+		cancel_bt.setIcon(img);
+		add(cancel_bt);
+
 		
-		idDouble = new Gen_button_login(login_frame,"중복 확인","SignIn_ID_DoubleCheck",710,100, 100,45);
+		img = new ImageIcon("img/login/dbchk.png");
+		idDouble = new Gen_button_login(login_frame,"","SignIn_ID_DoubleCheck",725,100, 100,55);
+		idDouble.setIcon(img);
 		add(idDouble);
-		NickDouble = new Gen_button_login(login_frame,"중복 확인","SignIn_Nickname_DoubleCheck",710,350, 100,45);
+		
+		img = new ImageIcon("img/login/dbchk.png");
+		NickDouble = new Gen_button_login(login_frame,"","SignIn_Nickname_DoubleCheck",725,350, 100,55);
+		NickDouble.setIcon(img);
 		add(NickDouble);
 		
+		ImageIcon img = new ImageIcon("img/gamepanel/test4.png");
+		JLabel lb = new JLabel(img);
+		lb.setBounds(0,0,800,800);
+		add(lb);
 		
 	}
 	

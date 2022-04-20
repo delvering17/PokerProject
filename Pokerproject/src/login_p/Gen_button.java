@@ -1,6 +1,7 @@
 package login_p;
 
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -39,6 +40,8 @@ class Gen_button_login extends JButton implements ActionListener {
 		super(name);
 		this.login_frame = login_frame;
 		setBounds(dis_x, dis_y, size_x, size_y);
+		setBackground(new Color(255,0,0,0));
+		setBorder(null);
 		this.function = function;
 		
 		addActionListener(this);
@@ -86,7 +89,7 @@ class LogIn_in implements Inter_button_login {
 						id_login + "';").equals(pw_login);
 				if (respw) {
 					// 성공 시 대기실 화면 전환
-					System.out.println("로그인 성공");
+				
 					//// 갓찬욱 개잘생김
 					
 					int memberNum = new SignDB().num_get("id = '"+id_login + "';");
@@ -206,7 +209,7 @@ class SignInComplete_in implements Inter_button_login {
 		
 		
 		signDate = "2022-01-01";
-		System.out.println(email);
+		
 		nickname = signInfo.get(3).getText().trim();
 		gender = login_frame.signin_panel.genderInfo.getSelectedItem().toString();
 		introduce = ""+signInfo.get(7).getText().trim();
@@ -225,7 +228,7 @@ class SignInComplete_in implements Inter_button_login {
 		for (int i = 0 ; i < 7 ; i++) {
 			if (new GongbackCon().sicon(signInfo.get(i).getText()) && i != 5 ) {
 				Gong = signInfo.get(i).getName();
-				System.out.println(Gong);
+				
 			resGongback = true;
 			break;
 			} else {}
@@ -479,8 +482,8 @@ class FindPW_button implements Inter_button_login {
 				
 				aa = JOptionPane.showInputDialog(null, new SignDB().FindPW_Qcheck("id = '"+
 						idpw_find + "';"), "답변을 입력하세요", JOptionPane.QUESTION_MESSAGE) +"";
-				System.out.println(aa);
-				System.out.println();
+				
+		
 				if (aa.equals(new SignDB().FindPW_Acheck("id = '"+
 						idpw_find + "';"))) {
 					JOptionPane.showMessageDialog(null, "비밀번호는  "+ new SignDB().FindPW_get("id = '"+

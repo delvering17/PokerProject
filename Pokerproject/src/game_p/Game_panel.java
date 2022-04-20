@@ -2,8 +2,12 @@ package game_p;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -15,6 +19,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
 import javax.swing.ImageIcon;
@@ -124,6 +130,12 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	
 	MyData myData;
 	Boolean gameStart_Gen;
+	
+	JPanel betting_pan;
+	JLabel betting_pan_whole;
+	JLabel betting_pan_wholemoney;
+	JLabel betting_pan_pan;
+	JLabel betting_pan_panmoney;
 	public Game_panel(Login_frame login_frame,Receiver ch,MyData myData,Integer addr) {
 		
 		me = new GameData();
@@ -199,7 +211,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		p1_bet_jokbo.setBounds(40,0,200,35);
 		p1_bet_jokbo.setForeground(Color.white);
 		p1_bet_jokbo.setFont(p1_bet_jokbo.getFont().deriveFont(16.0f));
-		p1_bet_jokbo.setText("베팅 금액: 0");
+		p1_bet_jokbo.setText("베팅 머니: 0");
 		
 		player1cardShow = new ArrayList<PlayerCard_Label>();
 		
@@ -223,7 +235,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		p2_bet_jokbo.setBounds(40,0,200,35);
 		p2_bet_jokbo.setForeground(Color.white);
 		p2_bet_jokbo.setFont(p2_bet_jokbo.getFont().deriveFont(16.0f));
-		p2_bet_jokbo.setText("베팅 금액: 0");
+		p2_bet_jokbo.setText("베팅 머니: 0");
 		
 		player2cardShow = new ArrayList<PlayerCard_Label>();
 		for (int i = 170 ; i >= 20 ; i -= 25) {
@@ -244,7 +256,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		p3_bet_jokbo.setBounds(40,0,200,35);
 		p3_bet_jokbo.setForeground(Color.white);
 		p3_bet_jokbo.setFont(p3_bet_jokbo.getFont().deriveFont(16.0f));
-		p3_bet_jokbo.setText("베팅 금액: 0");
+		p3_bet_jokbo.setText("베팅 머니: 0");
 		
 		player3cardShow = new ArrayList<PlayerCard_Label>();
 		for (int i = 170 ; i >= 20 ; i -= 25) {
@@ -266,7 +278,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		p4_bet_jokbo.setBounds(40,0,200,35);
 		p4_bet_jokbo.setForeground(Color.white);
 		p4_bet_jokbo.setFont(p4_bet_jokbo.getFont().deriveFont(16.0f));
-		p4_bet_jokbo.setText("베팅 금액: 0");
+		p4_bet_jokbo.setText("베팅 머니: 0");
 		
 		player4cardShow = new ArrayList<PlayerCard_Label>();
 		for (int i = 170 ; i >= 20 ; i -= 25) {
@@ -287,7 +299,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		p5_bet_jokbo.setBounds(40,0,200,35);
 		p5_bet_jokbo.setForeground(Color.white);
 		p5_bet_jokbo.setFont(p5_bet_jokbo.getFont().deriveFont(16.0f));
-		p5_bet_jokbo.setText("베팅 금액: 0");
+		p5_bet_jokbo.setText("베팅 머니: 0");
 		
 		player5cardShow = new ArrayList<PlayerCard_Label>();
 		for (int i = 170 ; i >= 20 ; i -= 25) {
@@ -304,22 +316,55 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 
 		
 		// betting
-		betting = new JLabel();
-		betting.setBounds(500, 50, 200, 200);
-		betting.setForeground(Color.white);
-		betting.setBackground(new Color(41,67,58));
-		betting.setText("-----");
+		betting_pan = new JPanel();
+		betting_pan.setBounds(500, 50, 200, 200);
+	
 		
-		add(betting);
+		betting_pan.setOpaque(false);
+		betting_pan.setLayout(null);
+		
+		betting_pan_whole = new JLabel();
+        betting_pan_whole.setBounds(10,0, 195, 50);
+        betting_pan_whole.setText("전체 베팅 머니"); 
+        betting_pan_whole.setFont(new Font("Pretendard-SemiBold",Font.BOLD,15));
+        betting_pan_whole.setForeground(Color.white);
+        betting_pan.add(betting_pan_whole);
+
+        betting_pan_wholemoney = new JLabel();
+        betting_pan_wholemoney.setBounds(4, 50, 195, 50);
+        betting_pan_wholemoney.setText("0");
+        betting_pan_wholemoney.setFont(new Font("Pretendard-SemiBold",Font.BOLD,18));
+        betting_pan_wholemoney.setBorder(new LineBorder(new Color(210,160,0)));
+        betting_pan_wholemoney.setForeground(Color.white);
+        betting_pan.add(betting_pan_wholemoney);
+
+        betting_pan_pan = new JLabel();
+        betting_pan_pan.setBounds(10, 100, 195,50);
+        betting_pan_pan.setText("현재 베팅 머니");
+        betting_pan_pan.setFont(new Font("Pretendard-SemiBold",Font.BOLD,15));
+        betting_pan_pan.setForeground(Color.white);
+        betting_pan.add(betting_pan_pan);
+
+        betting_pan_panmoney = new JLabel();
+        betting_pan_panmoney.setBounds(4, 150, 195, 50);
+        betting_pan_panmoney.setText("0");
+        betting_pan_panmoney.setFont(new Font("Pretendard-SemiBold",Font.BOLD,18));
+        betting_pan_panmoney.setBorder(new LineBorder(new Color(210,160,0)));
+        betting_pan_panmoney.setForeground(Color.white);
+        betting_pan.add(betting_pan_panmoney);
+        add(betting_pan);
+		
 		
 		JPanel betbuttonarea = new JPanel();
-//		betbuttonarea.setBackground(new Color(255,0,0,0));
+		
 		betbuttonarea.setLayout(null);
         betbuttonarea.setBounds(740,520,170,220);
+        betbuttonarea.setBackground(new Color(255,0,0,0));
+        betbuttonarea.setOpaque(false);
         add(betbuttonarea);
         
         //String [] betbt = {"콜","삥","따당","하프","다이","체크","맥스"};
-        ImageIcon i0 = new ImageIcon("img/gamepanel/call_bt.gif");
+        ImageIcon i0 = new ImageIcon("img/gamepanel/call_bt.png");
         bt = new BetBtn("",0,0); // 콜
         bt.setIcon(i0);
     	bt.addActionListener(new ActionListener() {
@@ -377,7 +422,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				
 			}
 		});
-    	ImageIcon i1 = new ImageIcon("img/gamepanel/bbing_bt.gif");
+    	ImageIcon i1 = new ImageIcon("img/gamepanel/bbing_bt.png");
         bt1 = new BetBtn("",85,0); // 삥
         bt1.setIcon(i1);
     	bt1.addActionListener(new ActionListener() {
@@ -404,7 +449,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				
 			}
 		});
-    	ImageIcon i2 = new ImageIcon("img/gamepanel/ddadang_bt.gif");
+    	ImageIcon i2 = new ImageIcon("img/gamepanel/ddadang_bt.png");
         bt2 = new BetBtn("",0,55); //따당
         bt2.setIcon(i2);
     	bt2.addActionListener(new ActionListener() {
@@ -435,7 +480,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				
 			}
 		});
-    	ImageIcon i3 = new ImageIcon("img/gamepanel/half_bt.gif");
+    	ImageIcon i3 = new ImageIcon("img/gamepanel/half_bt.png");
         bt3 = new BetBtn("",85,55);//하프
         bt3.setIcon(i3);
     	bt3.addActionListener(new ActionListener() {
@@ -465,7 +510,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				
 			}
 		});
-    	ImageIcon i4 = new ImageIcon("img/gamepanel/die_bt.gif");
+    	ImageIcon i4 = new ImageIcon("img/gamepanel/die_bt.png");
         bt4 = new BetBtn("",0,110);//다이
         bt4.setIcon(i4);
         bt4.addActionListener(new ActionListener() {
@@ -486,7 +531,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				ch.send(tcpdata);
             }
         });
-        ImageIcon i5 = new ImageIcon("img/gamepanel/quarter_bt.gif");
+        ImageIcon i5 = new ImageIcon("img/gamepanel/quarter_bt.png");
         bt5 = new BetBtn("",85,110);//쿼터
         bt5.setIcon(i5);
         bt5.addActionListener(new ActionListener() {
@@ -516,7 +561,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 		        ch.send(tcpdata);
             }
         });
-        ImageIcon i6 = new ImageIcon("img/gamepanel/max_bt.gif");
+        ImageIcon i6 = new ImageIcon("img/gamepanel/max_bt.png");
         bt6 = new BetBtn("",0,165);//맥스
         bt6.setIcon(i6);
     	bt6.addActionListener(new ActionListener() {
@@ -578,11 +623,17 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 //			}
 //		}, 0, 1000);
         
+        //
+        ImageIcon ii = new ImageIcon("img/gamepanel/chip.png");
+        JLabel chipchip = new JLabel(ii);
+        chipchip.setBounds(20,510,200,200);
+        add(chipchip);
+        
 		//
 		turnNickname = new JLabel();
-		turnNickname.setBounds(500, 300, 200, 200);
+		turnNickname.setBounds(500, 350, 200, 100);
 		turnNickname.setForeground(Color.white);
-		turnNickname.setText("차례: nickname");
+		turnNickname.setText("");
 		turnNickname.setHorizontalAlignment(JLabel.CENTER);
 		turnNickname.setFont(turnNickname.getFont().deriveFont(16.0f));
 		add(turnNickname);
@@ -683,8 +734,11 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	class BetBtn extends JButton {
 		public BetBtn(String name,int x,int y) {
 			super(name);
+			
 			setBounds(x, y,85, 55);
-			setBackground(Color.white);
+			setBorder(null);
+			setBackground(new Color(255,0,0,0));
+			
 		}
 	}
 
@@ -706,6 +760,11 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 					
 					GameStart = new JButton("게임 시작");
 					GameStart.setBounds(500, 280, 200, 80);
+					GameStart.setBorderPainted(false);
+					GameStart.setBackground(Color.white);
+	                GameStart.setForeground(Color.black);
+	             
+	                GameStart.setFont(new Font("Pretendard-SemiBold",Font.BOLD,20));
 					add(GameStart);	
 					
 					GameStart.addActionListener(new ActionListener() {
@@ -802,7 +861,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				me = gd;
 				
 				betting_Show(me.playerNum, "betting_bbing");
-				betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
+				wholeBetting_modify();
 				playerturn();
 				bt1.setEnabled(false);
 				break;	
@@ -812,7 +871,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				me = gd;
 				
 				betting_Show(me.playerNum, "betting_ddadang");
-				betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
+				wholeBetting_modify();
 				playerturn();
 				bt1.setEnabled(false);
 				break;
@@ -822,7 +881,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				me = gd;
 				
 				betting_Show(me.playerNum, "betting_half");
-				betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
+				wholeBetting_modify();
 				playerturn();
 				bt1.setEnabled(false);
 				break;	
@@ -832,7 +891,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				me = gd;
 				
 				betting_Show(me.playerNum, "betting_quarter");
-				betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
+				wholeBetting_modify();
 				playerturn();
 				bt1.setEnabled(false);
 				break;
@@ -842,7 +901,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				me = gd;
 				
 				betting_Show(me.playerNum, "betting_max");
-				betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
+				wholeBetting_modify();
 				playerturn();	
 				bt1.setEnabled(false);
 				break;
@@ -904,8 +963,8 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 						roomckh(false);
 						endGame_profileReset();
 						
-						turnNickname.setText("차례 : ");
-						betting.setText("전체 베팅금액: "+0+ ", 현재 판돈: "+ 0);
+						turnNickname.setText("");
+						wholeBetting_reset();
 						p1_bet_jokbo.setText("베팅 : "+ 0);
 						p2_bet_jokbo.setText("베팅 : "+ 0);
 						p3_bet_jokbo.setText("베팅 : "+ 0);
@@ -917,6 +976,11 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 						if(myData.playerNum == 0 && gameStart_Gen == false) {
 							GameStart = new JButton("게임 시작");
 							GameStart.setBounds(500, 280, 200, 80);
+							GameStart.setBackground(Color.white);
+							GameStart.setBorderPainted(false);
+					
+			                GameStart.setForeground(Color.black);
+			                GameStart.setFont(new Font("Pretendard-SemiBold",Font.PLAIN,20));
 	//						GameStart.setEnabled(false);
 							add(GameStart);
 							gameStart_Gen = true;
@@ -967,7 +1031,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				me = gd;
 				
 				betting_Show(me.playerNum, "betting_call");
-				betting.setText("전체 베팅금액: "+me.wholeBettingMoney+ ", 현재 판돈: "+ me.panMoney);
+				wholeBetting_modify();
 				playerturn();	
 				bt1.setEnabled(false);
 				System.out.println(me.callCount+"=========================");
@@ -1040,8 +1104,9 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
                                     );
                         } else {
                         	String winn = "";
+                        	System.out.println(me.winner+"-------------");
                         	for (Map.Entry<String, Integer> cd :me.game_users.entrySet()) {
-                            	if ( me.winner.equals(cd.getValue())) {
+                            	if ( Integer.parseInt(me.winner)== (cd.getValue())) {
                             		winn = cd.getKey();
                             	}
                             }
@@ -1107,8 +1172,8 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 	                    }
 						endGame_profileReset();
 						
-						turnNickname.setText("차례 : ");
-						betting.setText("전체 베팅금액: "+0+ ", 현재 판돈: "+ 0);
+						turnNickname.setText("");
+						wholeBetting_reset();
 						p1_bet_jokbo.setText("베팅 : "+ 0);
 						p2_bet_jokbo.setText("베팅 : "+ 0);
 						p3_bet_jokbo.setText("베팅 : "+ 0);
@@ -1120,6 +1185,10 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 						if(myData.playerNum == 0 && gameStart_Gen == false) {
 							GameStart = new JButton("게임 시작");
 							GameStart.setBounds(500, 280, 200, 80);
+							GameStart.setBackground(Color.white);
+							GameStart.setBorderPainted(false);
+							GameStart.setForeground(Color.black);
+			                GameStart.setFont(new Font("Pretendard-SemiBold",Font.PLAIN,20));
 	//						GameStart.setEnabled(false);
 							add(GameStart);
 							gameStart_Gen = true;
@@ -1330,7 +1399,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 
 		System.out.println(myData.playerNum +","+me.userCount);
         if (myData.playerNum == next(me.userCount)) {
-        	System.out.println("내 차례");
+        	
         	if(myData.money <= 0) {
         		betting_Button_false();
         		bt.setEnabled(true);
@@ -1339,7 +1408,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
         		
         	}
         } else {
-        	System.out.println(" 차례");
+        	
             betting_Button_false();
         }
     }
@@ -1767,6 +1836,16 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 
     }
     
+    void wholeBetting_modify () {
+        betting_pan_wholemoney.setText(""+me.wholeBettingMoney);
+        betting_pan_panmoney.setText(""+me.panMoney);
+
+    }
+    void wholeBetting_reset () {
+        betting_pan_wholemoney.setText(""+0);
+        betting_pan_panmoney.setText(""+0);
+
+    }
 }	
 	
 class Help_pg extends JFrame{
