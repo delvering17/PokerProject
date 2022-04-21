@@ -2,6 +2,7 @@ package lobby_i;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -20,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.border.LineBorder;
 
 import DB_p.ProfileDTO;
 import game_p.Game_panel;
@@ -69,7 +71,10 @@ public class Making implements RoomAction {
 		//jf.add(betT);
 		
 		JButton roomAdd = new JButton("만들기");
-		roomAdd.setBounds(55, 50, 90, 35);
+		roomAdd.setBounds(45, 40, 100, 60);
+		roomAdd.setBorder(new LineBorder(Color.gray,3));
+		roomAdd.setBackground(new Color(255,255,255));
+		roomAdd.setFont(new Font("나눔고딕 Bold",Font.BOLD,20));
 		pwchk.addActionListener(new ActionListener() {
 			
 			@Override
@@ -95,7 +100,10 @@ public class Making implements RoomAction {
 			}
 		});
 		JButton roomCancel = new JButton("취소");
-		roomCancel.setBounds(155, 50, 90, 35);
+		roomCancel.setBounds(150, 40, 100, 60);
+		roomCancel.setBorder(new LineBorder(Color.gray,3));
+		roomCancel.setFont(new Font("나눔고딕 Bold",Font.BOLD,20));
+		roomCancel.setBackground(new Color(255,255,255));
 		roomCancel.addActionListener(new ActionListener() {
 			
 			@Override

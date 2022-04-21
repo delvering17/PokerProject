@@ -1,5 +1,6 @@
 package login_p;
 
+import java.awt.Color;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
@@ -24,6 +25,7 @@ public class FindIDPW_panel extends JPanel{
 	public FindIDPW_panel(Login_frame login_frame) {
 		
 		setBounds(0,0,1200,800);
+		setBackground(new Color(247,247,247));
 		setLayout(null);
 
 		// 아이디 찾기

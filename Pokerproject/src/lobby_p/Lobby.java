@@ -86,10 +86,12 @@ public class Lobby extends JPanel implements NetExecute {
 		for (int i = 0; i < 9; i++) {
 			img = new ImageIcon("img/gamepanel/room.png");
 			JLabel jl= new JLabel(img);
-			jl.setBorder(new LineBorder(Color.black,2));
+			jl.setBorder(new LineBorder(Color.black,3));
 			jl.setOpaque(true);
 			jl.setBackground(new Color(236,239,247));
-			RoomBtn rBtn = new RoomBtn("만들기","Making",i,90,110,80,40,this);
+			RoomBtn rBtn = new RoomBtn("만들기","Making",i,75,95,100,60,this);
+
+			rBtn.setBorder(new LineBorder(Color.gray,3));
 			btnlist.add(rBtn);
 			jl.add(rBtn);
 			roomPanel.add(jl);
@@ -107,9 +109,9 @@ public class Lobby extends JPanel implements NetExecute {
 		jtf = new JTextField();
 		//jtf.setBackground(new Color(236,239,247));
 		jtf.setBounds(0, 200, 800, 20);
-		jtf.setFont(new Font("Arial white",Font.BOLD,15));
+		jtf.setFont(new Font("Arial white",Font.BOLD,20));
 		jta = new JTextArea();
-		jta.setFont(new Font("Arial white",Font.BOLD,15));
+		jta.setFont(new Font("Arial white",Font.BOLD,20));
 		//jta.setBackground(new Color(213,220,236,80));
 		JScrollPane js = new JScrollPane(jta);
 		js.setBounds(0, 0, 800, 200);
@@ -147,7 +149,7 @@ public class Lobby extends JPanel implements NetExecute {
 		
 		JTextArea profile = new JTextArea();
 		profile.setBounds(10, 10, 330, 200);
-		profile.setFont(new Font("Arial white",Font.BOLD,15));
+		profile.setFont(new Font("Arial white",Font.BOLD,18));
 		profile.setOpaque(false);
 		img = new ImageIcon("img/gamepanel/profile.png");
 		JLabel userProfile = new JLabel(img);// img
@@ -187,7 +189,9 @@ public class Lobby extends JPanel implements NetExecute {
 			this.cname = cname;
 			this.name = name;
 			this.lobby = lobby;
+			setBackground(new Color(255,255,255));
 			setBounds(x, y, width, height);
+			setFont(new Font("나눔고딕 Bold",Font.BOLD,20));
 			addActionListener(this);
 		}
 		public RoomBtn(String name,String cname,int addr,int x,int y,int width , int height,Lobby lobby) {
@@ -196,7 +200,9 @@ public class Lobby extends JPanel implements NetExecute {
 			this.name = name;
 			this.addr = addr;
 			this.lobby = lobby;
+			setBackground(new Color(255,255,255));
 			setBounds(x, y, width, height);
+			setFont(new Font("나눔고딕 Bold",Font.BOLD,20));
 			addActionListener(this);
 		}
 		

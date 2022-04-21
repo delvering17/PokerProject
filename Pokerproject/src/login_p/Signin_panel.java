@@ -32,22 +32,22 @@ public class Signin_panel extends JPanel {
 		
 		this.login_frame = login_frame;
 		setBounds(0,0,1200,800);
+		setBackground(new Color(247,247,247));
 		setLayout(null);
 		
 		add(new Gen_label("회원가입",550,30,100,50));
 		
-		add(new Gen_label("* 아이디",400,100,80,40));
-		add(new Gen_label("* 비밀번호",400,150,80,40));
-		add(new Gen_label("* 비밀번호확인",400,200,80,40));
-		add(new Gen_label("* 이름",400,250,80,40));
-		add(new Gen_label("* 이메일",400,300,80,40));
-		add(new Gen_label("* 닉네임",400,350,80,40));
-		add(new Gen_label("  성별",400,400,80,40));
-		add(new Gen_label("* 비밀번호질문",400,450,80,40));
-		add(new Gen_label("* 비밀번호답변",400,500,80,40));
-		add(new Gen_label("  자기소개",400,550,80,40));
-		
-		add(new Gen_label("  자기소개",400,550,80,40));
+		add(new Gen_label("* 아이디",400,100,90,40));
+		add(new Gen_label("* 비밀번호",400,150,90,40));
+		add(new Gen_label("* 비밀번호확인",400,200,90,40));
+		add(new Gen_label("* 이름",400,250,90,40));
+		add(new Gen_label("* 이메일",400,300,90,40));
+		add(new Gen_label("* 닉네임",400,350,90,40));
+		add(new Gen_label("  성별",400,400,90,40));
+		add(new Gen_label("* 비밀번호질문",400,450,90,40));
+		add(new Gen_label("* 비밀번호답변",400,500,90,40));
+		add(new Gen_label("  자기소개",400,550,90,40));
+	
 		add(new Gen_label("   '*'이 붙은 항목은 필수 항목입니다",500,595,250,40));
 		
 		add(new Gen_label("아이디: 영문 시작, 영문 또는 숫자 조합, 5~12자리",830,100,300,40));
