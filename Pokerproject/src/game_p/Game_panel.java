@@ -436,7 +436,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				
 				me.callCount=0;
 				me.userCount = myData.playerNum;
-				me.btMoney += me.panMoney;				
+				me.btMoney = me.panMoney;				
 				me.prebetMoney = me.btMoney; 
 				me.wholeBettingMoney += me.btMoney;
 				myData.money -= me.btMoney;
@@ -870,6 +870,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				gd = (GameData)data.oData;
 				me = gd;
 				
+			
 				betting_Show(me.playerNum, "betting_bbing");
 				wholeBetting_modify();
 				playerturn();
@@ -880,6 +881,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				gd = (GameData)data.oData;
 				me = gd;
 				
+
 				betting_Show(me.playerNum, "betting_ddadang");
 				wholeBetting_modify();
 				playerturn();
@@ -890,6 +892,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				gd = (GameData)data.oData;
 				me = gd;
 				
+			
 				betting_Show(me.playerNum, "betting_half");
 				wholeBetting_modify();
 				playerturn();
@@ -900,6 +903,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				gd = (GameData)data.oData;
 				me = gd;
 				
+			
 				betting_Show(me.playerNum, "betting_quarter");
 				wholeBetting_modify();
 				playerturn();
@@ -910,6 +914,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 				gd = (GameData)data.oData;
 				me = gd;
 				
+		
 				betting_Show(me.playerNum, "betting_max");
 				wholeBetting_modify();
 				playerturn();	
@@ -919,6 +924,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			case "betting_die":
 				gd = (GameData)data.oData;
 				me = gd;
+				
 				
 				if(diechk() == 1) {
 					System.out.println("종료입니다.");
@@ -969,6 +975,9 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 						repaint();
 						
 						Thread.sleep(3000);
+						me.panMoney = 10;
+						me.wholeBettingMoney = 0;
+						me.btMoney = 10;
 						if (myData.money == 0) {
 							myData.money = 50000;
 							gameRes_DBInsert(); 
@@ -1061,6 +1070,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 			case "betting_call":
 				gd = (GameData)data.oData;
 				me = gd;
+				
 				
 				betting_Show(me.playerNum, "betting_call");
 				wholeBetting_modify();
@@ -1189,6 +1199,9 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 						repaint();
 	
 						Thread.sleep(3000);
+						me.panMoney = 10;
+						me.wholeBettingMoney = 0;
+						me.btMoney = 10;
 						roomckh(false);
 						remove(trophy);
 						if (myData.money == 0) {
@@ -1341,6 +1354,8 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
 
 	void first_split() {
 		// 처음 입장판돈 
+		me.panMoney = 10;
+		me.wholeBettingMoney = 0;
 		me.wholeBettingMoney = me.game_users.size()*me.panMoney; 
 		me.playerDeck = new HashMap<Integer, ArrayList<PokerCard>>();
 		// 플레이어 카드집 공간 생성
@@ -1879,7 +1894,7 @@ public class Game_panel extends JPanel implements ActionListener,NetExecute {
     
     void wholeBetting_modify () {
         betting_pan_wholemoney.setText(""+me.wholeBettingMoney);
-        betting_pan_panmoney.setText(""+me.panMoney);
+        betting_pan_panmoney.setText(""+me.btMoney);
 
     }
     void wholeBetting_reset () {
